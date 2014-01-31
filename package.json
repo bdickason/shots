@@ -20,7 +20,7 @@
         "mocha": "^1.17.1",
     		"should": "^3.1.2"
     }
-  , "main": "app"
+  , "main": "index"
   , "engines": { "node": ">= 0.10.1" }
   , "scripts": {
         "test": "make test"

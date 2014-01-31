@@ -14,7 +14,8 @@
       , "url": "https://github.com/bdickason/shots"
     }
   , "dependencies": {
-    "express": "^3.0.1"
+    "express": "^3.0.1",
+    "rethinkdb": "^1.11.0"
     }
   , "devDependencies": {
         "mocha": "^1.17.1",

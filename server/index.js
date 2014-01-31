@@ -1,5 +1,6 @@
 express = require('express');
-http = require('http');
+r = require('rethinkdb');
+
 cfg = require('./cfg/config.js');
 
 module.exports.startServer = function() {
@@ -8,10 +9,16 @@ module.exports.startServer = function() {
   // Configure middleware
   app.use(express.favicon());
 
+  // Configure Database
+  db = r.connect({ host: cfg.RETHINKDB_HOST, port: cfg.RETHINKDB_PORT }, function(err, conn) {
+    if(err) throw err;
+    console.log(conn);
+  });
+
   // Routes
   app.get('/', function(req, res) {
     // Default Route - serves the Backbone app
-    res.send("index");
+    res.send('index');
   });
 
   // API Routes

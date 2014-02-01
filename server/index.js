@@ -1,5 +1,10 @@
 express = require('express');
+
 db = require('./db');
+
+/* Models */
+projects = require('./projects/projects.js');
+shots = require('./shots/shots.js');
 
 cfg = require('./cfg/config.js');
 
@@ -14,35 +19,19 @@ module.exports.startServer = function() {
   // Configure Database once when app starts
   db.setup(cfg);
 
-  // Routes
+  /* Client-side Routes */
   app.get('/', function(req, res) {
     // Default Route - serves the Backbone app
-    console.log(db);
     res.send('index');
   });
 
-  // API Routes
+  /* API Routes */
   app.get('/projects', function(req, res) {
     // Returns a list of all projects
-    exampleResponse =
-    [
-      { "id": 0,
-        "name": "model-edit",
-        "shots": [
-          { "id": 0 },
-          { "id": 1 }
-        ]
-      },
-      { "id": 1,
-        "name": "facebook-login",
-        "shots": [
-          { "id": 5 },
-          { "id": 90 }
-        ]
-      }
-    ];
 
-    res.json(exampleResponse);
+    Projects.get(function(callback) {
+      res.json(callback);
+    });
   });
 
   app.get('/projects/:project', function(req, res) {
@@ -50,18 +39,9 @@ module.exports.startServer = function() {
 
     project = req.params.project;
 
-    exampleResponse =
-    {
-      "id": 0,
-      "name": project,
-      "shots": [
-          { "id": 0 },
-          { "id": 1 },
-          { "id": 2 },
-      ]
-    };
-
-    res.json(exampleResponse);
+    projects.getById(project, function(callback) {
+      res.json(callback);
+    });
   });
 
   app.get('/projects/:project/:shot', function(req, res) {
@@ -70,22 +50,9 @@ module.exports.startServer = function() {
     project = req.params.project;
     shot = req.params.shot;
 
-    exampleResponse =
-    {
-      "id": req.params.shot,
-      "author": {
-        "id": 6,
-        "avatar": "http://www.google.com/blah.jpg",
-        "name": "bdickason"
-      },
-      "text": "blah blah blah blah blah.",
-      "images": [
-        { "url": "http://google.com/blah1.jpg" },
-        { "url": "http://google.com/blah2.jpg" }
-      ]
-    };
-
-    res.json(exampleResponse);
+    shots.getById(shot, project, function(callback) {
+      res.json(callback);
+    });
   });
 
 

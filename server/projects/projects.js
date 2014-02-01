@@ -20,7 +20,7 @@ Example:
 
 module.exports.get = function(callback) {
   /* Gets a list of all projects */
-  exampleResponse =
+  var exampleResponse =
     [
       { "name": "model-edit",
         "shots": [
@@ -38,12 +38,11 @@ module.exports.get = function(callback) {
     callback(exampleResponse);
 };
 
-module.exports.getById = function(id, callback) {
+module.exports.getById = function(project, callback) {
   /* Gets a single Project by ID */
-  console.log(project);
-  exampleResponse =
+  var exampleResponse =
     {
-      "name": id,
+      "name": project,
       "shots": [
           { "id": 0 },
           { "id": 1 },

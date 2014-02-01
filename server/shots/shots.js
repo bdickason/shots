@@ -21,12 +21,12 @@ Example:
 
 */
 
-module.exports.getById = function(id, project, callback) {
+module.exports.getById = function(shot, project, callback) {
   /* Gets a single Shot by ID */
 
-  exampleResponse =
+  var exampleResponse =
   {
-    "id": id,
+    "id": shot,
     "project": project,
     "author": {
       "id": 6,

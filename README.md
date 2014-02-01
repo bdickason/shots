@@ -21,7 +21,7 @@ A project has many shots, ordered in chronological order.
 
 Example:
 
-```
+```json
 {
   "id": 0,
   "name": project,
@@ -41,7 +41,7 @@ A Shot may only belong to one project.
 
 Example:
 
-```
+```json
 {
   "id": req.params.shot,
   "author": {
@@ -56,3 +56,15 @@ Example:
   ]
 };
 ```
+
+# Running Tests
+
+We use [mocha](http://github.com/visionmedia/mocha) for our server-side tests.
+
+To install mocha, type:
+`sudo npm install -g mocha`
+
+To run the test suite type:
+`mocha server/test` from the base project directory
+
+Do not push to `master` with failing tests. `master` must always be deployable (but not deplorable).

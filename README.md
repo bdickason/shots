@@ -24,7 +24,6 @@ Example:
 
 ```json
 {
-  "id": 0,
   "name": project,
   "shots": [
       { "id": 0 },
@@ -44,7 +43,7 @@ Example:
 
 ```json
 {
-  "id": req.params.shot,
+  "id": 0,
   "author": {
     "id": 6,
     "avatar": "http://www.google.com/blah.jpg",

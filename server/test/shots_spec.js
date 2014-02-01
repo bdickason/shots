@@ -5,7 +5,7 @@ var should = require('should');
 var cfg = require('../cfg/config.js');
 var shots = require('../shots/shots.js');
 
-describe('shots', function() {
+describe('Shots', function() {
   describe('GET with no arguments', function() {
     it('should not exist', function() {
       // Input

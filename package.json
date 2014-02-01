@@ -1,29 +1,42 @@
 {
-    "name": "shots"
-  , "version": "0.0.1"
-  , "description": "Share shots from your projects with your team."
-  , "homepage": ""
-  , "keywords": ["screenshots", "prototypes"]
-  , "author": "Brad Dickason <dickason@gmail.com>"
-  , "contributors": [
-        { "name": "Brad Dickason", "email": "dickason@gmail.com" },
-        { "name": "Trey McKay", "email": "trey@shapeways.com"}
-    ]
-  , "repository":{
-        "type": "git"
-      , "url": "https://github.com/bdickason/shots"
+  "name": "shots",
+  "version": "0.0.1",
+  "description": "Share shots from your projects with your team.",
+  "homepage": "",
+  "keywords": [
+    "screenshots",
+    "prototypes"
+  ],
+  "author": "Brad Dickason <dickason@gmail.com>",
+  "contributors": [
+    {
+      "name": "Brad Dickason",
+      "email": "dickason@gmail.com"
+    },
+    {
+      "name": "Trey McKay",
+      "email": "trey@shapeways.com"
     }
-  , "dependencies": {
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bdickason/shots"
+  },
+  "dependencies": {
     "express": "^3.0.1",
-    "rethinkdb": "^1.11.0"
-    }
-  , "devDependencies": {
-        "mocha": "^1.17.1",
-    		"should": "^3.1.2"
-    }
-  , "main": "index"
-  , "engines": { "node": ">= 0.10.1" }
-  , "scripts": {
-        "test": "make test"
-    }
+    "rethinkdb": "^1.11.0",
+    "grunt": "^0.4.2"
+  },
+  "devDependencies": {
+    "mocha": "^1.17.1",
+    "should": "^3.1.2",
+    "grunt-mocha-test": "^0.9.0"
+  },
+  "main": "index",
+  "engines": {
+    "node": ">= 0.10.1"
+  },
+  "scripts": {
+    "test": "make test"
+  }
 }

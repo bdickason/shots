@@ -8,8 +8,9 @@ Capture shots of your product as you build it and share them with your team.
 2. Install RethinkDB: http://www.rethinkdb.com/docs/install/
 3. Clone the repository: https://github.com/bdickason/shots
 4. `cd shots; npm install`
-5. Load the database: `rethinkdb`
-6. Load the server: `node index.js`
+5. Install Grunt: `sudo npm install -g grunt-cli`
+6. Load the database: `rethinkdb`
+7. Load the server: `node index.js`
 
 ## Projects
 
@@ -59,12 +60,9 @@ Example:
 
 # Running Tests
 
-We use [mocha](http://github.com/visionmedia/mocha) for our server-side tests.
-
-To install mocha, type:
-`sudo npm install -g mocha`
+We use [mocha](http://visionmedia.github.io/mocha/) for our server-side tests.
 
 To run the test suite type:
-`mocha server/test` from the base project directory
+`grunt tests` from the base project directory
 
 Do not push to `master` with failing tests. `master` must always be deployable (but not deplorable).

@@ -21,6 +21,7 @@ module.exports.startServer = function() {
 
   // API Routes
   app.get('/projects/:project', function(req, res) {
+    db.getProjects()
     res.json({ "project": req.params.project});
   });
 

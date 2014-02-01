@@ -47,10 +47,13 @@ module.exports.startServer = function() {
 
   app.get('/projects/:project', function(req, res) {
     // Returns detailed information about a single shot
+
+    project = req.params.project;
+
     exampleResponse =
     {
       "id": 0,
-      "name": "model-edit",
+      "name": project,
       "shots": [
           { "id": 0 },
           { "id": 1 },
@@ -63,9 +66,13 @@ module.exports.startServer = function() {
 
   app.get('/projects/:project/:shot', function(req, res) {
     // Returns a list of shots for a given project
+
+    project = req.params.project;
+    shot = req.params.shot;
+
     exampleResponse =
     {
-      "id": 0,
+      "id": req.params.shot,
       "author": {
         "id": 6,
         "avatar": "http://www.google.com/blah.jpg",

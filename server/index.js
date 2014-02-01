@@ -29,7 +29,7 @@ module.exports.startServer = function() {
   app.get('/projects', function(req, res) {
     // Returns a list of all projects
 
-    Projects.get(function(callback) {
+    projects.get(function(callback) {
       res.json(callback);
     });
   });

@@ -1,5 +1,5 @@
 express = require('express');
-r = require('rethinkdb');
+db = require('./db');
 
 cfg = require('./cfg/config.js');
 
@@ -11,11 +11,8 @@ module.exports.startServer = function() {
   // Configure middleware
   app.use(express.favicon());
 
-  // Configure Database
-  db = r.connect({ host: cfg.RETHINKDB_HOST, port: cfg.RETHINKDB_PORT }, function(err, conn) {
-    if(err) throw err;
-    // console.log(conn);
-  });
+  // Configure Database once when app starts
+  db.setup(cfg);
 
   // Routes
   app.get('/', function(req, res) {

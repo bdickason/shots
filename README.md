@@ -21,6 +21,6 @@ A project has many shots, ordered in chronological order.
 
 ## Shots
 
-A Shot is a combination of text and images posted by a user.
+A Shot is a combination of text and/or images posted by a user.
 
 A Shot may only belong to one project.

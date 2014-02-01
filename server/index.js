@@ -3,6 +3,8 @@ r = require('rethinkdb');
 
 cfg = require('./cfg/config.js');
 
+var db;
+
 module.exports.startServer = function() {
   app = express();
 
@@ -12,19 +14,77 @@ module.exports.startServer = function() {
   // Configure Database
   db = r.connect({ host: cfg.RETHINKDB_HOST, port: cfg.RETHINKDB_PORT }, function(err, conn) {
     if(err) throw err;
-    console.log(conn);
+    // console.log(conn);
   });
 
   // Routes
   app.get('/', function(req, res) {
     // Default Route - serves the Backbone app
+    console.log(db);
     res.send('index');
   });
 
   // API Routes
-  app.get('/projects/:project', function(req, res) {
-    res.json({ "project": req.params.project});
+  app.get('/projects', function(req, res) {
+    // Returns a list of all projects
+    exampleResponse =
+    [
+      { "id": 0,
+        "name": "model-edit",
+        "shots": [
+          { "id": 0 },
+          { "id": 1 }
+        ]
+      },
+      { "id": 1,
+        "name": "facebook-login",
+        "shots": [
+          { "id": 5 },
+          { "id": 90 }
+        ]
+      }
+    ];
+
+    res.json(exampleResponse);
   });
+
+  app.get('/projects/:project', function(req, res) {
+    // Returns detailed information about a single shot
+    exampleResponse =
+    {
+      "id": 0,
+      "name": "model-edit",
+      "shots": [
+          { "id": 0 },
+          { "id": 1 },
+          { "id": 2 },
+      ]
+    };
+
+    res.json(exampleResponse);
+  });
+
+  app.get('/projects/:project/:shot', function(req, res) {
+    // Returns a list of shots for a given project
+    exampleResponse =
+    {
+      "id": 0,
+      "author": {
+        "id": 6,
+        "avatar": "http://www.google.com/blah.jpg",
+        "name": "bdickason"
+      },
+      "text": "blah blah blah blah blah.",
+      "images": [
+        { "url": "http://google.com/blah1.jpg" },
+        { "url": "http://google.com/blah2.jpg" }
+      ]
+    };
+
+    res.json(exampleResponse);
+  });
+
+
 
   app.listen(cfg.PORT); // Start the server
 };

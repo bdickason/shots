@@ -65,3 +65,8 @@ To run the test suite type:
 `grunt tests` from the base project directory
 
 Do not push to `master` with failing tests. `master` must always be deployable (but not deplorable).
+
+
+# License
+
+Shots is governed by the MIT License. For more information see the LICENSE file.

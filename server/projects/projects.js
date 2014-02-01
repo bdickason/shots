@@ -20,6 +20,16 @@ Example:
 
 module.exports.get = function(callback) {
   /* Gets a list of all projects */
+
+  db.get('projects', function(err, data) {
+    if(!err) {
+      callback(data);
+    }
+    else
+      throw(err);
+  });
+
+  /*
   var exampleResponse =
     [
       { "name": "model-edit",
@@ -35,7 +45,7 @@ module.exports.get = function(callback) {
         ]
       }
     ];
-    callback(exampleResponse);
+    callback(exampleResponse); */
 };
 
 module.exports.getById = function(project, callback) {

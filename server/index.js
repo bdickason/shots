@@ -1,14 +1,12 @@
-express = require('express');
+var express = require('express');
 
-db = require('./db');
+db = require('./db'); // db currently initialized as a global variable
 
 /* Models */
-projects = require('./projects/projects.js');
-shots = require('./shots/shots.js');
+var projects = require('./projects/projects.js');
+var shots = require('./shots/shots.js');
 
 cfg = require('./cfg/config.js');
-
-var db;
 
 module.exports.startServer = function() {
   app = express();

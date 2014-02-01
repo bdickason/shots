@@ -7,25 +7,12 @@ var projects = require('../projects/projects.js');
 
 describe('Projects', function() {
   describe('GET with no arguments', function() {
-    it('should return a list of projects', function(done) {
+    it('should return an empty list of projects', function(done) {
       // Input
       var input = null; // Function takes no arguments
 
       // Expected Result
-      var expectedResult = [
-      { "name": "model-edit",
-        "shots": [
-          { "id": 0 },
-          { "id": 1 }
-        ]
-      },
-      { "name": "facebook-login",
-        "shots": [
-          { "id": 5 },
-          { "id": 90 }
-        ]
-      }
-    ];
+      var expectedResult = [];
 
       projects.get(function(callback) {
         should.exist(callback);

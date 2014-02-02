@@ -13,7 +13,7 @@ before(function(next) {
 
 after(function(next) {
   // Wipe database when done
-  db.wipe(cfg, function() {
+  db.wipe(cfg, function(results) {
     next();
   });
 });

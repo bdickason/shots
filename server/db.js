@@ -121,8 +121,7 @@ module.exports.wipe = function(cfg, callback) {
     db: cfg.RETHINKDB_DB,
     tables: {
       'projects': 'id',
-      'shots': 'id',
-      'users': 'id'
+      'shots': 'id'
     }
   };
 
@@ -132,13 +131,20 @@ module.exports.wipe = function(cfg, callback) {
       throw err;
     }
     else {
-      // Check if tables already exist. If not, create them
-      r.dbDrop(dbConfig.db).run(conn, function(err, result) {
+      tables = [];
+      // Loop through each table and delete it
+      for(var table in dbConfig.tables) {
+        tableObject = rdb.table(table).delete();
+        tables.push(tableObject);
+      }
+      r.expr(tables).run(conn, function(err, results) {
+        /* In order to have a single callback point for unit tests, 
+           we have to delete all tables in a single command */
         if(err) {
           callback(err);
         }
         else {
-          callback(result);
+          callback(results);
         }
       });
       //return(conn);

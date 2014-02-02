@@ -50,6 +50,16 @@ module.exports.get = function(callback) {
 
 module.exports.getById = function(project, callback) {
   /* Gets a single Project by ID */
+
+  db.getById(project, 'projects', function(err, data) {
+    if(!err) {
+      callback(data);
+    }
+    else {
+      throw(err);
+    }
+  });
+  /*
   var exampleResponse =
     {
       "name": project,
@@ -60,5 +70,5 @@ module.exports.getById = function(project, callback) {
       ]
     };
 
-  callback(exampleResponse);
+  callback(exampleResponse); */
 };

@@ -72,6 +72,21 @@ module.exports.get = function(table, callback) {
   });
 };
 
+module.exports.getById = function(id, table, callback) {
+  // Get a single entry from the db
+  onConnect(function(err, connection) {
+    rdb.table(table).get(id).run(connection, function(err, result) {
+      if(err) {
+        callback(err, null);
+      }
+      else {
+        callback(err, result);
+      }
+      connection.close();
+    });
+  });
+};
+
 function onConnect(callback) {
   r.connect({host: dbConfig.host, port: dbConfig.port }, function(err, connection) {
     if(err) {

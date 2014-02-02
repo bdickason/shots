@@ -44,7 +44,6 @@ describe('Projects', function() {
 
   describe('GET with a valid ID', function() {
     it('should return a single project', function(done) {
-      console.log("Get with a valid ID");
       // Input
       var name = 'model-edit';
 

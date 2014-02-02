@@ -4,11 +4,16 @@ cfg = require('../cfg/config.js');
 
 cfg.RETHINKDB_DB = 'shots_test';  // Use fake database for running tests
 
-before(function() {
-  db.setup(cfg);
-  console.log("blah");
+before(function(next) {
+  // Create new test database and tables
+  db.setup(cfg, function(results) {
+    next();
+  });
 });
 
-after(function() {
+after(function(next) {
   // Wipe database when done
+  db.wipe(cfg, function() {
+    next();
+  });
 });

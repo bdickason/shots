@@ -13,8 +13,7 @@ module.exports.setup = function(cfg, callback) {
     db: cfg.RETHINKDB_DB,
     tables: {
       'projects': 'id',
-      'shots': 'id',
-      'users': 'id'
+      'shots': 'id'
     }
   };
 
@@ -54,12 +53,12 @@ module.exports.setup = function(cfg, callback) {
             });
           })(table); */
         }
-        r.expr(tables).run(conn, function(err, result) {
+        r.expr(tables).run(conn, function(err, results) {
           if(err) {
             callback(err);
           }
           else {
-            callback(result);
+            callback(results);
           }
         });
       });

@@ -33,6 +33,16 @@ module.exports.startServer = function() {
     });
   });
 
+  app.put('/projects/:project', function(req, res) {
+    // Adds a new Project
+
+    project = {"name": req.params.project };
+
+    projects.put(project, function(callback) {
+      res.json(callback);
+    });
+  });
+
   app.get('/projects/:project', function(req, res) {
     // Returns detailed information about a single shot
 

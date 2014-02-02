@@ -5,7 +5,7 @@ r = require('rethinkdb');
 var dbConfig;
 rdb = "";  // Shortcut to avoid typing r.db(blah)
 
-module.exports.setup = function(cfg) {
+module.exports.setup = function(cfg, callback) {
 
   dbConfig = {
     host: cfg.RETHINKDB_HOST,
@@ -35,19 +35,33 @@ module.exports.setup = function(cfg) {
           console.log("Db (" + result.name + ") created.\n");
         }
         rdb = r.db(dbConfig.db);
+        tables = [];
         // Database exists, Check if tables exist
         for(var table in dbConfig.tables) {
-          (function(tableName) {
+          tableObject = rdb.tableCreate(table);
+          tables.push(tableObject);
+
+          /*(function(tableName) {
             rdb.tableCreate(tableName, { primaryKey: dbConfig.tables[table]}).run(conn, function(err, result) {
               if(err) {
                 //console.log(err);
+                callback(err);
               }
               else {
                 console.log("Table (" + tableName + ") is created.\n");
+                callback(result);
               }
             });
-          })(table);
+          })(table); */
         }
+        r.expr(tables).run(conn, function(err, result) {
+          if(err) {
+            callback(err);
+          }
+          else {
+            callback(result);
+          }
+        });
       });
       return(conn);
     }

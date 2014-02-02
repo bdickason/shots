@@ -15,7 +15,8 @@ module.exports.startServer = function() {
   app.use(express.favicon());
 
   // Configure Database once when app starts
-  db.setup(cfg);
+  db.setup(cfg, function() {
+  });
 
   /* Client-side Routes */
   app.get('/', function(req, res) {

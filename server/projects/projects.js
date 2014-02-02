@@ -48,10 +48,36 @@ module.exports.get = function(callback) {
     callback(exampleResponse); */
 };
 
-module.exports.getById = function(project, callback) {
+module.exports.getById = function(name, callback) {
   /* Gets a single Project by ID */
 
-  db.getById(project, 'projects', function(err, data) {
+  db.getById(name, 'projects', function(err, data) {
+    if(!err) {
+      callback(data);
+    }
+    else {
+      throw(err);
+    }
+  });
+  /*
+  var exampleResponse =
+    {
+      "name": project,
+      "shots": [
+          { "id": 0 },
+          { "id": 1 },
+          { "id": 2 },
+      ]
+    };
+
+  callback(exampleResponse); */
+};
+
+
+module.exports.put = function(name, callback) {
+  /* Creates a new project */
+
+  db.put(name, 'projects', function(err, data) {
     if(!err) {
       callback(data);
     }

@@ -23,22 +23,37 @@ describe('Projects', function() {
     });
   });
 
+  describe('PUT a project with no shots', function() {
+    it('should successfully insert an empty project', function(next) {
+      // Input
+      var name = 'model-edit';
+      var input = { "name": name };
+
+      // Expected Result
+      var expectedResult = { "Inserted": 1 };
+
+      projects.put(input, function(callback) {
+        should.exist(callback);
+        callback.should.be.type('object');
+        callback.errors.should.equal(0);
+        callback.inserted.should.equal(1);
+        next();
+      });
+    });
+  });
+
   describe('GET with a valid ID', function() {
     it('should return a single project', function(done) {
+      console.log("Get with a valid ID");
       // Input
-      var project = 'model-edit';
+      var name = 'model-edit';
 
       // Expected Result
       var expectedResult = {
-        "name": 'model-edit',
-        "shots": [
-            { "id": 0 },
-            { "id": 1 },
-            { "id": 2 },
-        ]
+        "name": 'model-edit'
       };
 
-      projects.getById(project, function(callback) {
+      projects.getById(name, function(callback) {
         should.exist(callback);
         callback.should.be.type('object');
         callback.should.eql(expectedResult);

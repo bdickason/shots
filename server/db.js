@@ -12,7 +12,7 @@ module.exports.setup = function(cfg, callback) {
     port: cfg.RETHINKDB_PORT,
     db: cfg.RETHINKDB_DB,
     tables: {
-      'projects': 'id',
+      'projects': 'name',
       'shots': 'id'
     }
   };
@@ -30,30 +30,16 @@ module.exports.setup = function(cfg, callback) {
         if(err) {
           // console.log(err);
         }
-        else {
-          console.log("Db (" + result.name + ") created.\n");
-        }
         rdb = r.db(dbConfig.db);
         tables = [];
         // Database exists, Check if tables exist
         for(var table in dbConfig.tables) {
-          tableObject = rdb.tableCreate(table);
+          tableObject = rdb.tableCreate(table, {primaryKey: dbConfig.tables[table]});
           tables.push(tableObject);
-
-          /*(function(tableName) {
-            rdb.tableCreate(tableName, { primaryKey: dbConfig.tables[table]}).run(conn, function(err, result) {
-              if(err) {
-                //console.log(err);
-                callback(err);
-              }
-              else {
-                console.log("Table (" + tableName + ") is created.\n");
-                callback(result);
-              }
-            });
-          })(table); */
         }
         r.expr(tables).run(conn, function(err, results) {
+          /* In order to have a single callback point for unit tests, 
+             we have to create all tables in a single command */
           if(err) {
             callback(err);
           }
@@ -89,6 +75,21 @@ module.exports.getById = function(id, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
     rdb.table(table).get(id).run(connection, function(err, result) {
+      if(err) {
+        callback(err, null);
+      }
+      else {
+        callback(err, result);
+      }
+      connection.close();
+    });
+  });
+};
+
+module.exports.put = function(id, table, callback) {
+  // Get a single entry from the db
+  onConnect(function(err, connection) {
+    rdb.table(table).insert(id).run(connection, function(err, result) {
       if(err) {
         callback(err, null);
       }
@@ -137,7 +138,6 @@ module.exports.wipe = function(cfg, callback) {
           callback(err);
         }
         else {
-          console.log("Db (" + result.name + ") wiped.\n");
           callback(result);
         }
       });

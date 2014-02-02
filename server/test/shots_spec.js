@@ -8,6 +8,7 @@ var shots = require('../shots/shots.js');
 describe('Shots', function() {
   describe('GET with no arguments', function() {
     it('should not exist', function() {
+      // This functionality is covered by GET /projects
       // Input
       var input = null; // Function takes no arguments
 

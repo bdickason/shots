@@ -33,10 +33,11 @@ module.exports.startServer = function() {
     });
   });
 
-  app.put('/projects/:project', function(req, res) {
+  app.put('/projects', function(req, res) {
     // Adds a new Project
 
-    project = {"name": req.params.project };
+    console.log(req.query);
+    project = {"name": req.query.project };
 
     projects.put(project, function(callback) {
       res.json(callback);

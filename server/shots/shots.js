@@ -40,7 +40,7 @@ module.exports.getById = function(shot, project, callback) {
     ]
   }; */
 
-  db.getById(shot, project, 'shots', function(err, data) {
+  db.getById(shot, 'shots', function(err, data) {
     if(!err) {
       callback(data);
     }
@@ -49,6 +49,36 @@ module.exports.getById = function(shot, project, callback) {
     }
   });
 };
+
+module.exports.getByProject = function(project, callback) {
+  /* Gets all shots associated with a project */
+
+  /*
+  Example:
+  {
+    "id": req.params.shot,
+    "author": {
+      "id": 6,
+      "avatar": "http://www.google.com/blah.jpg",
+      "name": "bdickason"
+    },
+    "text": "blah blah blah blah blah.",
+    "images": [
+      { "url": "http://google.com/blah1.jpg" },
+      { "url": "http://google.com/blah2.jpg" }
+    ]
+  }; */
+
+  db.getByFilter(project, 'shots', function(err, data) {
+    if(!err) {
+      callback(data);
+    }
+    else {
+      throw(err);
+    }
+  });
+};
+
 
 
 module.exports.put = function(input, callback) {

@@ -27,6 +27,7 @@ module.exports.startServer = function() {
   /* API Routes */
   app.get('/projects', function(req, res) {
     // Returns a list of all projects
+    // Example: curl http://localhost:3000/projects
 
     projects.get(function(callback) {
       res.json(callback);
@@ -35,6 +36,7 @@ module.exports.startServer = function() {
 
   app.put('/projects', function(req, res) {
     // Adds a new Project
+    // Example: curl -X PUT http://localhost:3000/projects?project=model-edit
 
     project = {"name": req.query.project };
 
@@ -45,6 +47,7 @@ module.exports.startServer = function() {
 
   app.get('/projects/:project', function(req, res) {
     // Returns detailed information about a single shot
+    // Example: curl http://localhost:3000/projects/model-edit
 
     project = req.params.project;
 
@@ -66,6 +69,8 @@ module.exports.startServer = function() {
 
   app.put('/projects/:project', function(req, res) {
     // Adds a new shot to a project
+    // Example: curl -X PUT http://localhost:3000/projects/model-edit?author=bdickason
+    // * Note: Requires a project to create
 
     project = req.params.project;
     author = req.query.author;

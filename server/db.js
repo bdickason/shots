@@ -34,9 +34,10 @@ module.exports.setup = function(cfg, callback) {
         tables = [];
         // Database exists, Check if tables exist
         for(var table in dbConfig.tables) {
-          tableObject = rdb.tableCreate(table, {primaryKey: dbConfig.tables[table]});
+          tableObject = rdb.tableCreate(table, {primaryKey: dbConfig.tables[table], secondaryKey: 'project'});
           tables.push(tableObject);
         }
+
         r.expr(tables).run(conn, function(err, results) {
           /* In order to have a single callback point for unit tests, 
              we have to create all tables in a single command */
@@ -71,7 +72,7 @@ module.exports.get = function(table, callback) {
   });
 };
 
-module.exports.getById = function(id, table, callback) {
+module.exports.getById = function(id, filter, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
     rdb.table(table).get(id).run(connection, function(err, result) {
@@ -86,14 +87,17 @@ module.exports.getById = function(id, table, callback) {
   });
 };
 
-module.exports.put = function(id, table, callback) {
+module.exports.put = function(input, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
-    rdb.table(table).insert(id).run(connection, function(err, result) {
+    rdb.table(table).insert(input).run(connection, function(err, result) {
       if(err) {
         callback(err, null);
       }
       else {
+        console.log("Inserting: ");
+        console.log(input);
+        console.log(result);
         callback(err, result);
       }
       connection.close();

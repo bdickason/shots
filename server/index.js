@@ -36,7 +36,6 @@ module.exports.startServer = function() {
   app.put('/projects', function(req, res) {
     // Adds a new Project
 
-    console.log(req.query);
     project = {"name": req.query.project };
 
     projects.put(project, function(callback) {
@@ -61,6 +60,27 @@ module.exports.startServer = function() {
     shot = req.params.shot;
 
     shots.getById(shot, project, function(callback) {
+      res.json(callback);
+    });
+  });
+
+  app.put('/projects/:project', function(req, res) {
+    // Adds a new shot to a project
+
+    project = req.params.project;
+    author = req.query.author;
+    text = req.query.text;
+    image = req.query.image;
+
+    var input = {
+        "project": project,
+        "author": author,
+        "text": text,
+        "image": image
+      };
+
+
+    shots.put(input, function(callback) {
       res.json(callback);
     });
   });

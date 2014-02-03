@@ -22,12 +22,12 @@ Example:
 */
 
 module.exports.getById = function(shot, project, callback) {
-  /* Gets a single Shot by ID */
+  /* Gets a single Project by ID */
 
-  var exampleResponse =
+  /*
+  Example:
   {
-    "id": shot,
-    "project": project,
+    "id": req.params.shot,
     "author": {
       "id": 6,
       "avatar": "http://www.google.com/blah.jpg",
@@ -38,7 +38,28 @@ module.exports.getById = function(shot, project, callback) {
       { "url": "http://google.com/blah1.jpg" },
       { "url": "http://google.com/blah2.jpg" }
     ]
-  };
+  }; */
 
-  callback(exampleResponse);
+  db.getById(shot, project, 'shots', function(err, data) {
+    if(!err) {
+      callback(data);
+    }
+    else {
+      throw(err);
+    }
+  });
+};
+
+
+module.exports.put = function(input, callback) {
+  /* Creates a new project */
+  
+  db.put(input, 'shots', function(err, data) {
+    if(!err) {
+      callback(data);
+    }
+    else {
+      throw(err);
+    }
+  });
 };

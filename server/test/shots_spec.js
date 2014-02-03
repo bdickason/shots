@@ -62,13 +62,15 @@ describe('Shots', function() {
         "project": 'model-edit',
         "author": 'bdickason',
         "text": 'blah blah blah blah blah',
-        "image": 'http://google.com/blah1.jpg'
+        "image": 'http://google.com/blah1.jpg',
+        "timestamp": {}
       };
 
       shots.getById(shot, project, function(callback) {
         should.exist(callback);
         callback.should.be.type('object');
         callback.should.eql(expectedResult);
+
         done();
       });
     });
@@ -85,12 +87,14 @@ describe('Shots', function() {
       "project": 'model-edit',
       "author": 'bdickason',
       "text": 'blah blah blah blah blah',
-      "image": 'http://google.com/blah1.jpg'
+      "image": 'http://google.com/blah1.jpg',
+      "timestamp": {}
     }];
 
     shots.getByProject(project, function(callback) {
       should.exist(callback);
       callback.should.be.type('object');
+
       callback.should.eql(expectedResult);
       done();
     });

@@ -113,6 +113,8 @@ module.exports.getByFilter = function(filter, table, callback) {
 module.exports.put = function(input, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
+    input.timestamp = r.now();
+
     rdb.table(table).insert(input).run(connection, function(err, result) {
       if(err) {
         callback(err, null);

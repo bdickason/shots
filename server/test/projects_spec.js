@@ -49,7 +49,8 @@ describe('Projects', function() {
 
       // Expected Result
       var expectedResult = {
-        "name": 'model-edit'
+        "name": 'model-edit',
+        "timestamp": {}
       };
 
       projects.getById(name, function(callback) {

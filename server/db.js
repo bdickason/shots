@@ -38,11 +38,15 @@ module.exports.setup = function(cfg, callback) {
           tables.push(tableObject);
         }
 
+        // Need to create secondary index for shots
+        tableObject = rdb.table('shots').indexCreate('project');
+        tables.push(tableObject);
+
         r.expr(tables).run(conn, function(err, results) {
           /* In order to have a single callback point for unit tests, 
              we have to create all tables in a single command */
           if(err) {
-            // console.log(err);
+            //console.log(err);
             callback(err);
           }
           else {
@@ -73,7 +77,7 @@ module.exports.get = function(table, callback) {
   });
 };
 
-module.exports.getById = function(id, filter, table, callback) {
+module.exports.getById = function(id, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
     rdb.table(table).get(id).run(connection, function(err, result) {
@@ -88,9 +92,29 @@ module.exports.getById = function(id, filter, table, callback) {
   });
 };
 
+module.exports.getByFilter = function(filter, table, callback) {
+  // Get a single entry from the db
+  onConnect(function(err, connection) {
+    rdb.table(table).getAll(filter, { index: 'project' }).run(connection, function(err, cursor) {
+      if(err) {
+        callback(err, null);
+      }
+      else {
+        cursor.toArray(function(error, results) {
+          // RethinkDb returns a cursor by default: http://www.rethinkdb.com/docs/troubleshooting/#i-get-back-a-connection-in-my-callback-with-t
+          callback(err, results);
+        });
+      }
+      connection.close();
+    });
+  });
+};
+
 module.exports.put = function(input, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
+    input.timestamp = r.now();
+
     rdb.table(table).insert(input).run(connection, function(err, result) {
       if(err) {
         callback(err, null);

@@ -62,16 +62,43 @@ describe('Shots', function() {
         "project": 'model-edit',
         "author": 'bdickason',
         "text": 'blah blah blah blah blah',
-        "image": 'http://google.com/blah1.jpg'
+        "image": 'http://google.com/blah1.jpg',
+        "timestamp": {}
       };
 
       shots.getById(shot, project, function(callback) {
         should.exist(callback);
         callback.should.be.type('object');
         callback.should.eql(expectedResult);
+
         done();
       });
     });
+  });
+
+  describe('GET all shots from a given Project with one shot', function() {
+  it('should return a list with one shot', function(done) {
+    // Input
+    var project = 'model-edit';
+
+    // Expected Result
+    var expectedResult = [{
+      "id": shotId,
+      "project": 'model-edit',
+      "author": 'bdickason',
+      "text": 'blah blah blah blah blah',
+      "image": 'http://google.com/blah1.jpg',
+      "timestamp": {}
+    }];
+
+    shots.getByProject(project, function(callback) {
+      should.exist(callback);
+      callback.should.be.type('object');
+
+      callback.should.eql(expectedResult);
+      done();
+    });
+  });
   });
 
 });

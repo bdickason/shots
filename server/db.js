@@ -28,13 +28,13 @@ module.exports.setup = function(cfg, callback) {
       // Check if tables already exist. If not, create them
       r.dbCreate(dbConfig.db).run(conn, function(err, result) {
         if(err) {
-          // console.log(err);
+          //console.log(err);
         }
         rdb = r.db(dbConfig.db);
         tables = [];
         // Database exists, Check if tables exist
         for(var table in dbConfig.tables) {
-          tableObject = rdb.tableCreate(table, {primaryKey: dbConfig.tables[table], secondaryKey: 'project'});
+          tableObject = rdb.tableCreate(table, {primaryKey: dbConfig.tables[table]});
           tables.push(tableObject);
         }
 
@@ -42,6 +42,7 @@ module.exports.setup = function(cfg, callback) {
           /* In order to have a single callback point for unit tests, 
              we have to create all tables in a single command */
           if(err) {
+            // console.log(err);
             callback(err);
           }
           else {
@@ -95,9 +96,6 @@ module.exports.put = function(input, table, callback) {
         callback(err, null);
       }
       else {
-        console.log("Inserting: ");
-        console.log(input);
-        console.log(result);
         callback(err, result);
       }
       connection.close();
@@ -116,6 +114,9 @@ function onConnect(callback) {
     }
   });
 }
+
+
+/* Don't use this :x */
 
 module.exports.wipe = function(cfg, callback) {
 

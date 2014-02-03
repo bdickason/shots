@@ -1,4 +1,5 @@
 var express = require('express');
+var handlebars = require('express3-handlebars');
 
 db = require('./db'); // db currently initialized as a global variable
 
@@ -10,9 +11,14 @@ cfg = require('./cfg/config.js');
 
 module.exports.startServer = function() {
   app = express();
+  hbs = handlebars.create();
 
   // Configure middleware
   app.use(express.favicon());
+  app.use(express.static('client'));
+  app.engine('handlebars', hbs.engine);
+  app.set('view engine', 'handlebars');
+
 
   // Configure Database once when app starts
   db.setup(cfg, function() {
@@ -21,7 +27,7 @@ module.exports.startServer = function() {
   /* Client-side Routes */
   app.get('/', function(req, res) {
     // Default Route - serves the Backbone app
-    res.send('index');
+    res.render('client');
   });
 
   /* API Routes */

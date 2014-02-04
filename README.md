@@ -10,7 +10,8 @@ Capture shots of your product as you build it and share them with your team.
 4. `cd shots; npm install`
 5. Install Grunt: `sudo npm install -g grunt-cli`
 6. Load the database: `rethinkdb`
-7. Load the server: `node index.js`
+7. Build .js and run tests: `grunt`
+8. Load the server: `node index.js`
 
 ## Projects
 
@@ -57,6 +58,17 @@ Example:
 };
 ```
 
+# Browserify
+
+We use [browserify](http://browserify.org/) for our frontend module system. It's similar to `npm` but runs on the client.
+
+Browserify compiles all .js into `app/lib/bundle.js`.
+
+All modules are included via the `require` command and app.js is the entry point.
+
+While working, I suggest using `grunt watch` to re-build any js files that change while you're working.
+
+
 # Running Tests
 
 We use [mocha](http://visionmedia.github.io/mocha/) for our server-side tests.
@@ -65,6 +77,7 @@ To run the test suite type:
 `grunt tests` from the base project directory
 
 Do not push to `master` with failing tests. `master` must always be deployable (but not deplorable).
+
 
 
 # License

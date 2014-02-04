@@ -7,6 +7,8 @@ Building client-side js
 
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.initConfig({
     mochaTest: {
@@ -18,9 +20,16 @@ module.exports = function(grunt) {
         src: ['server/test/*.js']
       }
     },
+    browserify: {
+      'app/lib/bundle.js': ['app/app.js']
+    },
+    watch: {
+      files: [ 'app/*.js'],
+      tasks: [ 'browserify' ]
+    }
   });
 
-  grunt.registerTask('default', 'mochaTest'); // By default run tests
+  grunt.registerTask('default', ['browserify', 'mochaTest']); // By default run tests
   grunt.registerTask('tests', 'mochaTest');   // Only run tests
 
 };

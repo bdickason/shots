@@ -1,17 +1,8 @@
 /* Main app js file */
 
 window.onload = function(){
-  var AppView = Backbone.View.extend({
-    el: '#container',
-
-    initialize: function() {
-      this.render();
-    },
-
-    render: function() {
-      this.$el.html("Welcome to Shots!");
-    }
-  });
-
+  Backbone.$ = window.$;
+  var AppView = require('./views.js');
   var appView = new AppView();
 };
+

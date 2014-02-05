@@ -15,7 +15,7 @@ module.exports.startServer = function() {
 
   // Configure middleware
   app.use(express.favicon());
-  app.use(express.static('app'));
+  app.use(express.static(__dirname + '/static'));
   app.engine('handlebars', hbs.engine);
   app.set('view engine', 'handlebars');
 

@@ -51,9 +51,7 @@ Example:
     "name": "bdickason"
   },
   "text": "blah blah blah blah blah.",
-  "images": [
-    { "url": "http://google.com/blah1.jpg" },
-    { "url": "http://google.com/blah2.jpg" }
+  "image": "http://google.com/blah1.jpg" }
   ]
 };
 ```

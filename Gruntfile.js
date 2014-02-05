@@ -21,10 +21,13 @@ module.exports = function(grunt) {
       }
     },
     browserify: {
-      'server/static/lib/bundle.js': ['app/app.js']
+      'server/static/lib/bundle.js': ['app/app.js'],
+      options: {
+        transform: ['hbsfy']
+      }
     },
     watch: {
-      files: [ 'app/*.js', 'app/**/*.js'],
+      files: [ 'app/*.js', 'app/**/*.js', 'app/**/*.hbs'],
       tasks: [ 'browserify' ]
     }
   });

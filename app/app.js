@@ -1,17 +1,20 @@
 /* Main app js file */
 
+app = {};
+
 window.onload = function(){
   Backbone.$ = window.$;
 
-  var ShotModel = require('./models/shotModel.js');
+  app.ShotModel = require('./models/shotModel.js');
 
   var ShotsView = require('./views/shotsView.js');
-  var shotModel = new ShotModel({id: 'model-edit'});
+  var shotModel = new app.ShotModel({id: 'model-edit'});
   var ShotsCollection = require('./collections/shotsCollection.js');
+  var ProjectsCollection = require('./collections/projectsCollection.js');
 
   var shotsView = new ShotsView();
   var shotsCollection = new ShotsCollection(shotModel);
-  console.log(shotsCollection.pluck('id'));
 
+  app.projects = new ProjectsCollection();
 };
 

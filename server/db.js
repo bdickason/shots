@@ -67,6 +67,7 @@ module.exports.get = function(table, callback) {
         callback(err, null);
       }
       else {
+        console.log("got here");
         cursor.toArray(function(error, results) {
           // RethinkDb returns a cursor by default: http://www.rethinkdb.com/docs/troubleshooting/#i-get-back-a-connection-in-my-callback-with-t
           callback(err, results);

@@ -6,7 +6,7 @@ module.exports = Backbone.View.extend({
       this.render();
     },
 
-    render: function() { 
+    render: function() {
       this.$el.html("Welcome to Shots!");
     }
   });

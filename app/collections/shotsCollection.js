@@ -2,5 +2,8 @@
 var ShotModel = require('../models/shotModel.js');
 
 module.exports = Backbone.Collection.extend({
-    model: app.ShotModel
+    model: ShotModel,
+    initialize: function() {
+      // this.fetch();
+    }
   });

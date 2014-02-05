@@ -2,7 +2,7 @@
 
 window.onload = function(){
   Backbone.$ = window.$;
-  var AppView = require('./views.js');
-  var appView = new AppView();
+  var ShotsView = require('./views/shotsView.js');
+  var shotsView = new ShotsView();
 };
 

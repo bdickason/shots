@@ -3,14 +3,13 @@
 
 window.onload = function(){
   Backbone.$ = window.$;
-  var AppView = require('./views.js');
-  var appView = new AppView();
-  //console.log("awesomer! wtf."
+  var ShotsView = require('./views/shotsView.js');
+  var shotsView = new ShotsView();
 };
 
 
-},{"./views.js":2}],2:[function(require,module,exports){
-/* Views go here */
+},{"./views/shotsView.js":2}],2:[function(require,module,exports){
+/* Shots View - handles logic and rendering of shots */
 module.exports = Backbone.View.extend({
     el: '#container',
 

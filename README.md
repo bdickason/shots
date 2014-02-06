@@ -81,3 +81,12 @@ Do not push to `master` with failing tests. `master` must always be deployable (
 # License
 
 Shots is governed by the MIT License. For more information see the LICENSE file.
+
+
+# FAQ
+
+**Q: I'm geting an error when running npm install: 'Error: EMFILE, too many open files'**
+
+A: Your operating system has a limit on the number of files that can be open at any time. To resolve this, you can use the command: `ulimit -n 10480`
+
+For more information: http://superuser.com/questions/261023/how-to-change-default-ulimit-values-in-mac-os-x-10-6

@@ -95,8 +95,11 @@ module.exports.getById = function(id, table, callback) {
 module.exports.getByFilter = function(filter, table, callback) {
   // Get a set of entries from the db that match a query
   onConnect(function(err, connection) {
-    console.log(filter);
-    rdb.table(table).filter(filter).run(connection, function(err, cursor) {
+
+    rdb.table(table).
+    filter(filter).
+    orderBy(r.desc('timestamp')).
+    run(connection, function(err, cursor) {
       if(err) {
         callback(err, null);
       }
@@ -114,7 +117,7 @@ module.exports.getByFilter = function(filter, table, callback) {
 module.exports.getLast = function(filter, table, callback) {
   // Get the last object in a table that matches your filter
   onConnect(function(err, connection) {
-    console.log(filter);
+
     rdb.table(table)
     .filter(filter)
     .orderBy(r.desc('id'))

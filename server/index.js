@@ -97,7 +97,11 @@ module.exports.startServer = function() {
     });
   });
 
-
+  app.get('*', function(req, res) {
+    res.send('Sorry, there was a problem with your request');
+    console.log('--- UNKNOWN REQUEST ---');
+    console.log(req);
+  });
 
   app.listen(cfg.PORT); // Start the server
 };

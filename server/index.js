@@ -85,9 +85,9 @@ module.exports.startServer = function() {
 
     var input = {
         "project": project,
-        "author": author,
-        "text": text,
-        "image": image
+        "author": author || null,
+        "text": text || null,
+        "image": image || null
       };
 
     shots.put(input, function(callback) {

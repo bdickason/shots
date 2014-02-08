@@ -80,8 +80,6 @@ module.exports.get = function(table, callback) {
 module.exports.getById = function(id, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
-    console.log('table: ' + table);
-    console.log('id: ' + id);
     rdb.table(table).get(id).run(connection, function(err, result) {
       if(err) {
         callback(err, null);
@@ -99,6 +97,7 @@ module.exports.getByFilter = function(filter, table, callback) {
   // Get a set of entries from the db that match a query
   onConnect(function(err, connection) {
 
+    console.log(filter);
     rdb.table(table).
     filter(filter).
     orderBy(r.desc('timestamp')).

@@ -71,7 +71,9 @@ module.exports.getByProject = function(project, callback) {
     ]
   }; */
 
-  db.getByFilter(project, 'shots', function(err, data) {
+  filter = {project: project};  // Must use explicit json so rethinkdb exact matches
+
+  db.getByFilter(filter, 'shots', function(err, data) {
     if(!err) {
       callback(data);
     }
@@ -88,9 +90,16 @@ module.exports.put = function(input, callback) {
 
   filter = { project: input.project };
   // Get last shot Id (so we know what our shot's ID should be as RethinkDb does not have an auto_increment)
+  
   db.getLast(filter, 'shots', function(err, lastData) {
     if(!err) {
-      input.id = lastData.id + 1;
+      if(lastData) {
+        input.id = lastData.id + 1;
+      }
+      else {
+        input.id = 0;
+      }
+      
 
       // Put the shot in with the proper ID
       db.put(input, 'shots', function(err, putData) {

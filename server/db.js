@@ -22,11 +22,11 @@ module.exports.setup = function(cfg, callback) {
 
   // Initial setup and connection for database
   r.connect({ host: dbConfig.host, port: dbConfig.port, db: dbConfig.db, authKey: dbConfig.authKey }, function(err, conn) {
+    console.log(dbConfig);
     if(err) {
       throw err;
     }
     else {
-      console.log(dbConfig.host);
       // Check if tables already exist. If not, create them
       r.dbCreate(dbConfig.db).run(conn, function(err, result) {
         if(err) {

@@ -181,6 +181,7 @@ module.exports.wipe = function(cfg, callback) {
     host: cfg.RETHINKDB_HOST,
     port: cfg.RETHINKDB_PORT,
     db: cfg.RETHINKDB_DB,
+    authKey: cfg.RETHINKDB_AUTHKEY,
     tables: {
       'projects': 'id',
       'shots': 'id'
@@ -188,7 +189,7 @@ module.exports.wipe = function(cfg, callback) {
   };
 
   // Initial setup and connection for database
-  r.connect({ host: dbConfig.host, port: dbConfig.port, db: dbConfig.db }, function(err, conn) {
+  r.connect({ host: dbConfig.host, port: dbConfig.port, db: dbConfig.db, authKey: dbConfig.authKey }, function(err, conn) {
     if(err) {
       throw err;
     }

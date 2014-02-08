@@ -8,15 +8,20 @@ module.exports = Backbone.View.extend({
 
     initialize: function() {
       this.render();
+      console.log(this.$el);
+      // console.log('wtf!');
+      /* this.collection.bind('add', function(shot) {
+        this.$el.append(new shotView({model: shot}).render().el);
+      }); */
     },
 
     render: function() {
       // Display each shot in a list
-      _.each(shots, function(shot) {
-        var shotModel = new ShotModel(shot);
-        var shotView = new ShotView({model: shotModel});
-        this.$el.append(shotView.el);
-      }, this);
+      var view = this;  // this.collection.each overrides this to refer to current collection
 
+      this.collection.each(function(shotModel) {
+        var shotView = new ShotView({model: shotModel});
+        view.$el.append(shotView.el);
+      });
     }
   });

@@ -14,12 +14,24 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
-    'click .shotlink': 'gotoShot'
+    'click .shotlink': 'gotoShot',
+    'click .save': 'saveShot'
   },
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
+  },
+
+  saveShot: function() {
+    console.log('saving shot!');
+    this.model.set({
+      text: $('#text').val()
+    });
+
+    console.log(this.model);
+
+    this.collection.create(this.model);
   },
 
   gotoShot: function(e) {

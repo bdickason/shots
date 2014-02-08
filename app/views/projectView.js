@@ -2,6 +2,8 @@
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
 
+var ShotsCollection = require('../collections/shotsCollection.js');
+
 var ShotsView = require('../views/shotsView.js');
 
 module.exports = Backbone.View.extend({
@@ -10,17 +12,18 @@ module.exports = Backbone.View.extend({
   template: projectTemplate,
 
   initialize: function() {
-    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.model.fetch();
+    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     //this.render();
   },
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
-
+    
+    
     if(this.model.get('shots')) {
-      shots = this.model.get('shots');
-      shotsView = new ShotsView(shots);
+      shotsModel = new ShotsCollection(this.model.get('shots'));
+      shotsView = new ShotsView({ collection: shotsModel });
     }
 
     return this;

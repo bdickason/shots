@@ -11,6 +11,7 @@ module.exports.setup = function(cfg, callback) {
     host: cfg.RETHINKDB_HOST,
     port: cfg.RETHINKDB_PORT,
     db: cfg.RETHINKDB_DB,
+    authKey: cfg.RETHINKDB_AUTHKEY,
     tables: {
       'projects': 'id',
       'shots': 'id'

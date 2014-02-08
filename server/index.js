@@ -8,6 +8,7 @@ var projects = require('./projects/projects.js');
 var shots = require('./shots/shots.js');
 
 cfg = require('./cfg/config.js');
+console.log(cfg);
 
 module.exports.startServer = function() {
   app = express();

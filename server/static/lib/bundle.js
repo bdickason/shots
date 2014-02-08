@@ -360,13 +360,13 @@ module.exports = Backbone.View.extend({
         };
 
         this.collection.create(input);
+        $('#text').val('');
       }
     },
 
     render: function() {
       // Display 'new shot' menu
       this.$el.append(this.template());
-
 
       // Display each shot in a list
 

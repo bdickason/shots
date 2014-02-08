@@ -236,10 +236,9 @@ module.exports = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     
-    
     if(this.model.get('shots')) {
       shotsModel = new ShotsCollection(this.model.get('shots'));
-      shotsView = new ShotsView({ collection: shotsModel });
+      shotsView = new ShotsView({ collection: shotsModel, project: this.model.get('id') });
     }
 
     return this;
@@ -308,14 +307,6 @@ module.exports = Backbone.View.extend({
   },
 
   saveShot: function() {
-    console.log('saving shot!');
-    this.model.set({
-      text: $('#text').val()
-    });
-
-    console.log(this.model);
-
-    this.collection.create(this.model);
   },
 
   gotoShot: function(e) {
@@ -338,21 +329,47 @@ module.exports = Backbone.View.extend({
 
 var ShotModel = require('../models/shotModel.js');
 var ShotView = require('../views/shotView.js');
+var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
     el: '.shots',
 
-    initialize: function() {
+    template: shotsTemplate,
+
+    initialize: function(options) {
       this.render();
-      console.log(this.$el);
-      // console.log('wtf!');
-      /* this.collection.bind('add', function(shot) {
-        this.$el.append(new shotView({model: shot}).render().el);
-      }); */
+
+      this.project = options.project;  // Save project name in case we need to add
+
+      var view = this;
+      
+      this.collection.bind('add', function(shot) {
+        view.$el.append(new ShotView({model: shot}).render().el);
+      });
+    },
+    
+    events: {
+      'click .save': 'createShot'
+    },
+
+    createShot: function(shot) {
+      if($('#text').val()) {
+        var input = {
+          text: $('#text').val(),
+          projectId: this.project
+        };
+
+        this.collection.create(input);
+      }
     },
 
     render: function() {
+      // Display 'new shot' menu
+      this.$el.append(this.template());
+
+
       // Display each shot in a list
+
       var view = this;  // this.collection.each overrides this to refer to current collection
 
       this.collection.each(function(shotModel) {
@@ -362,7 +379,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../models/shotModel.js":5,"../views/shotView.js":12}],14:[function(require,module,exports){
+},{"../models/shotModel.js":5,"../views/shotView.js":12,"./templates/shotsTemplate.hbs":20}],14:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -415,7 +432,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "  <a href=\"/\" id=\"home\">Home</a> | New Project";
   });
 
-},{"hbsfy/runtime":27}],16:[function(require,module,exports){
+},{"hbsfy/runtime":28}],16:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -432,7 +449,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":27}],17:[function(require,module,exports){
+},{"hbsfy/runtime":28}],17:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -445,11 +462,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</h1>\n\n    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>\n\n    <ul class=\"shots\">\n    </ul>\n</div>";
+    + "</h1>\n\n    <ul class=\"shots\">\n    </ul>\n</div>";
   return buffer;
   });
 
-},{"hbsfy/runtime":27}],18:[function(require,module,exports){
+},{"hbsfy/runtime":28}],18:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -479,7 +496,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":27}],19:[function(require,module,exports){
+},{"hbsfy/runtime":28}],19:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -532,7 +549,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":27}],20:[function(require,module,exports){
+},{"hbsfy/runtime":28}],20:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>";
+  });
+
+},{"hbsfy/runtime":28}],21:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -565,7 +594,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":21,"./handlebars/exception":22,"./handlebars/runtime":23,"./handlebars/safe-string":24,"./handlebars/utils":25}],21:[function(require,module,exports){
+},{"./handlebars/base":22,"./handlebars/exception":23,"./handlebars/runtime":24,"./handlebars/safe-string":25,"./handlebars/utils":26}],22:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -746,7 +775,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":22,"./utils":25}],22:[function(require,module,exports){
+},{"./exception":23,"./utils":26}],23:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -775,7 +804,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -913,7 +942,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":21,"./exception":22,"./utils":25}],24:[function(require,module,exports){
+},{"./base":22,"./exception":23,"./utils":26}],25:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -925,7 +954,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -1002,12 +1031,12 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":24}],26:[function(require,module,exports){
+},{"./safe-string":25}],27:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":20}],27:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":21}],28:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":26}]},{},[1])
+},{"handlebars/runtime":27}]},{},[1])

@@ -14,6 +14,7 @@ module.exports.startServer = function() {
   hbs = handlebars.create();
 
   // Configure middleware
+  app.use(express.bodyParser());
   app.use(express.favicon());
   app.use(express.static(__dirname + '/static'));
   app.engine('handlebars', hbs.engine);
@@ -40,13 +41,13 @@ module.exports.startServer = function() {
     });
   });
 
-  app.put('/api/projects', function(req, res) {
+  app.post('/api/projects', function(req, res) {
     // Adds a new Project
-    // Example: curl -X PUT http://localhost:3000/api/projects?project=model-edit
+    // Example: curl -X POST http://localhost:3000/api/projects?project=model-edit
 
     input = {"id": req.query.project };
 
-    projects.put(input, function(callback) {
+    projects.post(input, function(callback) {
       res.json(callback);
     });
   });
@@ -73,15 +74,15 @@ module.exports.startServer = function() {
     });
   });
 
-  app.put('/api/projects/:project', function(req, res) {
+  app.post('/api/projects/:project', function(req, res) {
     // Adds a new shot to a project
     // Example: curl -X PUT http://localhost:3000/api/projects/model-edit?author=bdickason
     // * Note: Requires a project to create
 
     project = req.params.project;
-    author = req.query.author;
-    text = req.query.text || null;
-    image = req.query.image || null;
+    author = req.body.author || null;
+    text = req.body.text || null;
+    image = req.body.image || null;
 
     var input = {
         "project": project,
@@ -90,7 +91,7 @@ module.exports.startServer = function() {
         "image": image || null
       };
 
-    shots.put(input, function(callback) {
+    shots.post(input, function(callback) {
       res.json(callback);
     });
   });

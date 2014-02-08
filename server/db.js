@@ -85,7 +85,6 @@ module.exports.getById = function(id, table, callback) {
         callback(err, null);
       }
       else {
-        console.log(result);
         callback(err, result);
       }
       connection.close();
@@ -96,8 +95,6 @@ module.exports.getById = function(id, table, callback) {
 module.exports.getByFilter = function(filter, table, callback) {
   // Get a set of entries from the db that match a query
   onConnect(function(err, connection) {
-
-    console.log(filter);
     rdb.table(table).
     filter(filter).
     orderBy(r.desc('timestamp')).
@@ -139,11 +136,11 @@ module.exports.getLast = function(filter, table, callback) {
   });
 };
 
-module.exports.put = function(input, table, callback) {
+module.exports.post = function(input, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
     input.timestamp = r.now();
-    console.log(input);
+    // console.log(input);
 
     rdb.table(table).insert(input).run(connection, function(err, result) {
       if(err) {

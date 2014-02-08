@@ -77,7 +77,7 @@ module.exports.getById = function(name, callback) {
 };
 
 
-module.exports.put = function(input, callback) {
+module.exports.post = function(input, callback) {
   /* Creates a new project 
     var exampleResponse =
     {
@@ -91,7 +91,7 @@ module.exports.put = function(input, callback) {
   */
   
   
-  db.put(input, 'projects', function(err, data) {
+  db.post(input, 'projects', function(err, data) {
     if(!err) {
       callback(data);
     }

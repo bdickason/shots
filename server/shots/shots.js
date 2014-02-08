@@ -85,7 +85,7 @@ module.exports.getByProject = function(project, callback) {
 
 
 
-module.exports.put = function(input, callback) {
+module.exports.post = function(input, callback) {
   /* Creates a new shot */
 
   filter = { project: input.project };
@@ -102,7 +102,7 @@ module.exports.put = function(input, callback) {
       
 
       // Put the shot in with the proper ID
-      db.put(input, 'shots', function(err, putData) {
+      db.post(input, 'shots', function(err, putData) {
         if(!err) {
           callback(putData);
         }

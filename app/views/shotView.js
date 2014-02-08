@@ -24,14 +24,6 @@ module.exports = Backbone.View.extend({
   },
 
   saveShot: function() {
-    console.log('saving shot!');
-    this.model.set({
-      text: $('#text').val()
-    });
-
-    console.log(this.model);
-
-    this.collection.create(this.model);
   },
 
   gotoShot: function(e) {

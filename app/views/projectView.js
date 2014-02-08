@@ -20,10 +20,9 @@ module.exports = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     
-    
     if(this.model.get('shots')) {
       shotsModel = new ShotsCollection(this.model.get('shots'));
-      shotsView = new ShotsView({ collection: shotsModel });
+      shotsView = new ShotsView({ collection: shotsModel, project: this.model.get('id') });
     }
 
     return this;

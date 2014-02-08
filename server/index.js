@@ -22,6 +22,17 @@ module.exports.startServer = function() {
   app.set('view engine', 'handlebars');
 
 
+  var os=require('os');
+  var ifaces=os.networkInterfaces();
+  for (var dev in ifaces) {
+    var alias=0;
+    ifaces[dev].forEach(function(details){
+      if (details.family=='IPv4') {
+        console.log(dev+(alias?':'+alias:''),details.address);
+        ++alias;
+      }
+    });
+  }
   // Configure Database once when app starts
   db.setup(cfg, function() {
   });

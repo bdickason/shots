@@ -161,7 +161,7 @@ module.exports.post = function(input, table, callback) {
 /* Utility Functions */
 
 function onConnect(callback) {
-  r.connect({host: dbConfig.host, port: dbConfig.port }, function(err, connection) {
+  r.connect({host: dbConfig.host, port: dbConfig.port, authKey: dbConfig.authKey }, function(err, connection) {
     if(err) {
       throw(err);
     }

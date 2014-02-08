@@ -3,8 +3,8 @@
 var Shots = require('../collections/shotsCollection.js');
 
 module.exports = Backbone.Model.extend({
+  urlRoot: '/api/projects',
   initialize: function() {
-    this.shots = new Shots({'project': this.id, url: '/projects/' + this.id});
   },
     defaults: {
       text: ''

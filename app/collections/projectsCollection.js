@@ -3,7 +3,7 @@ var ProjectModel = require('../models/projectModel.js');
 
 module.exports = Backbone.Collection.extend({
     model: ProjectModel,
-    url: '/projects',
+    url: '/api/projects',
     initialize: function() {
       this.fetch();
     }

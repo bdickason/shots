@@ -18,6 +18,8 @@ Example:
 
 */
 
+var shots = require('../shots/shots.js');
+
 module.exports.get = function(callback) {
   /* Gets a list of all projects */
 
@@ -51,9 +53,12 @@ module.exports.get = function(callback) {
 module.exports.getById = function(name, callback) {
   /* Gets a single Project by ID */
 
-  db.getById(name, 'projects', function(err, data) {
+  db.getById(name, 'projects', function(err, projectData) {
     if(!err) {
-      callback(data);
+      shots.getByProject(name, function(shotData) {
+        projectData.shots = shotData;
+        callback(projectData);
+      });
     }
     else {
       throw(err);

@@ -3,16 +3,13 @@
 app = {};
 
 window.onload = function(){
-  Backbone.$ = window.$;
+    Backbone.$ = window.$;
 
-  var ShotsView = require('./views/shotsView.js');
-  var ProjectsView = require('./views/projectsView.js');
+    app.utils = require('./utils.js');
 
-  var ShotsCollection = require('./collections/shotsCollection.js');
-  var ProjectsCollection = require('./collections/projectsCollection.js');
+    var Routes = require('./routes.js');
 
-  app.projects = new ProjectsCollection();
-
-  var projectsView = new ProjectsView({collection: app.projects});
+    app.router = new Routes(); // Routes control the app and start everything up, depending on location
+    Backbone.history.start();
 };
 

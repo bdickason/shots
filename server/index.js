@@ -31,7 +31,7 @@ module.exports.startServer = function() {
   });
 
   /* API Routes */
-  app.get('/projects', function(req, res) {
+  app.get('/api/projects', function(req, res) {
     // Returns a list of all projects
     // Example: curl http://localhost:3000/projects
 
@@ -40,19 +40,19 @@ module.exports.startServer = function() {
     });
   });
 
-  app.put('/projects', function(req, res) {
+  app.put('/api/projects', function(req, res) {
     // Adds a new Project
-    // Example: curl -X PUT http://localhost:3000/projects?project=model-edit
+    // Example: curl -X PUT http://localhost:3000/api/projects?project=model-edit
 
-    project = {"name": req.query.project };
+    project = {"id": req.query.project };
 
     projects.put(project, function(callback) {
       res.json(callback);
     });
   });
 
-  app.get('/projects/:project', function(req, res) {
-    // Returns detailed information about a single shot
+  app.get('/api/projects/:project', function(req, res) {
+    // Returns detailed information about a single project
     // Example: curl http://localhost:3000/projects/model-edit
 
     project = req.params.project;
@@ -62,7 +62,7 @@ module.exports.startServer = function() {
     });
   });
 
-  app.get('/projects/:project/:shot', function(req, res) {
+  app.get('/api/projects/:project/:shot', function(req, res) {
     // Returns a list of shots for a given project
 
     project = req.params.project;
@@ -73,9 +73,9 @@ module.exports.startServer = function() {
     });
   });
 
-  app.put('/projects/:project', function(req, res) {
+  app.put('/api/projects/:project', function(req, res) {
     // Adds a new shot to a project
-    // Example: curl -X PUT http://localhost:3000/projects/model-edit?author=bdickason
+    // Example: curl -X PUT http://localhost:3000/api/projects/model-edit?author=bdickason
     // * Note: Requires a project to create
 
     project = req.params.project;

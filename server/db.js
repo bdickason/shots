@@ -12,7 +12,7 @@ module.exports.setup = function(cfg, callback) {
     port: cfg.RETHINKDB_PORT,
     db: cfg.RETHINKDB_DB,
     tables: {
-      'projects': 'name',
+      'projects': 'id',
       'shots': 'id'
     }
   };

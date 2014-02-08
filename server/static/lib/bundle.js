@@ -4,27 +4,24 @@
 app = {};
 
 window.onload = function(){
-  Backbone.$ = window.$;
+    Backbone.$ = window.$;
 
-  var ShotsView = require('./views/shotsView.js');
-  var ProjectsView = require('./views/projectsView.js');
+    app.utils = require('./utils.js');
 
-  var ShotsCollection = require('./collections/shotsCollection.js');
-  var ProjectsCollection = require('./collections/projectsCollection.js');
+    var Routes = require('./routes.js');
 
-  app.projects = new ProjectsCollection();
-
-  var projectsView = new ProjectsView({collection: app.projects});
+    app.router = new Routes(); // Routes control the app and start everything up, depending on location
+    Backbone.history.start();
 };
 
 
-},{"./collections/projectsCollection.js":2,"./collections/shotsCollection.js":3,"./views/projectsView.js":6,"./views/shotsView.js":7}],2:[function(require,module,exports){
+},{"./routes.js":6,"./utils.js":7}],2:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('../models/projectModel.js');
 
 module.exports = Backbone.Collection.extend({
     model: ProjectModel,
-    url: '/projects',
+    url: '/api/projects',
     initialize: function() {
       this.fetch();
     }
@@ -45,8 +42,8 @@ module.exports = Backbone.Collection.extend({
 var Shots = require('../collections/shotsCollection.js');
 
 module.exports = Backbone.Model.extend({
+  urlRoot: '/api/projects',
   initialize: function() {
-    this.shots = new Shots({'project': this.id, url: '/projects/' + this.id});
   },
     defaults: {
       text: ''
@@ -56,47 +53,344 @@ module.exports = Backbone.Model.extend({
 },{"../collections/shotsCollection.js":3}],5:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 module.exports = Backbone.Model.extend({
+    urlRoot: function() {
+        return('/api/projects/' + this.instanceUrl);
+    },
+    initialize: function() {
+        this.instanceUrl = this.get('projectId');
+    },
     defaults: {
       text: ''
     }
   });
 
 },{}],6:[function(require,module,exports){
+/* Routes - Contains all routes for client-side app */
+
+var NavView = require('./views/navView.js');
+var ProjectNavView = require('./views/projectNavView.js');
+var ProjectsView = require('./views/projectsView.js');
+var ProjectView = require('./views/projectView.js');
+var ShotView = require('./views/shotView.js');
+
+var ProjectsCollection = require('./collections/projectsCollection.js');
+
+var ProjectModel = require('./models/projectModel.js');
+var ShotModel = require('./models/shotModel.js');
+
+
+module.exports = Backbone.Router.extend({
+    routes: {
+        '': 'home',
+        ':project/:shot(/)': 'shot',    // the (/) catches both :shot and :shot/
+        ':project(/)': 'project',
+    },
+    home: function(params) {
+        // Default Route (/) - Display a list of the most recently updated projects
+        console.log('Route: /');
+
+        // Display navigation
+        var navView = new NavView();
+        $('nav').html(navView.$el); // Currently necessary because views persist after a new route is visited
+
+        // Display list of latest projects
+        projectsCollection = new ProjectsCollection();
+        var projectsView = new ProjectsView({collection: projectsCollection});
+        $('content').html(projectsView.$el);
+
+    },
+    project: function(project) {
+        // (/:projectName) - Loads a single project
+        console.log('[project]: /#' + project);
+        
+        // Display navigation
+        var navView = new NavView();
+        $('nav').html(navView.$el);
+
+        // Display a single project
+        projectModel = new ProjectModel({id: project});
+        var projectView = new ProjectView({model: projectModel});
+        $('content').html(projectView.$el);
+    },
+    shot: function(project, shot) {
+        // (/:projectName/shotName) - Loads a single shot
+        console.log('[shot]: /#' + project + '/' + shot);
+
+        // Display navigation
+        var navView = new NavView();
+        $('nav').html(navView.$el);
+
+        // Display 'project' sub-navigation
+        projectModel = new ProjectModel({id: project});
+        var projectNav = new ProjectNavView(projectModel);
+        navView.$el.after(projectNav.$el);
+
+        // Display a single shot
+        shot = new ShotModel({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
+        var shotView = new ShotView({model: shot});
+        $('content').html(shotView.$el);
+    }
+});
+},{"./collections/projectsCollection.js":2,"./models/projectModel.js":4,"./models/shotModel.js":5,"./views/navView.js":8,"./views/projectNavView.js":9,"./views/projectView.js":10,"./views/projectsView.js":11,"./views/shotView.js":12}],7:[function(require,module,exports){
+/* utils - Utility functions */
+
+module.exports.close = function(view) {
+    // Removes all reference to a view (avoids memory leaks)
+    if(view.model) {
+        // View has a model, unbind change events
+        view.model.unbind("change", view.modelChanged);
+    }
+
+    view.remove();
+    view.unbind();
+};
+},{}],8:[function(require,module,exports){
+/* Nav View - Renders the navigation */
+
+var navTemplate = require('./templates/navTemplate.hbs');
+
+module.exports = Backbone.View.extend({
+  tagName: 'div',
+
+  template: navTemplate,
+
+  initialize: function() {
+    this.render();
+  },
+
+  events: {
+    'click #home': 'gotoHome'
+  },
+
+  render: function() {
+    this.$el.html(this.template()); // Nav has no collection associated with it, so just render the tepmlate
+    return this;
+  },
+
+  gotoHome: function(e) {
+    // Navigate to the homepage
+    // Can't figure out how to pass an empty route to Backbone to get it to the homepage
+    /*
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    route = " ";
+    console.log(app.router);
+    app.router.navigate(route, {trigger: true}); */
+  }
+});
+
+},{"./templates/navTemplate.hbs":14}],9:[function(require,module,exports){
+/* projectNav View - Renders a sub-nav for a specific project */
+
+var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
+
+module.exports = Backbone.View.extend({
+  tagName: 'div',
+
+  template: projectNavTemplate,
+
+  initialize: function() {
+    this.render();
+  },
+
+  events: {
+    'click #project': 'gotoProject'
+  },
+
+  render: function() {
+    this.$el.html(this.template({ id: this.id })); // Nav has no collection associated with it, so just render the tepmlate
+    return this;
+  },
+
+  gotoProject: function(e) {
+    // Navigate to the Project page
+    
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    route = this.id;
+    app.router.navigate(route, {trigger: true});
+
+    app.utils.close(this);
+  }
+});
+
+},{"./templates/projectNavTemplate.hbs":15}],10:[function(require,module,exports){
+/* Project View - displays a single projects */
+
+var projectTemplate = require('./templates/projectTemplate.hbs');
+
+var ShotsView = require('../views/shotsView.js');
+
+module.exports = Backbone.View.extend({
+  tagName: 'div',
+
+  template: projectTemplate,
+
+  initialize: function() {
+    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+    this.model.fetch();
+    //this.render();
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+
+    if(this.model.get('shots')) {
+      shots = this.model.get('shots');
+      shotsView = new ShotsView(shots);
+    }
+
+    return this;
+  }
+});
+
+},{"../views/shotsView.js":13,"./templates/projectTemplate.hbs":16}],11:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
-  el: '#container',
+  tagName: 'div',
 
   template: projectsTemplate,
 
   initialize: function() {
-    this.collection.bind('reset', this.render, this); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();
   },
 
+  events: {
+    'click .project a': 'gotoProject'
+  },
+
   render: function() {
-    console.log(this.collection.toJSON());
     this.$el.html(this.template(this.collection.toJSON()));
     return this;
+  },
+
+  gotoProject: function(e) {
+    // Navigate to a specific project
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    projectId = e.target.id;
+    route = projectId;
+
+    app.router.navigate(route, {trigger: true});
   }
 });
 
-},{"./templates/projectsTemplate.hbs":8}],7:[function(require,module,exports){
-/* Shots View - handles logic and rendering of shots */
+},{"./templates/projectsTemplate.hbs":17}],12:[function(require,module,exports){
+/* Shot View - displays a single shot */
+
+var shotTemplate = require('./templates/shotTemplate.hbs');
+
+var ShotModel = require('../models/shotModel.js');
+
 module.exports = Backbone.View.extend({
-    el: '',
+
+  template: shotTemplate,
+
+  initialize: function() {
+    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+    this.model.fetch();
+  },
+
+  events: {
+    'click .shotlink': 'gotoShot'
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    console.log(this.model.toJSON());
+    return this;
+  },
+
+  gotoShot: function(e) {
+    // Navigate to a shot
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    var shotId = this.model.get('project') + '/' + this.model.get('id');
+    route = shotId;
+
+    app.router.navigate(route, {trigger: true});
+
+  },
+  debug: function(e) {
+    console.log(e);
+  }
+});
+
+},{"../models/shotModel.js":5,"./templates/shotTemplate.hbs":18}],13:[function(require,module,exports){
+/* Shots View - displays a list of shots */
+
+var ShotModel = require('../models/shotModel.js');
+var ShotView = require('../views/shotView.js');
+
+module.exports = Backbone.View.extend({
+    el: '.shots',
 
     initialize: function() {
       this.render();
     },
 
     render: function() {
+      // Display each shot in a list
+      _.each(shots, function(shot) {
+        var shotModel = new ShotModel(shot);
+        var shotView = new ShotView({model: shotModel});
+        this.$el.append(shotView.el);
+      }, this);
+
     }
   });
 
-},{}],8:[function(require,module,exports){
+},{"../models/shotModel.js":5,"../views/shotView.js":12}],14:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "  <a href=\"/\" id=\"home\">Home</a> | New Project";
+  });
+
+},{"hbsfy/runtime":26}],15:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "  <a href=\"#\" id=\"project\">&lt;- ";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " </a>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":26}],16:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "  <div class=\"view\">\n    <h1>";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\n\n    <ul class=\"shots\">\n    </ul>\n</div>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":26}],17:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -107,26 +401,79 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n        <li>";
+  buffer += "\n        <li class=\"project\"><a href=\"#\" id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + " ";
-  if (helper = helpers.name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+    + "\">";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</li>\n      ";
+    + "</a></li>\n      ";
   return buffer;
   }
 
-  buffer += "  <div class=\"view\">\n    Projects: \n    <ul>\n      ";
+  buffer += "  <div class=\"view\">\n    <ul>\n      ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </ul>\n  </div> ";
   return buffer;
   });
 
-},{"hbsfy/runtime":16}],9:[function(require,module,exports){
+},{"hbsfy/runtime":26}],18:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<li id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shot\">\n    <a href=\"/#";
+  if (helper = helpers.project) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.project); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shotlink\" id=\"";
+  if (helper = helpers.project) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.project); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">Shot ";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n    <a href=\"http://twitter.com/";
+  if (helper = helpers.author) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.author); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\">";
+  if (helper = helpers.author) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.author); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n    <p>";
+  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n    <img src=\"";
+  if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n</li>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":26}],19:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -159,7 +506,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":10,"./handlebars/exception":11,"./handlebars/runtime":12,"./handlebars/safe-string":13,"./handlebars/utils":14}],10:[function(require,module,exports){
+},{"./handlebars/base":20,"./handlebars/exception":21,"./handlebars/runtime":22,"./handlebars/safe-string":23,"./handlebars/utils":24}],20:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -340,7 +687,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":11,"./utils":14}],11:[function(require,module,exports){
+},{"./exception":21,"./utils":24}],21:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -369,7 +716,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],12:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -507,7 +854,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":10,"./exception":11,"./utils":14}],13:[function(require,module,exports){
+},{"./base":20,"./exception":21,"./utils":24}],23:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -519,7 +866,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],14:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -596,12 +943,12 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":13}],15:[function(require,module,exports){
+},{"./safe-string":23}],25:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":9}],16:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":19}],26:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":15}]},{},[1])
+},{"handlebars/runtime":25}]},{},[1])

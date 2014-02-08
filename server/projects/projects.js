@@ -79,10 +79,11 @@ module.exports.getById = function(name, callback) {
 };
 
 
-module.exports.put = function(name, callback) {
+module.exports.put = function(input, callback) {
   /* Creates a new project */
   
-  db.put(name, 'projects', function(err, data) {
+  
+  db.put(input, 'projects', function(err, data) {
     if(!err) {
       callback(data);
     }

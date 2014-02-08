@@ -44,9 +44,9 @@ module.exports.startServer = function() {
     // Adds a new Project
     // Example: curl -X PUT http://localhost:3000/api/projects?project=model-edit
 
-    project = {"id": req.query.project };
+    input = {"id": req.query.project };
 
-    projects.put(project, function(callback) {
+    projects.put(input, function(callback) {
       res.json(callback);
     });
   });

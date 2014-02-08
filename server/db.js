@@ -80,11 +80,14 @@ module.exports.get = function(table, callback) {
 module.exports.getById = function(id, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
+    console.log('table: ' + table);
+    console.log('id: ' + id);
     rdb.table(table).get(id).run(connection, function(err, result) {
       if(err) {
         callback(err, null);
       }
       else {
+        console.log(result);
         callback(err, result);
       }
       connection.close();
@@ -148,6 +151,7 @@ module.exports.put = function(input, table, callback) {
         callback(err, null);
       }
       else {
+        console.log(result);
         callback(err, result);
       }
       connection.close();

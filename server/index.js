@@ -80,8 +80,8 @@ module.exports.startServer = function() {
 
     project = req.params.project;
     author = req.query.author;
-    text = req.query.text;
-    image = req.query.image;
+    text = req.query.text || null;
+    image = req.query.image || null;
 
     var input = {
         "project": project,
@@ -89,7 +89,6 @@ module.exports.startServer = function() {
         "text": text,
         "image": image
       };
-
 
     shots.put(input, function(callback) {
       res.json(callback);

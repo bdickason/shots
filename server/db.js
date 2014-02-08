@@ -93,9 +93,10 @@ module.exports.getById = function(id, table, callback) {
 };
 
 module.exports.getByFilter = function(filter, table, callback) {
-  // Get a single entry from the db
+  // Get a set of entries from the db that match a query
   onConnect(function(err, connection) {
-    rdb.table(table).getAll(filter, { index: 'project' }).run(connection, function(err, cursor) {
+    console.log(filter);
+    rdb.table(table).filter(filter).run(connection, function(err, cursor) {
       if(err) {
         callback(err, null);
       }
@@ -110,10 +111,34 @@ module.exports.getByFilter = function(filter, table, callback) {
   });
 };
 
+module.exports.getLast = function(filter, table, callback) {
+  // Get the last object in a table that matches your filter
+  onConnect(function(err, connection) {
+    console.log(filter);
+    rdb.table(table)
+    .filter(filter)
+    .orderBy(r.desc('id'))
+    .limit(1)
+    .run(connection, function(err, cursor) {
+      if(err) {
+        callback(err, null);
+      }
+      else {
+        cursor.toArray(function(error, results) {
+          result = results[0];  // Only return one
+          callback(err, result);
+        });
+      }
+      connection.close();
+    });
+  });
+};
+
 module.exports.put = function(input, table, callback) {
   // Get a single entry from the db
   onConnect(function(err, connection) {
     input.timestamp = r.now();
+    console.log(input);
 
     rdb.table(table).insert(input).run(connection, function(err, result) {
       if(err) {
@@ -126,6 +151,9 @@ module.exports.put = function(input, table, callback) {
     });
   });
 };
+
+
+/* Utility Functions */
 
 function onConnect(callback) {
   r.connect({host: dbConfig.host, port: dbConfig.port }, function(err, connection) {

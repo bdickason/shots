@@ -15,7 +15,7 @@ window.onload = function(){
 };
 
 
-},{"./routes.js":6,"./utils.js":7}],2:[function(require,module,exports){
+},{"./routes.js":5,"./utils.js":6}],2:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('../models/projectModel.js');
 
@@ -26,20 +26,8 @@ module.exports = Backbone.Collection.extend({
       this.fetch();
     }
   });
-},{"../models/projectModel.js":4}],3:[function(require,module,exports){
-/* Shots Collection - An ordered list of Shots */
-var ShotModel = require('../models/shotModel.js');
-
-module.exports = Backbone.Collection.extend({
-    model: ShotModel,
-    initialize: function() {
-      // this.fetch();
-    }
-  });
-},{"../models/shotModel.js":5}],4:[function(require,module,exports){
+},{"../models/projectModel.js":3}],3:[function(require,module,exports){
 /* Project Model - data layer for a single Project */
-
-var Shots = require('../collections/shotsCollection.js');
 
 module.exports = Backbone.Model.extend({
   urlRoot: '/api/projects',
@@ -50,7 +38,7 @@ module.exports = Backbone.Model.extend({
     }
   });
 
-},{"../collections/shotsCollection.js":3}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 module.exports = Backbone.Model.extend({
     urlRoot: function() {
@@ -64,7 +52,7 @@ module.exports = Backbone.Model.extend({
     }
   });
 
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 var NavView = require('./views/navView.js');
@@ -72,6 +60,7 @@ var ProjectNavView = require('./views/projectNavView.js');
 var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
+var SingleShotView = require('./views/singleShotView.js');
 
 var ProjectsCollection = require('./collections/projectsCollection.js');
 
@@ -127,11 +116,11 @@ module.exports = Backbone.Router.extend({
 
         // Display a single shot
         shot = new ShotModel({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var shotView = new ShotView({model: shot});
-        $('content').html(shotView.$el);
+        var singleShotView = new SingleShotView({model: shot});
+        $('content').html(singleShotView.$el);
     }
 });
-},{"./collections/projectsCollection.js":2,"./models/projectModel.js":4,"./models/shotModel.js":5,"./views/navView.js":8,"./views/projectNavView.js":9,"./views/projectView.js":10,"./views/projectsView.js":11,"./views/shotView.js":12}],7:[function(require,module,exports){
+},{"./collections/projectsCollection.js":2,"./models/projectModel.js":3,"./models/shotModel.js":4,"./views/navView.js":7,"./views/projectNavView.js":8,"./views/projectView.js":9,"./views/projectsView.js":10,"./views/shotView.js":11,"./views/singleShotView.js":13}],6:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -144,7 +133,7 @@ module.exports.close = function(view) {
     view.remove();
     view.unbind();
 };
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./templates/navTemplate.hbs');
@@ -179,7 +168,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/navTemplate.hbs":14}],9:[function(require,module,exports){
+},{"./templates/navTemplate.hbs":14}],8:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -214,7 +203,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":15}],10:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":15}],9:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
@@ -244,7 +233,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../views/shotsView.js":13,"./templates/projectTemplate.hbs":16}],11:[function(require,module,exports){
+},{"../views/shotsView.js":12,"./templates/projectTemplate.hbs":16}],10:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
@@ -279,8 +268,8 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectsTemplate.hbs":17}],12:[function(require,module,exports){
-/* Shot View - displays a single shot */
+},{"./templates/projectsTemplate.hbs":17}],11:[function(require,module,exports){
+/* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
@@ -292,7 +281,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    this.model.fetch();
+    this.render();  // Data is passed in, so we don't need to call a URL
   },
 
   events: {
@@ -301,7 +290,6 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
-    console.log(this.model.toJSON());
     return this;
   },
 
@@ -320,7 +308,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../models/shotModel.js":5,"./templates/shotTemplate.hbs":18}],13:[function(require,module,exports){
+},{"../models/shotModel.js":4,"./templates/shotTemplate.hbs":18}],12:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotModel = require('../models/shotModel.js');
@@ -344,7 +332,48 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../models/shotModel.js":5,"../views/shotView.js":12}],14:[function(require,module,exports){
+},{"../models/shotModel.js":4,"../views/shotView.js":11}],13:[function(require,module,exports){
+/* Shot View - displays a single shot by itself on a page */
+
+var shotTemplate = require('./templates/shotTemplate.hbs');
+
+var ShotModel = require('../models/shotModel.js');
+
+module.exports = Backbone.View.extend({
+
+  template: shotTemplate,
+
+  initialize: function() {
+    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+    console.log('got here');
+    this.model.fetch();
+  },
+
+  events: {
+    'click .shotlink': 'gotoShot'
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  },
+
+  gotoShot: function(e) {
+    // Navigate to a shot
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    var shotId = this.model.get('project') + '/' + this.model.get('id');
+    route = shotId;
+
+    app.router.navigate(route, {trigger: true});
+
+  },
+  debug: function(e) {
+    console.log(e);
+  }
+});
+
+},{"../models/shotModel.js":4,"./templates/shotTemplate.hbs":18}],14:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

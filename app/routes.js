@@ -5,6 +5,7 @@ var ProjectNavView = require('./views/projectNavView.js');
 var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
+var SingleShotView = require('./views/singleShotView.js');
 
 var ProjectsCollection = require('./collections/projectsCollection.js');
 
@@ -60,7 +61,7 @@ module.exports = Backbone.Router.extend({
 
         // Display a single shot
         shot = new ShotModel({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var shotView = new ShotView({model: shot});
-        $('content').html(shotView.$el);
+        var singleShotView = new SingleShotView({model: shot});
+        $('content').html(singleShotView.$el);
     }
 });

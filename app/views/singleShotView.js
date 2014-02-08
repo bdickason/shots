@@ -1,4 +1,4 @@
-/* Shot View - displays a shot module embedded inside another page */
+/* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
@@ -10,7 +10,8 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    this.render();  // Data is passed in, so we don't need to call a URL
+    console.log('got here');
+    this.model.fetch();
   },
 
   events: {

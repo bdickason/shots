@@ -22,24 +22,29 @@ Example:
 */
 
 module.exports.getById = function(shot, project, callback) {
-  /* Gets a single Project by ID */
+  /* Gets a single shot by ID */
 
   /*
   Example:
   {
-    "id": req.params.shot,
-    "author": {
-      "id": 6,
-      "avatar": "http://www.google.com/blah.jpg",
-      "name": "bdickason"
-    },
+    "id": 0,
+    "author": "bdickason",
     "text": "blah blah blah blah blah.",
     "image": "http://google.com/blah2.jpg"
   }; */
 
-  db.getById(shot, 'shots', function(err, data) {
+  shot = parseInt(shot, 0);
+
+  filter = {
+    id: shot,
+    project: project
+  };
+
+
+
+  db.getByFilter(filter, 'shots', function(err, data) {
     if(!err) {
-      callback(data);
+      callback(data[0]);
     }
     else {
       throw(err);
@@ -79,14 +84,30 @@ module.exports.getByProject = function(project, callback) {
 
 
 module.exports.put = function(input, callback) {
-  /* Creates a new project */
-  
-  db.put(input, 'shots', function(err, data) {
+  /* Creates a new shot */
+
+  filter = { project: input.project };
+  // Get last shot Id (so we know what our shot's ID should be as RethinkDb does not have an auto_increment)
+  db.getLast(filter, 'shots', function(err, lastData) {
     if(!err) {
-      callback(data);
+      input.id = lastData.id + 1;
+
+      // Put the shot in with the proper ID
+      db.put(input, 'shots', function(err, putData) {
+        if(!err) {
+          callback(putData);
+        }
+        else {
+          throw(err);
+        }
+      });
     }
     else {
       throw(err);
     }
+    
+
   });
+  
+
 };

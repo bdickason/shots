@@ -21,18 +21,9 @@ Example:
 var shots = require('../shots/shots.js');
 
 module.exports.get = function(callback) {
-  /* Gets a list of all projects */
+  /* Gets a list of all projects 
 
-  db.get('projects', function(err, data) {
-    if(!err) {
-      callback(data);
-    }
-    else
-      throw(err);
-  });
-
-  /*
-  var exampleResponse =
+    var exampleResponse =
     [
       { "name": "model-edit",
         "shots": [
@@ -47,11 +38,30 @@ module.exports.get = function(callback) {
         ]
       }
     ];
-    callback(exampleResponse); */
+  */
+
+  db.get('projects', function(err, data) {
+    if(!err) {
+      callback(data);
+    }
+    else
+      throw(err);
+  });
 };
 
 module.exports.getById = function(name, callback) {
-  /* Gets a single Project by ID */
+  /* Gets a single Project by ID 
+
+    var exampleResponse =
+    {
+      "name": project,
+      "shots": [
+          { "id": 0 },
+          { "id": 1 },
+          { "id": 2 },
+      ]
+    };
+  */
 
   db.getById(name, 'projects', function(err, projectData) {
     if(!err) {
@@ -64,8 +74,12 @@ module.exports.getById = function(name, callback) {
       throw(err);
     }
   });
-  /*
-  var exampleResponse =
+};
+
+
+module.exports.put = function(input, callback) {
+  /* Creates a new project 
+    var exampleResponse =
     {
       "name": project,
       "shots": [
@@ -74,13 +88,7 @@ module.exports.getById = function(name, callback) {
           { "id": 2 },
       ]
     };
-
-  callback(exampleResponse); */
-};
-
-
-module.exports.put = function(input, callback) {
-  /* Creates a new project */
+  */
   
   
   db.put(input, 'projects', function(err, data) {
@@ -91,16 +99,4 @@ module.exports.put = function(input, callback) {
       throw(err);
     }
   });
-  /*
-  var exampleResponse =
-    {
-      "name": project,
-      "shots": [
-          { "id": 0 },
-          { "id": 1 },
-          { "id": 2 },
-      ]
-    };
-
-  callback(exampleResponse); */
 };

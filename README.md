@@ -76,7 +76,7 @@ To run the test suite type:
 
 Do not push to `master` with failing tests. `master` must always be deployable (but not deplorable).
 
-*Coming soon: Browser tests!*
+**Coming soon: Browser tests!**
 
 
 

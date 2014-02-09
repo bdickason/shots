@@ -8,8 +8,5 @@ module.exports = Backbone.Firebase.Model.extend({
     },
     defaults: {
       text: ''
-    },
-    parse: function(stuff) {
-        console.log(stuff);
     }
-  });
+});

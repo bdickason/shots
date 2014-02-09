@@ -17,7 +17,7 @@ window.onload = function(){
 };
 
 
-},{"./routes.js":7,"./utils.js":8}],2:[function(require,module,exports){
+},{"./routes.js":11,"./utils.js":12}],2:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('../models/projectModel.js');
 
@@ -28,17 +28,43 @@ module.exports = Backbone.Collection.extend({
       this.fetch();
     }
   });
-},{"../models/projectModel.js":5}],3:[function(require,module,exports){
+},{"../models/projectModel.js":7}],3:[function(require,module,exports){
+/* Projects Collection - An ordered list of Projects */
+var ProjectModelFirebase = require('../models/projectModelFirebase.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: ProjectModelFirebase,
+    firebase: function() {
+      return(new Firebase(this.fbUrl));
+    },
+    initialize: function() {
+      this.fbUrl = app.fbUrl + '/projects/';
+    }
+  });
+},{"../models/projectModelFirebase.js":8}],4:[function(require,module,exports){
+/* Shots Collection - An ordered list of Shots */
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: ShotModelFirebase,
+    initialize: function() {
+      console.log(this);
+    }
+  });
+},{"../models/shotModelFirebase.js":10}],5:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('../models/shotModel.js');
 
 module.exports = Backbone.Collection.extend({
     model: ShotModel,
-    initialize: function() {
-      // this.fetch();
+    firebase: function() {
+      return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, projectId) {
+      this.fbUrl = app.fbUrl + '/projects/' + projectId;
     }
   });
-},{"../models/shotModel.js":6}],4:[function(require,module,exports){
+},{"../models/shotModel.js":9}],6:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {
@@ -49,13 +75,10 @@ module.exports = Backbone.Firebase.Model.extend({
     },
     defaults: {
       text: ''
-    },
-    parse: function(stuff) {
-        console.log(stuff);
     }
-  });
+});
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /* Project Model - data layer for a single Project */
 
 module.exports = Backbone.Model.extend({
@@ -63,25 +86,37 @@ module.exports = Backbone.Model.extend({
   initialize: function() {
   },
     defaults: {
-      text: ''
     }
   });
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
+/* Project Model - data layer for a single Project */
+
+module.exports = Backbone.Firebase.Model.extend({
+  firebase: function() {
+    return(new Firebase(this.fbUrl));
+  },
+  initialize: function() {
+    this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
+  },
+  defaults: {
+  }
+});
+
+},{}],9:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 module.exports = Backbone.Model.extend({
-    urlRoot: function() {
-        return('/api/projects/' + this.instanceUrl);
-    },
     initialize: function() {
-        this.instanceUrl = this.get('projectId');
+        console.log('initialized');
     },
     defaults: {
       text: ''
     }
   });
 
-},{}],7:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+module.exports=require(6)
+},{}],11:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 var NavView = require('./views/navView.js');
@@ -92,8 +127,10 @@ var ShotView = require('./views/shotView.js');
 var SingleShotView = require('./views/singleShotView.js');
 
 var ProjectsCollection = require('./collections/projectsCollection.js');
+var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
 var ProjectModel = require('./models/projectModel.js');
+var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ShotModel = require('./models/shotModel.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
@@ -113,8 +150,8 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        projectsCollection = new ProjectsCollection();
-        var projectsView = new ProjectsView({collection: projectsCollection});
+        projectsCollectionFirebase = new ProjectsCollectionFirebase();
+        var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
         $('content').html(projectsView.$el);
 
     },
@@ -127,8 +164,8 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display a single project
-        projectModel = new ProjectModel({id: project});
-        var projectView = new ProjectView({model: projectModel});
+        projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectView = new ProjectView({model: projectModelFirebase});
         $('content').html(projectView.$el);
     },
     shot: function(project, shot) {
@@ -146,12 +183,11 @@ module.exports = Backbone.Router.extend({
 
         // Display a single shot
         shot = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        console.log(shot.toJSON());
         var singleShotView = new SingleShotView({model: shot});
         $('content').html(singleShotView.$el);
     }
 });
-},{"./collections/projectsCollection.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/shotModel.js":6,"./views/navView.js":9,"./views/projectNavView.js":10,"./views/projectView.js":11,"./views/projectsView.js":12,"./views/shotView.js":13,"./views/singleShotView.js":15}],8:[function(require,module,exports){
+},{"./collections/projectsCollection.js":2,"./collections/projectsCollectionFirebase.js":3,"./models/ShotModelFirebase.js":6,"./models/projectModel.js":7,"./models/projectModelFirebase.js":8,"./models/shotModel.js":9,"./views/navView.js":13,"./views/projectNavView.js":14,"./views/projectView.js":15,"./views/projectsView.js":16,"./views/shotView.js":17,"./views/singleShotView.js":19}],12:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -164,7 +200,7 @@ module.exports.close = function(view) {
     view.remove();
     view.unbind();
 };
-},{}],9:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./templates/navTemplate.hbs');
@@ -199,7 +235,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/navTemplate.hbs":16}],10:[function(require,module,exports){
+},{"./templates/navTemplate.hbs":20}],14:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -234,12 +270,13 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":17}],11:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":21}],15:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
 
 var ShotsCollection = require('../collections/shotsCollection.js');
+var ShotsCollectionFirebase = require('../collections/shotsCollectionFirebase.js');
 
 var ShotsView = require('../views/shotsView.js');
 
@@ -249,27 +286,32 @@ module.exports = Backbone.View.extend({
   template: projectTemplate,
 
   initialize: function() {
-    this.model.fetch();
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    //this.render();
   },
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     
     if(this.model.get('shots')) {
-      shotsModel = new ShotsCollection(this.model.get('shots'));
-      shotsView = new ShotsView({ collection: shotsModel, project: this.model.get('id') });
+      shots = this.model.get('shots');
+
+      shots[0] = shots[1];  // Temporary hack for my improperly added data.
+      shotsCollectionFirebase = new ShotsCollectionFirebase(shots, this.model.get('id'));
+      // shotsCollection = new ShotsCollection(this.model.get('shots'));
+      console.log(shotsCollectionFirebase.toJSON());
+      shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
     }
 
     return this;
   }
 });
 
-},{"../collections/shotsCollection.js":3,"../views/shotsView.js":14,"./templates/projectTemplate.hbs":18}],12:[function(require,module,exports){
+},{"../collections/shotsCollection.js":4,"../collections/shotsCollectionFirebase.js":5,"../views/shotsView.js":18,"./templates/projectTemplate.hbs":22}],16:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
+
+var ProjectView = require('../views/projectView.js');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',
@@ -279,10 +321,17 @@ module.exports = Backbone.View.extend({
   initialize: function() {
     this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();
+
+    var view = this;
+    this.collection.bind('add', function(project) {
+      console.log(project.toJSON());
+      view.$('.projects').append(new ProjectView({model: project}).render().el);
+    });
   },
 
   events: {
-    'click .project a': 'gotoProject'
+    'click .project a': 'gotoProject',
+    'click .save': 'createProject'
   },
 
   render: function() {
@@ -298,10 +347,23 @@ module.exports = Backbone.View.extend({
     route = projectId;
 
     app.router.navigate(route, {trigger: true});
+  },
+
+  createProject: function(project) {
+    if($('#name').val()) {
+      var input = {
+        id: $('#name').val()
+      };
+
+      console.log(input);
+
+      this.collection.create(input);
+      $('#name').val('');
+    }
   }
 });
 
-},{"./templates/projectsTemplate.hbs":19}],13:[function(require,module,exports){
+},{"../views/projectView.js":15,"./templates/projectsTemplate.hbs":23}],17:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -345,7 +407,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../models/shotModel.js":6,"./templates/shotTemplate.hbs":20}],14:[function(require,module,exports){
+},{"../models/shotModel.js":9,"./templates/shotTemplate.hbs":24}],18:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotModel = require('../models/shotModel.js');
@@ -363,7 +425,6 @@ module.exports = Backbone.View.extend({
       this.project = options.project;  // Save project name in case we need to add
 
       var view = this;
-      
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
       });
@@ -379,6 +440,8 @@ module.exports = Backbone.View.extend({
           text: $('#text').val(),
           projectId: this.project
         };
+
+        console.log(input);
 
         this.collection.create(input);
         $('#text').val('');
@@ -400,7 +463,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../models/shotModel.js":6,"../views/shotView.js":13,"./templates/shotsTemplate.hbs":21}],15:[function(require,module,exports){
+},{"../models/shotModel.js":9,"../views/shotView.js":17,"./templates/shotsTemplate.hbs":25}],19:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -440,7 +503,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../models/shotModel.js":6,"./templates/shotTemplate.hbs":20}],16:[function(require,module,exports){
+},{"../models/shotModel.js":9,"./templates/shotTemplate.hbs":24}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -452,7 +515,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "  <a href=\"/\" id=\"home\">Home</a> | New Project";
   });
 
-},{"hbsfy/runtime":29}],17:[function(require,module,exports){
+},{"hbsfy/runtime":33}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -469,7 +532,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":29}],18:[function(require,module,exports){
+},{"hbsfy/runtime":33}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -486,7 +549,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":29}],19:[function(require,module,exports){
+},{"hbsfy/runtime":33}],23:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -509,14 +572,14 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "  <div class=\"view\">\n    <ul>\n      ";
+  buffer += "  <div class=\"view\">\n    <label><h3>Create a Project</h3></label>\n    <input id=\"name\" type=\"textarea\" class\"input\" placeholder=\"\" autofocus>\n    <button class=\"save\">save</button>\n    <ul class=\"projects\">\n      ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </ul>\n  </div> ";
   return buffer;
   });
 
-},{"hbsfy/runtime":29}],20:[function(require,module,exports){
+},{"hbsfy/runtime":33}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -584,7 +647,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":29}],21:[function(require,module,exports){
+},{"hbsfy/runtime":33}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -596,7 +659,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>";
   });
 
-},{"hbsfy/runtime":29}],22:[function(require,module,exports){
+},{"hbsfy/runtime":33}],26:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -629,7 +692,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":23,"./handlebars/exception":24,"./handlebars/runtime":25,"./handlebars/safe-string":26,"./handlebars/utils":27}],23:[function(require,module,exports){
+},{"./handlebars/base":27,"./handlebars/exception":28,"./handlebars/runtime":29,"./handlebars/safe-string":30,"./handlebars/utils":31}],27:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -810,7 +873,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":24,"./utils":27}],24:[function(require,module,exports){
+},{"./exception":28,"./utils":31}],28:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -839,7 +902,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],25:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -977,7 +1040,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":23,"./exception":24,"./utils":27}],26:[function(require,module,exports){
+},{"./base":27,"./exception":28,"./utils":31}],30:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -989,7 +1052,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],27:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -1066,12 +1129,12 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":26}],28:[function(require,module,exports){
+},{"./safe-string":30}],32:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":22}],29:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":26}],33:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":28}]},{},[1])
+},{"handlebars/runtime":32}]},{},[1])

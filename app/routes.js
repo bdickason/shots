@@ -8,8 +8,10 @@ var ShotView = require('./views/shotView.js');
 var SingleShotView = require('./views/singleShotView.js');
 
 var ProjectsCollection = require('./collections/projectsCollection.js');
+var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
 var ProjectModel = require('./models/projectModel.js');
+var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ShotModel = require('./models/shotModel.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
@@ -29,8 +31,8 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        projectsCollection = new ProjectsCollection();
-        var projectsView = new ProjectsView({collection: projectsCollection});
+        projectsCollectionFirebase = new ProjectsCollectionFirebase();
+        var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
         $('content').html(projectsView.$el);
 
     },
@@ -43,8 +45,8 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display a single project
-        projectModel = new ProjectModel({id: project});
-        var projectView = new ProjectView({model: projectModel});
+        projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectView = new ProjectView({model: projectModelFirebase});
         $('content').html(projectView.$el);
     },
     shot: function(project, shot) {
@@ -62,7 +64,6 @@ module.exports = Backbone.Router.extend({
 
         // Display a single shot
         shot = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        console.log(shot.toJSON());
         var singleShotView = new SingleShotView({model: shot});
         $('content').html(singleShotView.$el);
     }

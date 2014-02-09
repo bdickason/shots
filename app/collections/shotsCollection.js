@@ -1,9 +1,9 @@
 /* Shots Collection - An ordered list of Shots */
-var ShotModel = require('../models/shotModel.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
-module.exports = Backbone.Collection.extend({
-    model: ShotModel,
+module.exports = Backbone.Firebase.Collection.extend({
+    model: ShotModelFirebase,
     initialize: function() {
-      // this.fetch();
+      console.log(this);
     }
   });

@@ -2,6 +2,8 @@
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
 
+var ProjectView = require('../views/projectView.js');
+
 module.exports = Backbone.View.extend({
   tagName: 'div',
 
@@ -10,10 +12,17 @@ module.exports = Backbone.View.extend({
   initialize: function() {
     this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();
+
+    var view = this;
+    this.collection.bind('add', function(project) {
+      console.log(project.toJSON());
+      view.$('.projects').append(new ProjectView({model: project}).render().el);
+    });
   },
 
   events: {
-    'click .project a': 'gotoProject'
+    'click .project a': 'gotoProject',
+    'click .save': 'createProject'
   },
 
   render: function() {
@@ -29,5 +38,18 @@ module.exports = Backbone.View.extend({
     route = projectId;
 
     app.router.navigate(route, {trigger: true});
+  },
+
+  createProject: function(project) {
+    if($('#name').val()) {
+      var input = {
+        id: $('#name').val()
+      };
+
+      console.log(input);
+
+      this.collection.create(input);
+      $('#name').val('');
+    }
   }
 });

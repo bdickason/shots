@@ -11,6 +11,7 @@ var ProjectsCollection = require('./collections/projectsCollection.js');
 
 var ProjectModel = require('./models/projectModel.js');
 var ShotModel = require('./models/shotModel.js');
+var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 
 module.exports = Backbone.Router.extend({
@@ -60,7 +61,8 @@ module.exports = Backbone.Router.extend({
         navView.$el.after(projectNav.$el);
 
         // Display a single shot
-        shot = new ShotModel({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
+        shot = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
+        console.log(shot.toJSON());
         var singleShotView = new SingleShotView({model: shot});
         $('content').html(singleShotView.$el);
     }

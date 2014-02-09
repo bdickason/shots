@@ -10,8 +10,6 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    console.log('got here');
-    this.model.fetch();
   },
 
   events: {
@@ -19,6 +17,7 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
+    console.log(this.model.toJSON());
     this.$el.html(this.template(this.model.toJSON()));
     return this;
   },

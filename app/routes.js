@@ -12,7 +12,7 @@ var ProjectsCollectionFirebase = require('./collections/projectsCollectionFireba
 
 var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
-var ShotModel = require('./models/shotModel.js');
+//var ShotModel = require('./models/shotModel.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 

@@ -2,28 +2,25 @@
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-var ShotModel = require('../models/shotModel.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 module.exports = Backbone.View.extend({
 
   template: shotTemplate,
 
   initialize: function() {
+    console.log(this.model);
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();  // Data is passed in, so we don't need to call a URL
   },
 
   events: {
-    'click .shotlink': 'gotoShot',
-    'click .save': 'saveShot'
+    'click .shotlink': 'gotoShot'
   },
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
-  },
-
-  saveShot: function() {
   },
 
   gotoShot: function(e) {
@@ -35,8 +32,5 @@ module.exports = Backbone.View.extend({
 
     app.router.navigate(route, {trigger: true});
 
-  },
-  debug: function(e) {
-    console.log(e);
   }
 });

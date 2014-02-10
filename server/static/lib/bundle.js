@@ -45,36 +45,42 @@ module.exports = Backbone.Firebase.Collection.extend({
 /* Shots Collection - An ordered list of Shots */
 var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
-module.exports = Backbone.Firebase.Collection.extend({
+module.exports = Backbone.Collection.extend({
     model: ShotModelFirebase,
     initialize: function() {
-      console.log(this);
     }
   });
 },{"../models/shotModelFirebase.js":10}],5:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
-var ShotModel = require('../models/shotModel.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 module.exports = Backbone.Collection.extend({
-    model: ShotModel,
+    model: ShotModelFirebase,
     firebase: function() {
       return(new Firebase(this.fbUrl));
     },
-    initialize: function(models, projectId) {
-      this.fbUrl = app.fbUrl + '/projects/' + projectId;
+    initialize: function() {
+      this.fbUrl = app.fbUrl + '/shots';
     }
   });
-},{"../models/shotModel.js":9}],6:[function(require,module,exports){
+},{"../models/shotModelFirebase.js":10}],6:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {
         return(new Firebase(this.fbUrl));
     },
     initialize: function() {
-        this.fbUrl = app.fbUrl + '/projects/' + this.get('projectId') + '/shots/' + this.get('id');
+        this.fbUrl = app.fbUrl + '/shots/' + this.get('id');
+    },
+    events: {
+      'all': 'debug'
     },
     defaults: {
       text: ''
+    },
+    debug: function(e) {
+      console.log('debugging');
+      console.log(e);
     }
 });
 
@@ -86,6 +92,7 @@ module.exports = Backbone.Model.extend({
   initialize: function() {
   },
     defaults: {
+      shots: []
     }
   });
 
@@ -99,7 +106,10 @@ module.exports = Backbone.Firebase.Model.extend({
   initialize: function() {
     this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
   },
-  defaults: {
+  defaults: function() {
+    return {
+      shots: []
+    };
   }
 });
 
@@ -107,7 +117,6 @@ module.exports = Backbone.Firebase.Model.extend({
 /* Shot Model - data layer for a single Shot */
 module.exports = Backbone.Model.extend({
     initialize: function() {
-        console.log('initialized');
     },
     defaults: {
       text: ''
@@ -131,7 +140,7 @@ var ProjectsCollectionFirebase = require('./collections/projectsCollectionFireba
 
 var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
-var ShotModel = require('./models/shotModel.js');
+//var ShotModel = require('./models/shotModel.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 
@@ -187,7 +196,7 @@ module.exports = Backbone.Router.extend({
         $('content').html(singleShotView.$el);
     }
 });
-},{"./collections/projectsCollection.js":2,"./collections/projectsCollectionFirebase.js":3,"./models/ShotModelFirebase.js":6,"./models/projectModel.js":7,"./models/projectModelFirebase.js":8,"./models/shotModel.js":9,"./views/navView.js":13,"./views/projectNavView.js":14,"./views/projectView.js":15,"./views/projectsView.js":16,"./views/shotView.js":17,"./views/singleShotView.js":19}],12:[function(require,module,exports){
+},{"./collections/projectsCollection.js":2,"./collections/projectsCollectionFirebase.js":3,"./models/ShotModelFirebase.js":6,"./models/projectModel.js":7,"./models/projectModelFirebase.js":8,"./views/navView.js":13,"./views/projectNavView.js":14,"./views/projectView.js":15,"./views/projectsView.js":16,"./views/shotView.js":17,"./views/singleShotView.js":19}],12:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -291,16 +300,17 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
+    var shots;
     
     if(this.model.get('shots')) {
       shots = this.model.get('shots');
-
-      shots[0] = shots[1];  // Temporary hack for my improperly added data.
-      shotsCollectionFirebase = new ShotsCollectionFirebase(shots, this.model.get('id'));
-      // shotsCollection = new ShotsCollection(this.model.get('shots'));
-      console.log(shotsCollectionFirebase.toJSON());
-      shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
     }
+    else {
+      shots = {}; // Empty collection
+    }
+
+    shotsCollectionFirebase = new ShotsCollectionFirebase();
+    shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
 
     return this;
   }
@@ -324,7 +334,6 @@ module.exports = Backbone.View.extend({
 
     var view = this;
     this.collection.bind('add', function(project) {
-      console.log(project.toJSON());
       view.$('.projects').append(new ProjectView({model: project}).render().el);
     });
   },
@@ -355,9 +364,8 @@ module.exports = Backbone.View.extend({
         id: $('#name').val()
       };
 
-      console.log(input);
-
       this.collection.create(input);
+
       $('#name').val('');
     }
   }
@@ -368,28 +376,25 @@ module.exports = Backbone.View.extend({
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-var ShotModel = require('../models/shotModel.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 module.exports = Backbone.View.extend({
 
   template: shotTemplate,
 
   initialize: function() {
+    console.log(this.model);
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();  // Data is passed in, so we don't need to call a URL
   },
 
   events: {
-    'click .shotlink': 'gotoShot',
-    'click .save': 'saveShot'
+    'click .shotlink': 'gotoShot'
   },
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     return this;
-  },
-
-  saveShot: function() {
   },
 
   gotoShot: function(e) {
@@ -401,16 +406,13 @@ module.exports = Backbone.View.extend({
 
     app.router.navigate(route, {trigger: true});
 
-  },
-  debug: function(e) {
-    console.log(e);
   }
 });
 
-},{"../models/shotModel.js":9,"./templates/shotTemplate.hbs":24}],18:[function(require,module,exports){
+},{"../models/shotModelFirebase.js":10,"./templates/shotTemplate.hbs":24}],18:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
-var ShotModel = require('../models/shotModel.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
@@ -425,8 +427,14 @@ module.exports = Backbone.View.extend({
       this.project = options.project;  // Save project name in case we need to add
 
       var view = this;
+
+      /*
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
+      }); */
+  
+      this.collection.bind('all', function(name, e) {
+        console.log(name);
       });
     },
     
@@ -435,15 +443,14 @@ module.exports = Backbone.View.extend({
     },
 
     createShot: function(shot) {
+
       if($('#text').val()) {
         var input = {
-          text: $('#text').val(),
-          projectId: this.project
+          id: $('#text').val()
         };
 
-        console.log(input);
+        tmp = this.collection.create(input);
 
-        this.collection.create(input);
         $('#text').val('');
       }
     },
@@ -453,17 +460,19 @@ module.exports = Backbone.View.extend({
       this.$el.append(this.template());
 
       // Display each shot in a list
+      if(_.size(this.collection) > 0) {
+        // Only do this if we have shots
+        var view = this;  // this.collection.each overrides this to refer to current collection
 
-      var view = this;  // this.collection.each overrides this to refer to current collection
-
-      this.collection.each(function(shotModel) {
-        var shotView = new ShotView({model: shotModel});
-        view.$el.append(shotView.el);
-      });
+        this.collection.each(function(shotModel) {
+          var shotView = new ShotView({model: shotModel});
+          view.$el.append(shotView.el);
+        });
+      }
     }
   });
 
-},{"../models/shotModel.js":9,"../views/shotView.js":17,"./templates/shotsTemplate.hbs":25}],19:[function(require,module,exports){
+},{"../models/shotModelFirebase.js":10,"../views/shotView.js":17,"./templates/shotsTemplate.hbs":25}],19:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');

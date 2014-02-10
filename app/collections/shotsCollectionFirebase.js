@@ -1,12 +1,12 @@
 /* Shots Collection - An ordered list of Shots */
-var ShotModel = require('../models/shotModel.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 module.exports = Backbone.Collection.extend({
-    model: ShotModel,
+    model: ShotModelFirebase,
     firebase: function() {
       return(new Firebase(this.fbUrl));
     },
-    initialize: function(models, projectId) {
-      this.fbUrl = app.fbUrl + '/projects/' + projectId;
+    initialize: function() {
+      this.fbUrl = app.fbUrl + '/shots';
     }
   });

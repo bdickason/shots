@@ -15,7 +15,6 @@ module.exports = Backbone.View.extend({
 
     var view = this;
     this.collection.bind('add', function(project) {
-      console.log(project.toJSON());
       view.$('.projects').append(new ProjectView({model: project}).render().el);
     });
   },
@@ -46,9 +45,8 @@ module.exports = Backbone.View.extend({
         id: $('#name').val()
       };
 
-      console.log(input);
-
       this.collection.create(input);
+
       $('#name').val('');
     }
   }

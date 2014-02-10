@@ -18,16 +18,17 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
+    var shots;
     
     if(this.model.get('shots')) {
       shots = this.model.get('shots');
-
-      shots[0] = shots[1];  // Temporary hack for my improperly added data.
-      shotsCollectionFirebase = new ShotsCollectionFirebase(shots, this.model.get('id'));
-      // shotsCollection = new ShotsCollection(this.model.get('shots'));
-      console.log(shotsCollectionFirebase.toJSON());
-      shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
     }
+    else {
+      shots = {}; // Empty collection
+    }
+
+    shotsCollectionFirebase = new ShotsCollectionFirebase();
+    shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
 
     return this;
   }

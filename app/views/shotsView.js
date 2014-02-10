@@ -16,10 +16,9 @@ module.exports = Backbone.View.extend({
 
       var view = this;
 
-      /*
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
-      }); */
+      });
   
       this.collection.bind('all', function(name, e) {
         console.log(name);

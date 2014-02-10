@@ -7,6 +7,6 @@ module.exports = Backbone.Collection.extend({
       return(new Firebase(this.fbUrl));
     },
     initialize: function() {
-      this.fbUrl = app.fbUrl + '/shots';
+      this.fbUrl = app.fbUrl + '/shots/';
     }
   });

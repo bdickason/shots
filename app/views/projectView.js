@@ -2,7 +2,6 @@
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
 
-var ShotsCollection = require('../collections/shotsCollection.js');
 var ShotsCollectionFirebase = require('../collections/shotsCollectionFirebase.js');
 
 var ShotsView = require('../views/shotsView.js');
@@ -18,14 +17,14 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
-    var shots;
+    /*var shots;
     
     if(this.model.get('shots')) {
       shots = this.model.get('shots');
     }
     else {
       shots = {}; // Empty collection
-    }
+    } */
 
     shotsCollectionFirebase = new ShotsCollectionFirebase();
     shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });

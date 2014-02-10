@@ -5,6 +5,8 @@ app = {};
 window.onload = function(){
     Backbone.$ = window.$;
 
+    Firebase.enableLogging(true);
+
     app.utils = require('./utils.js');
 
     app.fbUrl = 'https://shots.firebaseio.com';

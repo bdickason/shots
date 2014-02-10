@@ -7,7 +7,7 @@ var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
 var SingleShotView = require('./views/singleShotView.js');
 
-var ProjectsCollection = require('./collections/projectsCollection.js');
+//var ProjectsCollection = require('./collections/projectsCollection.js');
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
 var ProjectModel = require('./models/projectModel.js');

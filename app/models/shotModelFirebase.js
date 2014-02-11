@@ -1,4 +1,4 @@
-/* Shot Model - data layer for a single Shot */
+/* Shot Model - Standalone model (do not use in collections) */
 
 module.exports = Backbone.Firebase.Model.extend({
     firebase: new Firebase(app.fbUrl + '/shots/'),

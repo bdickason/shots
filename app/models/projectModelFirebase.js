@@ -1,4 +1,4 @@
-/* Project Model - data layer for a single Project */
+/* Project Model - For standalone use (not in a collection) */
 
 module.exports = Backbone.Firebase.Model.extend({
   firebase: new Firebase(app.fbUrl + '/projects'),

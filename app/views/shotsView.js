@@ -1,6 +1,5 @@
 /* Shots View - displays a list of shots */
 
-var ShotModelFirebase = require('../models/shotModelFirebase.js');
 var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 

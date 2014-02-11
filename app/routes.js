@@ -29,7 +29,6 @@ module.exports = Backbone.Router.extend({
 
         // Display list of latest projects
         projectsCollectionFirebase = new ProjectsCollectionFirebase();
-        console.log('got here');
         var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
         $('content').html(projectsView.$el);
 

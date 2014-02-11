@@ -6,7 +6,7 @@ app = {};
 window.onload = function(){
     Backbone.$ = window.$;
 
-    Firebase.enableLogging(true);
+    // Firebase.enableLogging(true);
 
     app.utils = require('./utils.js');
 
@@ -19,41 +19,32 @@ window.onload = function(){
 };
 
 
-},{"./routes.js":9,"./utils.js":10}],2:[function(require,module,exports){
+},{"./routes.js":7,"./utils.js":8}],2:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModelFirebase = require('../models/projectModelFirebase.js');
 
 module.exports = Backbone.Firebase.Collection.extend({
     model: ProjectModelFirebase,
-    firebase: function() {
-      return(new Firebase(this.fbUrl));
-    },
+    firebase: new Firebase(app.fbUrl + '/projects/'),
     initialize: function() {
-      this.fbUrl = app.fbUrl + '/projects/';
     }
   });
-},{"../models/projectModelFirebase.js":6}],3:[function(require,module,exports){
+},{"../models/projectModelFirebase.js":5}],3:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
-module.exports = Backbone.Collection.extend({
+module.exports = Backbone.Firebase.Collection.extend({
     model: ShotModelFirebase,
-    firebase: function() {
-      return(new Firebase(this.fbUrl));
-    },
+    firebase: new Firebase(app.fbUrl + '/shots/'),
     initialize: function() {
-      this.fbUrl = app.fbUrl + '/shots/';
     }
   });
-},{"../models/shotModelFirebase.js":8}],4:[function(require,module,exports){
+},{"../models/shotModelFirebase.js":6}],4:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
 module.exports = Backbone.Firebase.Model.extend({
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
+    firebase: new Firebase(app.fbUrl + '/shots/'),
     initialize: function() {
-        this.fbUrl = app.fbUrl + '/shots/' + this.get('id');
     },
     defaults: {
       text: ''
@@ -63,45 +54,16 @@ module.exports = Backbone.Firebase.Model.extend({
 },{}],5:[function(require,module,exports){
 /* Project Model - data layer for a single Project */
 
-module.exports = Backbone.Model.extend({
-  urlRoot: '/api/projects',
-  initialize: function() {
-  },
-    defaults: {
-      shots: []
-    }
-  });
-
-},{}],6:[function(require,module,exports){
-/* Project Model - data layer for a single Project */
-
 module.exports = Backbone.Firebase.Model.extend({
-  firebase: function() {
-    return(new Firebase(this.fbUrl));
-  },
+  firebase: new Firebase(app.fbUrl + '/projects'),
   initialize: function() {
-    this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
-  },
-  defaults: function() {
-    return {
-      shots: []
-    };
+    // this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
   }
 });
 
-},{}],7:[function(require,module,exports){
-/* Shot Model - data layer for a single Shot */
-module.exports = Backbone.Model.extend({
-    initialize: function() {
-    },
-    defaults: {
-      text: ''
-    }
-  });
-
-},{}],8:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 module.exports=require(4)
-},{}],9:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 var NavView = require('./views/navView.js');
@@ -111,12 +73,9 @@ var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
 var SingleShotView = require('./views/singleShotView.js');
 
-//var ProjectsCollection = require('./collections/projectsCollection.js');
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
-var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
-//var ShotModel = require('./models/shotModel.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 
@@ -136,6 +95,7 @@ module.exports = Backbone.Router.extend({
 
         // Display list of latest projects
         projectsCollectionFirebase = new ProjectsCollectionFirebase();
+        console.log('got here');
         var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
         $('content').html(projectsView.$el);
 
@@ -172,7 +132,7 @@ module.exports = Backbone.Router.extend({
         $('content').html(singleShotView.$el);
     }
 });
-},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":11,"./views/projectNavView.js":12,"./views/projectView.js":13,"./views/projectsView.js":14,"./views/shotView.js":15,"./views/singleShotView.js":17}],10:[function(require,module,exports){
+},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModelFirebase.js":5,"./views/navView.js":9,"./views/projectNavView.js":10,"./views/projectView.js":11,"./views/projectsView.js":12,"./views/shotView.js":13,"./views/singleShotView.js":15}],8:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -185,7 +145,7 @@ module.exports.close = function(view) {
     view.remove();
     view.unbind();
 };
-},{}],11:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./templates/navTemplate.hbs');
@@ -220,7 +180,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/navTemplate.hbs":18}],12:[function(require,module,exports){
+},{"./templates/navTemplate.hbs":16}],10:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -255,7 +215,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":19}],13:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":17}],11:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
@@ -291,7 +251,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":16,"./templates/projectTemplate.hbs":20}],14:[function(require,module,exports){
+},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":14,"./templates/projectTemplate.hbs":18}],12:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
@@ -305,7 +265,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    this.render();
+    //this.render();
 
     var view = this;
     this.collection.bind('add', function(project) {
@@ -339,14 +299,14 @@ module.exports = Backbone.View.extend({
         id: $('#name').val()
       };
 
-      this.collection.create(input);
+      this.collection.add(input);
 
       $('#name').val('');
     }
   }
 });
 
-},{"../views/projectView.js":13,"./templates/projectsTemplate.hbs":21}],15:[function(require,module,exports){
+},{"../views/projectView.js":11,"./templates/projectsTemplate.hbs":19}],13:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -384,7 +344,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../models/shotModelFirebase.js":8,"./templates/shotTemplate.hbs":22}],16:[function(require,module,exports){
+},{"../models/shotModelFirebase.js":6,"./templates/shotTemplate.hbs":20}],14:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotModelFirebase = require('../models/shotModelFirebase.js');
@@ -424,6 +384,7 @@ module.exports = Backbone.View.extend({
         };
 
         tmp = this.collection.create(input);
+        console.log(tmp);
 
         $('#text').val('');
       }
@@ -446,12 +407,12 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../models/shotModelFirebase.js":8,"../views/shotView.js":15,"./templates/shotsTemplate.hbs":23}],17:[function(require,module,exports){
+},{"../models/shotModelFirebase.js":6,"../views/shotView.js":13,"./templates/shotsTemplate.hbs":21}],15:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-var ShotModel = require('../models/shotModel.js');
+//var ShotModel = require('../models/shotModel.js');
 
 module.exports = Backbone.View.extend({
 
@@ -486,7 +447,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../models/shotModel.js":7,"./templates/shotTemplate.hbs":22}],18:[function(require,module,exports){
+},{"./templates/shotTemplate.hbs":20}],16:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -498,7 +459,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "  <a href=\"/\" id=\"home\">Home</a> | New Project";
   });
 
-},{"hbsfy/runtime":31}],19:[function(require,module,exports){
+},{"hbsfy/runtime":29}],17:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -515,7 +476,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],20:[function(require,module,exports){
+},{"hbsfy/runtime":29}],18:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -532,7 +493,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],21:[function(require,module,exports){
+},{"hbsfy/runtime":29}],19:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -562,7 +523,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],22:[function(require,module,exports){
+},{"hbsfy/runtime":29}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -630,7 +591,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],23:[function(require,module,exports){
+},{"hbsfy/runtime":29}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -642,7 +603,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>";
   });
 
-},{"hbsfy/runtime":31}],24:[function(require,module,exports){
+},{"hbsfy/runtime":29}],22:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -675,7 +636,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":25,"./handlebars/exception":26,"./handlebars/runtime":27,"./handlebars/safe-string":28,"./handlebars/utils":29}],25:[function(require,module,exports){
+},{"./handlebars/base":23,"./handlebars/exception":24,"./handlebars/runtime":25,"./handlebars/safe-string":26,"./handlebars/utils":27}],23:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -856,7 +817,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":26,"./utils":29}],26:[function(require,module,exports){
+},{"./exception":24,"./utils":27}],24:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -885,7 +846,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],27:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -1023,7 +984,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":25,"./exception":26,"./utils":29}],28:[function(require,module,exports){
+},{"./base":23,"./exception":24,"./utils":27}],26:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -1035,7 +996,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],29:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -1112,12 +1073,12 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":28}],30:[function(require,module,exports){
+},{"./safe-string":26}],28:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":24}],31:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":22}],29:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":30}]},{},[1])
+},{"handlebars/runtime":28}]},{},[1])

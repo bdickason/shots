@@ -7,12 +7,9 @@ var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
 var SingleShotView = require('./views/singleShotView.js');
 
-//var ProjectsCollection = require('./collections/projectsCollection.js');
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
-var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
-//var ShotModel = require('./models/shotModel.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 
@@ -32,6 +29,7 @@ module.exports = Backbone.Router.extend({
 
         // Display list of latest projects
         projectsCollectionFirebase = new ProjectsCollectionFirebase();
+        console.log('got here');
         var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
         $('content').html(projectsView.$el);
 

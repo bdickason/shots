@@ -5,7 +5,7 @@ app = {};
 window.onload = function(){
     Backbone.$ = window.$;
 
-    Firebase.enableLogging(true);
+    // Firebase.enableLogging(true);
 
     app.utils = require('./utils.js');
 

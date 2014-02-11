@@ -2,7 +2,7 @@
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-var ShotModel = require('../models/shotModel.js');
+//var ShotModel = require('../models/shotModel.js');
 
 module.exports = Backbone.View.extend({
 

@@ -1,6 +1,7 @@
 /* Shots View - displays a list of shots */
 
 var ShotModelFirebase = require('../models/shotModelFirebase.js');
+var ShotModel = require('../models/shotModel.js');
 var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
@@ -16,9 +17,9 @@ module.exports = Backbone.View.extend({
 
       var view = this;
 
-      this.collection.bind('add', function(shot) {
+      /*this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
-      });
+      }); */
   
       this.collection.bind('all', function(name, e) {
         console.log(name);
@@ -37,7 +38,6 @@ module.exports = Backbone.View.extend({
         };
 
         tmp = this.collection.create(input);
-        console.log(tmp);
 
         $('#text').val('');
       }
@@ -45,10 +45,15 @@ module.exports = Backbone.View.extend({
 
     render: function() {
       // Display 'new shot' menu
-      this.$el.append(this.template());
+      
+      // var model = new ShotModel({id: 'testing'});
+      this.collection.add({id: 'test_shot'});
+      console.log(this.collection.toJSON());
+      this.collection.save();
 
+      this.$el.append(this.template());
       // Display each shot in a list
-      if(_.size(this.collection) > 0) {
+      /*if(_.size(this.collection) > 0) {
         // Only do this if we have shots
         var view = this;  // this.collection.each overrides this to refer to current collection
 
@@ -56,6 +61,6 @@ module.exports = Backbone.View.extend({
           var shotView = new ShotView({model: shotModel});
           view.$el.append(shotView.el);
         });
-      }
+      } */
     }
   });

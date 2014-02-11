@@ -3,10 +3,7 @@ var ProjectModelFirebase = require('../models/projectModelFirebase.js');
 
 module.exports = Backbone.Firebase.Collection.extend({
     model: ProjectModelFirebase,
-    firebase: function() {
-      return(new Firebase(this.fbUrl));
-    },
+    firebase: new Backbone.Firebase(app.fbUrl + '/projects/'),
     initialize: function() {
-      this.fbUrl = app.fbUrl + '/projects/';
     }
   });

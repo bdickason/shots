@@ -1,15 +1,8 @@
 /* Project Model - data layer for a single Project */
 
 module.exports = Backbone.Firebase.Model.extend({
-  firebase: function() {
-    return(new Firebase(this.fbUrl));
-  },
+  firebase: new Backbone.Firebase(app.fbUrl + '/projejcts'),
   initialize: function() {
-    this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
-  },
-  defaults: function() {
-    return {
-      shots: []
-    };
+    // this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
   }
 });

@@ -3,10 +3,7 @@ var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 module.exports = Backbone.Collection.extend({
     model: ShotModelFirebase,
-    firebase: function() {
-      return(new Firebase(this.fbUrl));
-    },
+    firebase: new Backbone.Firebase(app.fbUrl + '/shots/'),
     initialize: function() {
-      this.fbUrl = app.fbUrl + '/shots/';
     }
   });

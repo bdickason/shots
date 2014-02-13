@@ -2,7 +2,6 @@ var express = require('express');
 var handlebars = require('express3-handlebars');
 
 cfg = require('./cfg/config.js');
-console.log(cfg);
 
 module.exports.startServer = function() {
   app = express();

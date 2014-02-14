@@ -31,7 +31,6 @@ module.exports = Backbone.Router.extend({
         projectsCollectionFirebase = new ProjectsCollectionFirebase();
         var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
         $('content').html(projectsView.$el);
-
     },
     project: function(project) {
         // (/:projectName) - Loads a single project
@@ -55,8 +54,8 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display 'project' sub-navigation
-        projectModel = new ProjectModel({id: project});
-        var projectNav = new ProjectNavView(projectModel);
+        projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectNav = new ProjectNavView(projectModelFirebase);
         navView.$el.after(projectNav.$el);
 
         // Display a single shot

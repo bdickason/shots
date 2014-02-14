@@ -17,16 +17,8 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
-    /*var shots;
-    
-    if(this.model.get('shots')) {
-      shots = this.model.get('shots');
-    }
-    else {
-      shots = {}; // Empty collection
-    } */
 
-    shotsCollectionFirebase = new ShotsCollectionFirebase();
+    shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
 
     return this;

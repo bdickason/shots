@@ -11,7 +11,6 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    //this.render();
 
     var view = this;
     this.collection.bind('add', function(project) {

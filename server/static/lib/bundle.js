@@ -35,8 +35,12 @@ var ShotModel = require('../models/shotModel.js');
 
 module.exports = Backbone.Firebase.Collection.extend({
     model: ShotModel,
-    firebase: new Firebase(app.fbUrl + '/shots/'),
-    initialize: function() {
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, options) {
+        this.fbUrl = app.fbUrl + '/shots/' + options.project;
+        console.log(this.fbUrl);
     }
   });
 },{"../models/shotModel.js":7}],4:[function(require,module,exports){
@@ -63,9 +67,11 @@ module.exports = Backbone.Model.extend({
 /* Project Model - For standalone use (not in a collection) */
 
 module.exports = Backbone.Firebase.Model.extend({
-  firebase: new Firebase(app.fbUrl + '/projects'),
+  firebase: function() {
+    return(new Firebase(this.fbUrl));
+  },
   initialize: function() {
-    // this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
+    this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
   }
 });
 
@@ -116,7 +122,6 @@ module.exports = Backbone.Router.extend({
         projectsCollectionFirebase = new ProjectsCollectionFirebase();
         var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
         $('content').html(projectsView.$el);
-
     },
     project: function(project) {
         // (/:projectName) - Loads a single project
@@ -140,8 +145,8 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display 'project' sub-navigation
-        projectModel = new ProjectModel({id: project});
-        var projectNav = new ProjectNavView(projectModel);
+        projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectNav = new ProjectNavView(projectModelFirebase);
         navView.$el.after(projectNav.$el);
 
         // Display a single shot
@@ -253,16 +258,8 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
-    /*var shots;
-    
-    if(this.model.get('shots')) {
-      shots = this.model.get('shots');
-    }
-    else {
-      shots = {}; // Empty collection
-    } */
 
-    shotsCollectionFirebase = new ShotsCollectionFirebase();
+    shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
 
     return this;
@@ -283,7 +280,6 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    //this.render();
 
     var view = this;
     this.collection.bind('add', function(project) {
@@ -336,7 +332,6 @@ module.exports = Backbone.View.extend({
   template: shotTemplate,
 
   initialize: function() {
-    console.log(this.model);
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();  // Data is passed in, so we don't need to call a URL
   },
@@ -383,10 +378,6 @@ module.exports = Backbone.View.extend({
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
       });
-  
-      this.collection.bind('all', function(name, e) {
-        console.log(name);
-      });
     },
     
     events: {
@@ -394,14 +385,12 @@ module.exports = Backbone.View.extend({
     },
 
     createShot: function(shot) {
-
       if($('#text').val()) {
         var input = {
           id: $('#text').val()
         };
 
         tmp = this.collection.create(input);
-        console.log(tmp);
 
         $('#text').val('');
       }

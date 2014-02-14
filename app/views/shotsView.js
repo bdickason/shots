@@ -18,10 +18,6 @@ module.exports = Backbone.View.extend({
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
       });
-  
-      this.collection.bind('all', function(name, e) {
-        console.log(name);
-      });
     },
     
     events: {
@@ -29,14 +25,12 @@ module.exports = Backbone.View.extend({
     },
 
     createShot: function(shot) {
-
       if($('#text').val()) {
         var input = {
           id: $('#text').val()
         };
 
         tmp = this.collection.create(input);
-        console.log(tmp);
 
         $('#text').val('');
       }

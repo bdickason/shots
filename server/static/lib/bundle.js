@@ -183,6 +183,13 @@ module.exports.close = function(view) {
     view.remove();
     view.unbind();
 };
+
+module.exports.debug = function(e, results) {
+    // spits out whatever event is fired
+    // Usage (within a view): this.listenTo(this.model, 'all', app.utils.debug);
+    console.log(e);
+    console.log(results);
+};
 },{}],11:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
@@ -269,14 +276,14 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+    shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
+    shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
+    this.listenTo(shotsCollectionFirebase, 'all', app.utils.debug);
   },
 
   render: function() {
-    shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
-    shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
-
     this.$el.html(this.template(this.model.toJSON()));
-
+    $('.shots').html(shotsView.render().el);
     return this;
   }
 });
@@ -347,6 +354,7 @@ module.exports = Backbone.View.extend({
   template: shotTemplate,
 
   initialize: function() {
+    console.log(this.projectId);
     this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();  // Data is passed in, so we don't need to call a URL
   },
@@ -364,7 +372,7 @@ module.exports = Backbone.View.extend({
     // Navigate to a shot
     e.preventDefault(); // Have to disable the default behavior of the anchor
 
-    var shotId = this.model.get('project') + '/' + this.model.get('id');
+    var shotId = this.model.get('projectId') + '/' + this.model.get('id');
     route = shotId;
 
     app.router.navigate(route, {trigger: true});
@@ -379,20 +387,16 @@ var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
-    el: '.shots',
-
+    tagName: 'ul',
     template: shotsTemplate,
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
 
       var view = this;
-
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
       });
-
-      this.render();
     },
     
     events: {
@@ -413,19 +417,22 @@ module.exports = Backbone.View.extend({
 
     render: function() {
       // Display 'new shot' menu
+      console.log('rendering!');
 
+      console.log(this.$el);
       // Display each shot in a list
       if(_.size(this.collection) > 0) {
         // Only do this if we have shots
         var view = this;  // this.collection.each overrides this to refer to current collection
 
         this.collection.each(function(shotModel) {
-          var shotView = new ShotView({model: shotModel});
+          var shotView = new ShotView({model: shotModel, projectId: view.project});
           view.$el.append(shotView.el);
         });
       }
 
-     this.$el.append(this.template());
+     this.$el.html(this.template());
+     return(this);
     }
   });
 
@@ -508,7 +515,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</h1>\n\n    <ul class=\"shots\">\n    </ul>\n</div>";
+    + "</h1>\n    <div class=\"shots\">\n    </div>\n</div>";
   return buffer;
   });
 
@@ -548,12 +555,14 @@ var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\n    <a href=\"/#";
+
+  buffer += "<li id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shot\">\n    <a href=\"/#";
   if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -573,24 +582,7 @@ function program1(depth0,data) {
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\n    </a>\n  ";
-  return buffer;
-  }
-
-function program3(depth0,data) {
-  
-  
-  return "\n    New Shot\n    </a>\n  ";
-  }
-
-  buffer += "<li id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"shot\">\n  ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.id), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    <a href=\"http://twitter.com/";
+    + "</a>\n    <a href=\"http://twitter.com/";
   if (helper = helpers.author) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.author); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

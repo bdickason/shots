@@ -11,8 +11,9 @@ module.exports.close = function(view) {
     view.unbind();
 };
 
-module.exports.debug = function(e) {
+module.exports.debug = function(e, results) {
     // spits out whatever event is fired
     // Usage (within a view): this.listenTo(this.model, 'all', app.utils.debug);
     console.log(e);
+    console.log(results);
 };

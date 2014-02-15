@@ -4,20 +4,16 @@ var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
-    el: '.shots',
-
+    tagName: 'ul',
     template: shotsTemplate,
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
 
       var view = this;
-
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
       });
-
-      this.render();
     },
     
     events: {
@@ -38,18 +34,21 @@ module.exports = Backbone.View.extend({
 
     render: function() {
       // Display 'new shot' menu
+      console.log('rendering!');
 
+      console.log(this.$el);
       // Display each shot in a list
       if(_.size(this.collection) > 0) {
         // Only do this if we have shots
         var view = this;  // this.collection.each overrides this to refer to current collection
 
         this.collection.each(function(shotModel) {
-          var shotView = new ShotView({model: shotModel});
+          var shotView = new ShotView({model: shotModel, projectId: view.project});
           view.$el.append(shotView.el);
         });
       }
 
-     this.$el.append(this.template());
+     this.$el.html(this.template());
+     return(this);
     }
   });

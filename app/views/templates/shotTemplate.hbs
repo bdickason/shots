@@ -1,11 +1,5 @@
 <li id="{{ id }}" class="shot">
-  {{#if id }}
-    <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Shot {{ id }}
-    </a>
-  {{else}}
-    New Shot
-    </a>
-  {{/if}}
+    <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Shot {{ id }}</a>
     <a href="http://twitter.com/{{ author }}" target="_blank">{{ author }}</a>
     <p>{{ text }}</p>
     <img src="{{ image }}">

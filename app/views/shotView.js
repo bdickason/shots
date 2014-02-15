@@ -9,6 +9,7 @@ module.exports = Backbone.View.extend({
   template: shotTemplate,
 
   initialize: function() {
+    console.log(this.projectId);
     this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();  // Data is passed in, so we don't need to call a URL
   },
@@ -26,7 +27,7 @@ module.exports = Backbone.View.extend({
     // Navigate to a shot
     e.preventDefault(); // Have to disable the default behavior of the anchor
 
-    var shotId = this.model.get('project') + '/' + this.model.get('id');
+    var shotId = this.model.get('projectId') + '/' + this.model.get('id');
     route = shotId;
 
     app.router.navigate(route, {trigger: true});

@@ -13,14 +13,14 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
-    shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
-    this.listenTo(shotsCollectionFirebase, 'all', app.utils.debug);
+    this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
+    this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id') });
   },
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
-    $('.shots').html(shotsView.render().el);
+
+    $('.shots', this.$el).html(this.shotsView.render().el);
     return this;
   }
 });

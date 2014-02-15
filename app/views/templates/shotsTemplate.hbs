@@ -1,5 +1,13 @@
     <label><h3>What are you working on?</h3></label>
     <input id="text" type="textarea" class"input" placeholder="My latest work" autofocus>
     <button class="save">save</button>
-    <ul class="shots">
+    <ul class="shotList">
+        {{#each this}}
+            <li id="{{ id }}" class="shot">
+                <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Shot {{ id }}</a>
+                <a href="http://twitter.com/{{ author }}" target="_blank">{{ author }}</a>
+                <p>{{ text }}</p>
+                <img src="{{ image }}">
+            </li>
+        {{/each}}
     </ul>

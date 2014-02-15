@@ -23,7 +23,7 @@ module.exports = Backbone.View.extend({
     // Navigate to a shot
     e.preventDefault(); // Have to disable the default behavior of the anchor
 
-    var shotId = this.model.get('project') + '/' + this.model.get('id');
+    var shotId = this.model.get('projectId') + '/' + this.model.get('id');
     route = shotId;
 
     app.router.navigate(route, {trigger: true});

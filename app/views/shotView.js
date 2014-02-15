@@ -2,16 +2,13 @@
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-var ShotModelFirebase = require('../models/shotModelFirebase.js');
-
 module.exports = Backbone.View.extend({
 
   template: shotTemplate,
 
-  initialize: function() {
-    console.log(this.projectId);
+  initialize: function(data, options) {
+    this.model.set('projectId', options.projectId); // Allows us to use the project Id in our template
     this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
-    this.render();  // Data is passed in, so we don't need to call a URL
   },
 
   events: {

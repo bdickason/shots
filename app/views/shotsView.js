@@ -10,9 +10,16 @@ module.exports = Backbone.View.extend({
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
 
+      /* this.collection.bind('add', function(shot) {
+        view.$el.append(new ShotView({model: shot}, { projectId: view.project }).render().el);
+      }); */
+      
+      this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+      this.listenTo(this.collection, 'all', app.utils.debug);
+
       var view = this;
-      this.collection.bind('add', function(shot) {
-        view.$el.append(new ShotView({model: shot}).render().el);
+      this.collection.bind('add', function(shotModel) {
+        $('.shotList', view.$el).append(new ShotView({model: shotModel}, { projectId: view.project} ).render().el);
       });
     },
     
@@ -33,22 +40,8 @@ module.exports = Backbone.View.extend({
     },
 
     render: function() {
-      // Display 'new shot' menu
-      console.log('rendering!');
-
-      console.log(this.$el);
-      // Display each shot in a list
-      if(_.size(this.collection) > 0) {
-        // Only do this if we have shots
-        var view = this;  // this.collection.each overrides this to refer to current collection
-
-        this.collection.each(function(shotModel) {
-          var shotView = new ShotView({model: shotModel, projectId: view.project});
-          view.$el.append(shotView.el);
-        });
-      }
-
-     this.$el.html(this.template());
-     return(this);
+      console.log(this.collection.toJSON());
+      this.$el.html(this.template(this.collection.toJSON()));
+      return(this);
     }
   });

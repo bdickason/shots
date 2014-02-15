@@ -20,7 +20,7 @@ window.onload = function(){
 };
 
 
-},{"./routes.js":9,"./utils.js":10}],2:[function(require,module,exports){
+},{"./routes.js":8,"./utils.js":9}],2:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('../models/projectModel.js');
 
@@ -90,8 +90,6 @@ module.exports = Backbone.Model.extend({
 });
 
 },{}],8:[function(require,module,exports){
-module.exports=require(4)
-},{}],9:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 var NavView = require('./views/navView.js');
@@ -170,7 +168,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":11,"./views/projectNavView.js":12,"./views/projectView.js":13,"./views/projectsView.js":14,"./views/shotView.js":15,"./views/singleShotView.js":17}],10:[function(require,module,exports){
+},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":10,"./views/projectNavView.js":11,"./views/projectView.js":12,"./views/projectsView.js":13,"./views/shotView.js":14,"./views/singleShotView.js":16}],9:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -190,7 +188,7 @@ module.exports.debug = function(e, results) {
     console.log(e);
     console.log(results);
 };
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./templates/navTemplate.hbs');
@@ -225,7 +223,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/navTemplate.hbs":18}],12:[function(require,module,exports){
+},{"./templates/navTemplate.hbs":17}],11:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -260,7 +258,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":19}],13:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":18}],12:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
@@ -276,19 +274,19 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
-    shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
-    this.listenTo(shotsCollectionFirebase, 'all', app.utils.debug);
+    this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
+    this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id') });
   },
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
-    $('.shots').html(shotsView.render().el);
+
+    $('.shots', this.$el).html(this.shotsView.render().el);
     return this;
   }
 });
 
-},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":16,"./templates/projectTemplate.hbs":20}],14:[function(require,module,exports){
+},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":15,"./templates/projectTemplate.hbs":19}],13:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
@@ -342,21 +340,18 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../views/projectView.js":13,"./templates/projectsTemplate.hbs":21}],15:[function(require,module,exports){
+},{"../views/projectView.js":12,"./templates/projectsTemplate.hbs":20}],14:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
-
-var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 module.exports = Backbone.View.extend({
 
   template: shotTemplate,
 
-  initialize: function() {
-    console.log(this.projectId);
+  initialize: function(data, options) {
+    this.model.set('projectId', options.projectId); // Allows us to use the project Id in our template
     this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
-    this.render();  // Data is passed in, so we don't need to call a URL
   },
 
   events: {
@@ -380,7 +375,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../models/shotModelFirebase.js":8,"./templates/shotTemplate.hbs":22}],16:[function(require,module,exports){
+},{"./templates/shotTemplate.hbs":21}],15:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('../views/shotView.js');
@@ -393,9 +388,16 @@ module.exports = Backbone.View.extend({
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
 
+      /* this.collection.bind('add', function(shot) {
+        view.$el.append(new ShotView({model: shot}, { projectId: view.project }).render().el);
+      }); */
+      
+      this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+      this.listenTo(this.collection, 'all', app.utils.debug);
+
       var view = this;
-      this.collection.bind('add', function(shot) {
-        view.$el.append(new ShotView({model: shot}).render().el);
+      this.collection.bind('add', function(shotModel) {
+        $('.shotList', view.$el).append(new ShotView({model: shotModel}, { projectId: view.project} ).render().el);
       });
     },
     
@@ -416,27 +418,13 @@ module.exports = Backbone.View.extend({
     },
 
     render: function() {
-      // Display 'new shot' menu
-      console.log('rendering!');
-
-      console.log(this.$el);
-      // Display each shot in a list
-      if(_.size(this.collection) > 0) {
-        // Only do this if we have shots
-        var view = this;  // this.collection.each overrides this to refer to current collection
-
-        this.collection.each(function(shotModel) {
-          var shotView = new ShotView({model: shotModel, projectId: view.project});
-          view.$el.append(shotView.el);
-        });
-      }
-
-     this.$el.html(this.template());
-     return(this);
+      console.log(this.collection.toJSON());
+      this.$el.html(this.template(this.collection.toJSON()));
+      return(this);
     }
   });
 
-},{"../views/shotView.js":15,"./templates/shotsTemplate.hbs":23}],17:[function(require,module,exports){
+},{"../views/shotView.js":14,"./templates/shotsTemplate.hbs":22}],16:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -462,14 +450,14 @@ module.exports = Backbone.View.extend({
     // Navigate to a shot
     e.preventDefault(); // Have to disable the default behavior of the anchor
 
-    var shotId = this.model.get('project') + '/' + this.model.get('id');
+    var shotId = this.model.get('projectId') + '/' + this.model.get('id');
     route = shotId;
 
     app.router.navigate(route, {trigger: true});
   }
 });
 
-},{"./templates/shotTemplate.hbs":22}],18:[function(require,module,exports){
+},{"./templates/shotTemplate.hbs":21}],17:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -481,7 +469,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "  <a href=\"/\" id=\"home\">Home</a> | New Project";
   });
 
-},{"hbsfy/runtime":31}],19:[function(require,module,exports){
+},{"hbsfy/runtime":30}],18:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -502,7 +490,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],20:[function(require,module,exports){
+},{"hbsfy/runtime":30}],19:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -519,7 +507,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],21:[function(require,module,exports){
+},{"hbsfy/runtime":30}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -549,7 +537,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],22:[function(require,module,exports){
+},{"hbsfy/runtime":30}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -602,19 +590,69 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],23:[function(require,module,exports){
+},{"hbsfy/runtime":30}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
   
+  var buffer = "", stack1, helper;
+  buffer += "\n            <li id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shot\">\n                <a href=\"/#";
+  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shotlink\" id=\"";
+  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">Shot ";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                <a href=\"http://twitter.com/";
+  if (helper = helpers.author) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.author); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" target=\"_blank\">";
+  if (helper = helpers.author) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.author); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n                <p>";
+  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n                <img src=\"";
+  if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n            </li>\n        ";
+  return buffer;
+  }
 
-
-  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>\n    <ul class=\"shots\">\n    </ul>";
+  buffer += "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>\n    <ul class=\"shotList\">\n        ";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    </ul>";
+  return buffer;
   });
 
-},{"hbsfy/runtime":31}],24:[function(require,module,exports){
+},{"hbsfy/runtime":30}],23:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -647,7 +685,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":25,"./handlebars/exception":26,"./handlebars/runtime":27,"./handlebars/safe-string":28,"./handlebars/utils":29}],25:[function(require,module,exports){
+},{"./handlebars/base":24,"./handlebars/exception":25,"./handlebars/runtime":26,"./handlebars/safe-string":27,"./handlebars/utils":28}],24:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -828,7 +866,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":26,"./utils":29}],26:[function(require,module,exports){
+},{"./exception":25,"./utils":28}],25:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -857,7 +895,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -995,7 +1033,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":25,"./exception":26,"./utils":29}],28:[function(require,module,exports){
+},{"./base":24,"./exception":25,"./utils":28}],27:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -1007,7 +1045,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],29:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -1084,12 +1122,12 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":28}],30:[function(require,module,exports){
+},{"./safe-string":27}],29:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":24}],31:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":23}],30:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":30}]},{},[1])
+},{"handlebars/runtime":29}]},{},[1])

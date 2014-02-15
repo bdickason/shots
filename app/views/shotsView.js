@@ -9,8 +9,6 @@ module.exports = Backbone.View.extend({
     template: shotsTemplate,
 
     initialize: function(options) {
-      this.render();
-
       this.project = options.project;  // Save project name in case we need to add
 
       var view = this;
@@ -18,6 +16,8 @@ module.exports = Backbone.View.extend({
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
       });
+
+      this.render();
     },
     
     events: {
@@ -38,7 +38,6 @@ module.exports = Backbone.View.extend({
 
     render: function() {
       // Display 'new shot' menu
-      this.$el.append(this.template());
 
       // Display each shot in a list
       if(_.size(this.collection) > 0) {
@@ -50,5 +49,7 @@ module.exports = Backbone.View.extend({
           view.$el.append(shotView.el);
         });
       }
+
+     this.$el.append(this.template());
     }
   });

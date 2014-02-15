@@ -13,8 +13,9 @@ window.onload = function(){
     app.fbUrl = 'https://shots.firebaseio.com';
 
     var Routes = require('./routes.js');
-
+    
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
+
     Backbone.history.start();
 };
 
@@ -40,15 +41,17 @@ module.exports = Backbone.Firebase.Collection.extend({
     },
     initialize: function(models, options) {
         this.fbUrl = app.fbUrl + '/shots/' + options.project;
-        console.log(this.fbUrl);
     }
   });
 },{"../models/shotModel.js":7}],4:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 module.exports = Backbone.Firebase.Model.extend({
-    firebase: new Firebase(app.fbUrl + '/shots/'),
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
     initialize: function() {
+        this.fbUrl = app.fbUrl + '/shots/' + this.get('id');
     },
     defaults: {
       text: ''
@@ -100,6 +103,7 @@ var SingleShotView = require('./views/singleShotView.js');
 
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
+var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
@@ -119,9 +123,9 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        projectsCollectionFirebase = new ProjectsCollectionFirebase();
+        var projectsCollectionFirebase = new ProjectsCollectionFirebase();
         var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
-        $('content').html(projectsView.$el);
+        $('content').html(projectsView.render().el);
     },
     project: function(project) {
         // (/:projectName) - Loads a single project
@@ -132,9 +136,11 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display a single project
-        projectModelFirebase = new ProjectModelFirebase({id: project});
+        // projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectModelFirebase = new ProjectModel({id: project});
         var projectView = new ProjectView({model: projectModelFirebase});
-        $('content').html(projectView.$el);
+
+        $('content').html(projectView.render().el);
     },
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
@@ -145,17 +151,21 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display 'project' sub-navigation
-        projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectModelFirebase = new ProjectModelFirebase({id: project});
         var projectNav = new ProjectNavView(projectModelFirebase);
         navView.$el.after(projectNav.$el);
 
         // Display a single shot
-        shot = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var singleShotView = new SingleShotView({model: shot});
-        $('content').html(singleShotView.$el);
+        var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
+        var singleShotView = new SingleShotView({model: shotModel });
+        $('content').html(singleShotView.render().el);
+    },
+    loadView: function(view) {
+        // this.view && (this.view.close ? this.view.close() : this.view.remove());
+        this.view = view;
     }
 });
-},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModelFirebase.js":6,"./views/navView.js":11,"./views/projectNavView.js":12,"./views/projectView.js":13,"./views/projectsView.js":14,"./views/shotView.js":15,"./views/singleShotView.js":17}],10:[function(require,module,exports){
+},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":11,"./views/projectNavView.js":12,"./views/projectView.js":13,"./views/projectsView.js":14,"./views/shotView.js":15,"./views/singleShotView.js":17}],10:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -214,7 +224,7 @@ module.exports = Backbone.View.extend({
   template: projectNavTemplate,
 
   initialize: function() {
-    this.render();
+    this.render();  // Data will not change so we only need to render once
   },
 
   events: {
@@ -257,10 +267,10 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template(this.model.toJSON()));
-
     shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     shotsView = new ShotsView({ collection: shotsCollectionFirebase, project: this.model.get('id') });
+
+    this.$el.html(this.template(this.model.toJSON()));
 
     return this;
   }
@@ -303,7 +313,7 @@ module.exports = Backbone.View.extend({
 
     projectId = e.target.id;
     route = projectId;
-
+    console.log(route);
     app.router.navigate(route, {trigger: true});
   },
 
@@ -369,8 +379,6 @@ module.exports = Backbone.View.extend({
     template: shotsTemplate,
 
     initialize: function(options) {
-      this.render();
-
       this.project = options.project;  // Save project name in case we need to add
 
       var view = this;
@@ -378,6 +386,8 @@ module.exports = Backbone.View.extend({
       this.collection.bind('add', function(shot) {
         view.$el.append(new ShotView({model: shot}).render().el);
       });
+
+      this.render();
     },
     
     events: {
@@ -398,7 +408,6 @@ module.exports = Backbone.View.extend({
 
     render: function() {
       // Display 'new shot' menu
-      this.$el.append(this.template());
 
       // Display each shot in a list
       if(_.size(this.collection) > 0) {
@@ -410,6 +419,8 @@ module.exports = Backbone.View.extend({
           view.$el.append(shotView.el);
         });
       }
+
+     this.$el.append(this.template());
     }
   });
 
@@ -417,8 +428,6 @@ module.exports = Backbone.View.extend({
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
-
-//var ShotModel = require('../models/shotModel.js');
 
 module.exports = Backbone.View.extend({
 
@@ -433,7 +442,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    console.log(this.model.toJSON());
     this.$el.html(this.template(this.model.toJSON()));
     return this;
   },
@@ -474,7 +482,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "  <a href=\"#\" id=\"project\">&lt;- ";
+  buffer += "  <a href=\"/#";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" id=\"project\">&lt;- ";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -541,16 +553,16 @@ function program1(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\n    <a href=\"/#";
-  if (helper = helpers.project) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.project); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "/";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "\" class=\"shotlink\" id=\"";
-  if (helper = helpers.project) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.project); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "/";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -606,7 +618,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>";
+  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>\n    <ul class=\"shots\">\n    </ul>";
   });
 
 },{"hbsfy/runtime":31}],24:[function(require,module,exports){

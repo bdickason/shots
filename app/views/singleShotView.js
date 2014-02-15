@@ -2,8 +2,6 @@
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-//var ShotModel = require('../models/shotModel.js');
-
 module.exports = Backbone.View.extend({
 
   template: shotTemplate,
@@ -17,7 +15,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    console.log(this.model.toJSON());
     this.$el.html(this.template(this.model.toJSON()));
     return this;
   },

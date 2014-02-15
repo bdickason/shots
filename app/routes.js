@@ -9,6 +9,7 @@ var SingleShotView = require('./views/singleShotView.js');
 
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
+var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
@@ -28,9 +29,9 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        projectsCollectionFirebase = new ProjectsCollectionFirebase();
+        var projectsCollectionFirebase = new ProjectsCollectionFirebase();
         var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
-        $('content').html(projectsView.$el);
+        $('content').html(projectsView.render().el);
     },
     project: function(project) {
         // (/:projectName) - Loads a single project
@@ -41,9 +42,11 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display a single project
-        projectModelFirebase = new ProjectModelFirebase({id: project});
+        // projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectModelFirebase = new ProjectModel({id: project});
         var projectView = new ProjectView({model: projectModelFirebase});
-        $('content').html(projectView.$el);
+
+        $('content').html(projectView.render().el);
     },
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
@@ -54,13 +57,17 @@ module.exports = Backbone.Router.extend({
         $('nav').html(navView.$el);
 
         // Display 'project' sub-navigation
-        projectModelFirebase = new ProjectModelFirebase({id: project});
+        var projectModelFirebase = new ProjectModelFirebase({id: project});
         var projectNav = new ProjectNavView(projectModelFirebase);
         navView.$el.after(projectNav.$el);
 
         // Display a single shot
-        shot = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var singleShotView = new SingleShotView({model: shot});
-        $('content').html(singleShotView.$el);
+        var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
+        var singleShotView = new SingleShotView({model: shotModel });
+        $('content').html(singleShotView.render().el);
+    },
+    loadView: function(view) {
+        // this.view && (this.view.close ? this.view.close() : this.view.remove());
+        this.view = view;
     }
 });

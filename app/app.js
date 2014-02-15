@@ -12,8 +12,9 @@ window.onload = function(){
     app.fbUrl = 'https://shots.firebaseio.com';
 
     var Routes = require('./routes.js');
-
+    
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
+
     Backbone.history.start();
 };
 

@@ -1,8 +1,11 @@
 /* Shot Model - Standalone model (do not use in collections) */
 
 module.exports = Backbone.Firebase.Model.extend({
-    firebase: new Firebase(app.fbUrl + '/shots/'),
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
     initialize: function() {
+        this.fbUrl = app.fbUrl + '/shots/' + this.get('id');
     },
     defaults: {
       text: ''

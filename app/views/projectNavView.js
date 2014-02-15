@@ -8,7 +8,7 @@ module.exports = Backbone.View.extend({
   template: projectNavTemplate,
 
   initialize: function() {
-    this.render();
+    this.render();  // Data will not change so we only need to render once
   },
 
   events: {

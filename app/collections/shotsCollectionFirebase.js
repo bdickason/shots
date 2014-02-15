@@ -8,6 +8,5 @@ module.exports = Backbone.Firebase.Collection.extend({
     },
     initialize: function(models, options) {
         this.fbUrl = app.fbUrl + '/shots/' + options.project;
-        console.log(this.fbUrl);
     }
   });

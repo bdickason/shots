@@ -27,9 +27,5 @@ module.exports = Backbone.View.extend({
     route = shotId;
 
     app.router.navigate(route, {trigger: true});
-
-  },
-  debug: function(e) {
-    console.log(e);
   }
 });

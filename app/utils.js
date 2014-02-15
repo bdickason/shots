@@ -10,3 +10,9 @@ module.exports.close = function(view) {
     view.remove();
     view.unbind();
 };
+
+module.exports.debug = function(e) {
+    // spits out whatever event is fired
+    // Usage (within a view): this.listenTo(this.model, 'all', app.utils.debug);
+    console.log(e);
+};

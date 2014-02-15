@@ -152,7 +152,7 @@ module.exports = Backbone.Router.extend({
         // Display 'project' sub-navigation
         var projectModelFirebase = new ProjectModelFirebase({id: project});
         var projectNav = new ProjectNavView(projectModelFirebase);
-        navView.$el.after(projectNav.render().el);
+        this.appendView(navView, projectNav);
 
         // Display a single shot
         var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
@@ -160,9 +160,14 @@ module.exports = Backbone.Router.extend({
         this.showView('content', singleShotView);
     },
     showView: function(selector, view) {
+        // Utility function to show a specific view that overrides a DOM object
         $(selector).html(view.render().el);
-        this.currentView = view;
         return(view);
+    },
+    appendView: function(masterView, childView) {
+        // Utility function to show a specific view that is displayed after an existing view
+        masterView.$el.after(childView.render().el);
+        return(childView);
     }
 });
 },{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":11,"./views/projectNavView.js":12,"./views/projectView.js":13,"./views/projectsView.js":14,"./views/shotView.js":15,"./views/singleShotView.js":17}],10:[function(require,module,exports){

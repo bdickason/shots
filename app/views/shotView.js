@@ -9,7 +9,7 @@ module.exports = Backbone.View.extend({
   template: shotTemplate,
 
   initialize: function() {
-    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();  // Data is passed in, so we don't need to call a URL
   },
 

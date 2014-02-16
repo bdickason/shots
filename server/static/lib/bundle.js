@@ -138,6 +138,8 @@ module.exports = Backbone.Router.extend({
         var projectView = new ProjectView({model: projectModelFirebase});
 
         this.showView('content', projectView);
+
+        console.log(projectView.$el.html());
     },
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
@@ -275,7 +277,7 @@ module.exports = Backbone.View.extend({
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
-    this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id') });
+    this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id')});
   },
 
   render: function() {
@@ -382,27 +384,30 @@ var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
-    tagName: 'ul',
+    tagName: 'div',
     template: shotsTemplate,
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
-
-      /* this.collection.bind('add', function(shot) {
-        view.$el.append(new ShotView({model: shot}, { projectId: view.project }).render().el);
-      }); */
       
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-      this.listenTo(this.collection, 'all', app.utils.debug);
 
       var view = this;
       this.collection.bind('add', function(shotModel) {
         $('.shotList', view.$el).append(new ShotView({model: shotModel}, { projectId: view.project} ).render().el);
       });
+
+      console.log(this.$el.find('#createShot'));
+      this.setElement(this.$el);
     },
     
     events: {
-      'click .save': 'createShot'
+      'keypress .input': 'pressEnter',
+      'click #createShot': 'createShot'
+    },
+
+    pressEnter: function(e) {
+      console.log(e);
     },
 
     createShot: function(shot) {
@@ -418,8 +423,8 @@ module.exports = Backbone.View.extend({
     },
 
     render: function() {
-      console.log(this.collection.toJSON());
       this.$el.html(this.template(this.collection.toJSON()));
+      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
       return(this);
     }
   });
@@ -645,7 +650,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class\"input\" placeholder=\"My latest work\" autofocus>\n    <button class=\"save\">save</button>\n    <ul class=\"shotList\">\n        ";
+  buffer += "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class=\"input\" placeholder=\"My latest work\" autofocus>\n    <button id=\"createShot\">save</button>\n    <ul class=\"shotList\">\n        ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </ul>";

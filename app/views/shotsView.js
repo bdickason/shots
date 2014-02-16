@@ -17,17 +17,20 @@ module.exports = Backbone.View.extend({
         $('.shotList', view.$el).append(new ShotView({model: shotModel}, { projectId: view.project} ).render().el);
       });
 
-      console.log(this.$el.find('#createShot'));
       this.setElement(this.$el);
     },
     
     events: {
-      'keypress .input': 'pressEnter',
+      'keyup .input': 'pressEnter',
       'click #createShot': 'createShot'
     },
 
     pressEnter: function(e) {
-      console.log(e);
+      // Submit form when user presses enter
+      if(e.which == 13 && $('#text').val()) {
+        this.createShot();
+      }
+      return(false);
     },
 
     createShot: function(shot) {

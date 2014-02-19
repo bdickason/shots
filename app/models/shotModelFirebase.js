@@ -5,7 +5,7 @@ module.exports = Backbone.Firebase.Model.extend({
         return(new Firebase(this.fbUrl));
     },
     initialize: function() {
-        this.fbUrl = app.fbUrl + '/shots/' + this.get('id');
+        this.fbUrl = app.fbUrl + '/shots/' + this.get('projectId') + '/' + this.get('id');
     },
     defaults: {
       text: ''

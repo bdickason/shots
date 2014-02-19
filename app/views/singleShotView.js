@@ -7,7 +7,7 @@ module.exports = Backbone.View.extend({
   template: shotTemplate,
 
   initialize: function() {
-    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
   },
 
   events: {
@@ -16,6 +16,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
+    console.log(this.model.toJSON());
     return this;
   },
 

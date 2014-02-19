@@ -138,8 +138,6 @@ module.exports = Backbone.Router.extend({
         var projectView = new ProjectView({model: projectModelFirebase});
 
         this.showView('content', projectView);
-
-        console.log(projectView.$el.html());
     },
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
@@ -414,14 +412,16 @@ module.exports = Backbone.View.extend({
     },
 
     createShot: function(shot) {
-      if($('#text').val()) {
+      if($('#text').val() || $('#image').val()) {
         var input = {
-          id: $('#text').val()
+          text: $('#text').val(),
+          image: $('#image').val()
         };
 
         tmp = this.collection.create(input);
 
         $('#text').val('');
+        $('#image').val('');
       }
     },
 
@@ -653,7 +653,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "    <label><h3>What are you working on?</h3></label>\n    <input id=\"text\" type=\"textarea\" class=\"input\" placeholder=\"My latest work\" autofocus>\n    <button id=\"createShot\">save</button>\n    <ul class=\"shotList\">\n        ";
+  buffer += "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shotList\">\n        ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </ul>";

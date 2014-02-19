@@ -46,8 +46,6 @@ module.exports = Backbone.Router.extend({
         var projectView = new ProjectView({model: projectModelFirebase});
 
         this.showView('content', projectView);
-
-        console.log(projectView.$el.html());
     },
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot

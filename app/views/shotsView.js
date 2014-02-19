@@ -34,14 +34,16 @@ module.exports = Backbone.View.extend({
     },
 
     createShot: function(shot) {
-      if($('#text').val()) {
+      if($('#text').val() || $('#image').val()) {
         var input = {
-          id: $('#text').val()
+          text: $('#text').val(),
+          image: $('#image').val()
         };
 
         tmp = this.collection.create(input);
 
         $('#text').val('');
+        $('#image').val('');
       }
     },
 

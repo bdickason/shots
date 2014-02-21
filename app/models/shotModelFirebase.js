@@ -1,5 +1,7 @@
 /* Shot Model - Standalone model (do not use in collections) */
 
+var moment = require('moment');
+
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {
         return(new Firebase(this.fbUrl));
@@ -10,10 +12,11 @@ module.exports = Backbone.Firebase.Model.extend({
     defaults: {
       text: ''
     },
-    getTime: function() {
-        time = new Date(timestamp);
-        hours = time.getHours();
-        minutes = time.getMinutes();
-        return(hours + ':' + minutes);
+    toJSON: function() {
+        // Generate custom timestamp
+        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
+        json.time = moment(this.get('timestamp')).format('h:mm');
+        console.log(json.time);
+        return(json);
     }
 });

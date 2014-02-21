@@ -15,8 +15,7 @@ module.exports = Backbone.Firebase.Model.extend({
     toJSON: function() {
         // Generate custom timestamp
         var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).format('h:mm');
-        console.log(json.time);
+        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
         return(json);
     }
 });

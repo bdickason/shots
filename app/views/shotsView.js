@@ -38,10 +38,10 @@ module.exports = Backbone.View.extend({
         var input = {
           text: $('#text').val(),
           image: $('#image').val(),
-          timestamp: Firebase.ServerValue.TIMESTAMP
+          timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
 
-        tmp = this.collection.create(input);
+        this.collection.create(input);
 
         $('#text').val('');
         $('#image').val('');

@@ -1,1 +1,9 @@
-  <a href="/" id="home">Home</a> | New Project
+  <a href="/" id="home">Home</a> | New Project | 
+  {{log app.user}}
+  {{#if username}}
+  {{! Check if user is logged in }}
+    <a href="#" id="username">@{{username}}</a> | 
+    <a href="#" id="logout">Logout</a>
+  {{else}}
+    <a href="#" id="login">Login</a>
+  {{/if}}

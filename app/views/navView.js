@@ -12,12 +12,17 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
-    'click #home': 'gotoHome'
+    'click #home': 'gotoHome',
+    'click #login': 'login'
   },
 
   render: function() {
-    this.$el.html(this.template()); // Nav has no collection associated with it, so just render the tepmlate
+    this.$el.html(this.template(app.user)); // Nav has no collection associated with it, so just render the tepmlate
     return this;
+  },
+
+  login: function(e) {
+    app.auth.login('twitter');
   },
 
   gotoHome: function(e) {

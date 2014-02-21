@@ -11,6 +11,21 @@ window.onload = function(){
     app.utils = require('./utils.js');
 
     app.fbUrl = 'https://shots.firebaseio.com';
+    app.user = {};
+
+    /* Authentication via Twitter/Firebase */
+    var fbRef = new Firebase(app.fbUrl);
+    app.auth = new FirebaseSimpleLogin(fbRef, function(error, user) {
+      if(user) {
+        // Login was successful
+        app.user.displayName = user.displayName;
+        app.user.username = user.username;
+        app.user.profile_image = user.profile_image_url_https;
+      }
+      else {
+        console.log(error);
+      }
+    });
 
     var Routes = require('./routes.js');
     
@@ -219,12 +234,17 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
-    'click #home': 'gotoHome'
+    'click #home': 'gotoHome',
+    'click #login': 'login'
   },
 
   render: function() {
-    this.$el.html(this.template()); // Nav has no collection associated with it, so just render the tepmlate
+    this.$el.html(this.template(app.user)); // Nav has no collection associated with it, so just render the tepmlate
     return this;
+  },
+
+  login: function(e) {
+    app.auth.login('twitter');
   },
 
   gotoHome: function(e) {
@@ -488,10 +508,31 @@ var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
   
+  var buffer = "", stack1, helper;
+  buffer += "\n  \n    <a href=\"#\" id=\"username\">@";
+  if (helper = helpers.username) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.username); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a> | \n    <a href=\"#\" id=\"logout\">Logout</a>\n  ";
+  return buffer;
+  }
 
+function program3(depth0,data) {
+  
+  
+  return "\n    <a href=\"#\" id=\"login\">Login</a>\n  ";
+  }
 
-  return "  <a href=\"/\" id=\"home\">Home</a> | New Project";
+  buffer += "  <a href=\"/\" id=\"home\">Home</a> | New Project | \n  "
+    + escapeExpression(helpers.log.call(depth0, ((stack1 = (depth0 && depth0.app)),stack1 == null || stack1 === false ? stack1 : stack1.user), {hash:{},data:data}))
+    + "\n  ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer;
   });
 
 },{"hbsfy/runtime":30}],18:[function(require,module,exports){

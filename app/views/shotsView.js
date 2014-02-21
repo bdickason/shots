@@ -37,7 +37,8 @@ module.exports = Backbone.View.extend({
       if($('#text').val() || $('#image').val()) {
         var input = {
           text: $('#text').val(),
-          image: $('#image').val()
+          image: $('#image').val(),
+          timestamp: Firebase.ServerValue.TIMESTAMP
         };
 
         tmp = this.collection.create(input);

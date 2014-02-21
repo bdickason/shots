@@ -9,5 +9,11 @@ module.exports = Backbone.Firebase.Model.extend({
     },
     defaults: {
       text: ''
+    },
+    getTime: function() {
+        time = new Date(timestamp);
+        hours = time.getHours();
+        minutes = time.getMinutes();
+        return(hours + ':' + minutes);
     }
 });

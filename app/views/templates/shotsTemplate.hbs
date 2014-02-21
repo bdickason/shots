@@ -5,7 +5,7 @@
     <ul class="shotList">
         {{#each this}}
             <li id="{{ id }}" class="shot">
-                <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Shot {{ id }}</a>
+                <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Shot {{ time }}</a>
                 <a href="http://twitter.com/{{ author }}" target="_blank">{{ author }}</a>
                 <p>{{ text }}</p>
                 <img src="{{ image }}">

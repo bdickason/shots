@@ -11,6 +11,7 @@ module.exports = Backbone.View.extend({
       this.project = options.project;  // Save project name in case we need to add
       
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+      this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
 
       var view = this;
       this.collection.bind('add', function(shotModel) {
@@ -22,7 +23,8 @@ module.exports = Backbone.View.extend({
     
     events: {
       'keyup .input': 'pressEnter',
-      'click #createShot': 'createShot'
+      'click #createShot': 'createShot',
+      'click #deleteShot': 'deleteShot'
     },
 
     pressEnter: function(e) {
@@ -35,7 +37,6 @@ module.exports = Backbone.View.extend({
 
     createShot: function(shot) {
       if($('#text').val() || $('#image').val()) {
-        console.log('creating shot');
         var input = {
           text: $('#text').val(),
           image: $('#image').val(),
@@ -49,7 +50,16 @@ module.exports = Backbone.View.extend({
         $('#image').val('');
       }
     },
+    deleteShot: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+      var shotId = $(e.currentTarget).data('id');
+      var shot = this.collection.get(shotId);
+      var owner = shot.get('user');
 
+      if(app.user.get('username') == owner) {
+        this.collection.remove(shot);
+      }
+    },
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js

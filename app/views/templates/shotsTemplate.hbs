@@ -8,6 +8,7 @@
                 <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Posted {{ time }} by {{ user }}</a><br />
                 <img src="{{ image }}">
                 <p>{{ text }}</p>
+                <p><a href="#" id="deleteShot" data-id="{{ id }}">delete</a></p>
             </li>
         {{/each}}
     </ul>

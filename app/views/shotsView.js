@@ -14,7 +14,7 @@ module.exports = Backbone.View.extend({
 
       var view = this;
       this.collection.bind('add', function(shotModel) {
-        $('.shotList', view.$el).append(new ShotView({model: shotModel}, { projectId: view.project} ).render().el);
+        $('.shotList', view.$el).prepend(new ShotView({model: shotModel}, { projectId: view.project} ).render().el);
       });
 
       this.setElement(this.$el);

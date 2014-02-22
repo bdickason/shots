@@ -3,6 +3,10 @@ var ShotModel = require('../models/shotModel.js');
 
 module.exports = Backbone.Firebase.Collection.extend({
     model: ShotModel,
+    comparator: function(model) {
+      // Sorts model by timestamp, newest first
+      return(-model.get('timestamp'));
+    },
     firebase: function() {
         return(new Firebase(this.fbUrl));
     },

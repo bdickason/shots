@@ -5,13 +5,13 @@ Capture shots of your product as you build it and share them with your team.
 
 # Installation
 1. Install Node >= 10.0: http://nodejs.org/download/
-2. Install RethinkDB: http://www.rethinkdb.com/docs/install/
-3. Clone the repository: https://github.com/bdickason/shots
-4. `cd shots; npm install`
-5. Install Grunt: `sudo npm install -g grunt-cli`
-6. Load the database: `rethinkdb`
-7. Build .js and run tests: `grunt`
-8. Load the server: `node index.js`
+2. Clone the repository: https://github.com/bdickason/shots
+3. `cd shots; npm install`
+4. Install Grunt: `sudo npm install -g grunt-cli`
+5. Load the database: `rethinkdb`
+6. Build .js and run tests: `grunt`
+7. Load the server: `node index.js`
+8. Visit the site in your browser: http://localhost:3000/
 
 ## Projects
 

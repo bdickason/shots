@@ -6,33 +6,30 @@ Capture shots of your product as you build it and share them with your team.
 # Installation
 1. Install Node >= 10.0: http://nodejs.org/download/
 2. Clone the repository: https://github.com/bdickason/shots
-3. `cd shots; npm install`
+3. Instal dependencies: `cd shots; npm install`
 4. Install Grunt: `sudo npm install -g grunt-cli`
-5. Load the database: `rethinkdb`
-6. Build .js and run tests: `grunt`
-7. Load the server: `node index.js`
-8. Visit the site in your browser: http://localhost:3000/
+5. Build .js and run tests: `grunt`
+6. Load the server: `node index.js`
+7. Visit the site in your browser: http://localhost:3000/
 
 ## Projects
 
 A project is defined by a project name.
 
-For example: **model-edit**
+For example: **wall thickness**
 
-A project has many shots, ordered in chronological order.
-
-Example:
+Example: https://shots.firebaseio.com/projects.json
 
 ```json
 {
-  "name": project,
-  "shots": [
-      { "id": 0 },
-      { "id": 1 },
-      { "id": 2 },
-  ]
-};
+  "wall thickness": {
+    "id": "wall thickness"
+  }
+}
 ```
+
+A project has many shots, ordered in chronological order.
+
 
 ## Shots
 
@@ -40,20 +37,20 @@ A Shot is a combination of text and/or images posted by a user.
 
 A Shot may only belong to one project.
 
-Example:
+Example: curl https://shots.firebaseio.com/shots/wall%20thickness/.json
 
 ```json
 {
-  "id": 0,
-  "author": {
-    "id": 6,
-    "avatar": "http://www.google.com/blah.jpg",
-    "name": "bdickason"
-  },
-  "text": "blah blah blah blah blah.",
-  "image": "http://google.com/blah1.jpg" }
-  ]
-};
+  "-JGQQotCb7K3SPp2_3Qr": {
+    "text": "Working on a new version of the wall thickness fixer",
+    "user": "bdickason",
+    "timestamp": 1393103425102,
+    "time": "a few seconds ago",
+    "image": "http://lh3.ggpht.com/_FhgfYmXyBPs/S_aa_E3A_kI/AAAAAAAAEG8/IYfVkF8Ra0M/cloud%20cosplay_thumb%5B1%5D.jpg?imgmax=800",
+    "projectId": "wall thickness",
+    "id":"-JGQQotCb7K3SPp2_3Qr"
+  }
+}
 ```
 
 # Browserify
@@ -69,7 +66,7 @@ While working, I suggest using `grunt watch` to re-build any js files that chang
 
 # Running Tests
 
-We use [mocha](http://visionmedia.github.io/mocha/) for our server-side tests.
+We deleted the server, so I need to figure out how tests will work.
 
 To run the test suite type:
 `grunt tests` from the base project directory

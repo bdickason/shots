@@ -69,3 +69,8 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* Text Colors */
 /* Link Colors */
 /* Background Colors */
+/* All Image-related styles */
+/* line 3, ../../../app/sass/_images.scss */
+img {
+  width: 40%;
+}

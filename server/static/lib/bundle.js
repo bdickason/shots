@@ -275,17 +275,6 @@ module.exports = Backbone.View.extend({
 
   logout: function(e) {
     this.model.logout();
-  },
-
-  gotoHome: function(e) {
-    // Navigate to the homepage
-    // Can't figure out how to pass an empty route to Backbone to get it to the homepage
-    /*
-    e.preventDefault(); // Have to disable the default behavior of the anchor
-
-    route = " ";
-    console.log(app.router);
-    app.router.navigate(route, {trigger: true}); */
   }
 });
 
@@ -560,6 +549,7 @@ function program3(depth0,data) {
   buffer += "  <a href=\"/#\" id=\"home\">Home</a> | New Project | \n  ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
   return buffer;
   });
 

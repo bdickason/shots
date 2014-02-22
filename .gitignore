@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
 rethinkdb_data
-.sass_cache
+.sass-cache

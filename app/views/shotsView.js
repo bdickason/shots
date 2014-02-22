@@ -64,7 +64,7 @@ module.exports = Backbone.View.extend({
     },
 
     parseImageUrl: function(url) {
-      console.log(url);
+      // Some image hosts default to give the user a webpage displaying the image, but we need to extract the direct link
       switch(url.substring(0, 19)) {
         case 'http://cl.ly/image/':
           // Cloudapp link

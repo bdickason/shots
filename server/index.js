@@ -12,6 +12,7 @@ module.exports.startServer = function() {
   app.use(express.favicon());
   app.use(express.static(__dirname + '/static'));
   app.engine('handlebars', hbs.engine);
+  app.set('views', './server/views');
   app.set('view engine', 'handlebars');
 
   /* Client-side Routes */

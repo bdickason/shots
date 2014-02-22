@@ -35,9 +35,11 @@ module.exports = Backbone.View.extend({
 
     createShot: function(shot) {
       if($('#text').val() || $('#image').val()) {
+        console.log('creating shot');
         var input = {
           text: $('#text').val(),
           image: $('#image').val(),
+          user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
 

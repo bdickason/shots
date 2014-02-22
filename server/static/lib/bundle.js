@@ -108,7 +108,12 @@ module.exports = Backbone.Model.extend({
 });
 
 },{"moment":32}],8:[function(require,module,exports){
-/* User Model - Standalone model integrated w/ Firebase simple login */
+/* User Model - Standalone model integrated w/ Firebase simple login 
+
+displayName: User's full name
+profileImage: User's avatar
+username: user's handle
+*/
 
 module.exports = Backbone.Model.extend({
     initialize: function() {
@@ -263,7 +268,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    console.log(this.model.toJSON());
     this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
     return this;
   },
@@ -468,9 +472,11 @@ module.exports = Backbone.View.extend({
 
     createShot: function(shot) {
       if($('#text').val() || $('#image').val()) {
+        console.log('creating shot');
         var input = {
           text: $('#text').val(),
           image: $('#image').val(),
+          user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
 

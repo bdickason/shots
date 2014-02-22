@@ -1,4 +1,9 @@
-/* User Model - Standalone model integrated w/ Firebase simple login */
+/* User Model - Standalone model integrated w/ Firebase simple login 
+
+displayName: User's full name
+profileImage: User's avatar
+username: user's handle
+*/
 
 module.exports = Backbone.Model.extend({
     initialize: function() {

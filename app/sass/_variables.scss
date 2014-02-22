@@ -1,0 +1,25 @@
+/* Variables Partial  - contains colors, fonts, etc. */
+
+/* Text Colors */
+$text-light:     #FFF;  // Light text for use on dark backgrounds
+$text-dark:      #404040;   // Dark text for use on light backgrounds
+$text-cta:       #808080;     // Text for call to action/buttons
+$text-hover:     black;
+
+/* Link Colors */
+$primary:        #AAA;
+$secondary:      #BBB;
+$button:         white;
+$button-hover:   #f8edd1;
+
+/* Background Colors */
+$bg:             #5F4F5A;	// Main site BG
+
+// Variations for each content area 
+$bg-cleanse:     #FFF;		// Cleanse Product
+$bg-moisturize:  #CCC;		// moisturize Product
+$bg-leavein:     #AAA;		// Leave-In Product
+
+$bg-promo:       #FFF;	// Promo Box
+
+$bg-about:       #CCC;		// About Us

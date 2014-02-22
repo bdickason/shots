@@ -1,0 +1,9 @@
+/* Base CSS file  - compiles all imports below into screen.css */
+
+@import "compass/reset";	// CSS Style Reset
+@import "compass/css3";   // CSS3 Optimizers for things like declaring border-radius
+@import "compass/typography/vertical_rhythm";
+@import "compass/utilities/general";
+
+/* Custom Partials */
+@import "_variables.scss";	// Variables: Color, size, etc. 

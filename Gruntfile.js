@@ -9,8 +9,18 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-compass');
 
   grunt.initConfig({
+    compass: {
+      dist: {
+        options: {
+          cssDir: 'server/static/css',
+          imagesDir: 'server/static/images',
+          sassDir: 'app/sass'
+        }
+      }
+    },
     mochaTest: {
       test: {
         options: {
@@ -27,8 +37,8 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: [ 'app/*.js', 'app/**/*.js', 'app/**/*.hbs'],
-      tasks: [ 'browserify' ]
+      files: [ 'app/*.js', 'app/**/*.js', 'app/**/*.hbs', 'app/**/*.scss'],
+      tasks: [ 'browserify', 'compass' ]
     }
   });
 

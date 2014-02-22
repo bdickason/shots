@@ -24,7 +24,8 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup .input': 'pressEnter',
       'click #createShot': 'createShot',
-      'click #deleteShot': 'deleteShot'
+      'click #deleteShot': 'deleteShot',
+      'click img': 'toggleSize'
     },
 
     pressEnter: function(e) {
@@ -50,6 +51,7 @@ module.exports = Backbone.View.extend({
         $('#image').val('');
       }
     },
+
     deleteShot: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
       var shotId = $(e.currentTarget).data('id');
@@ -58,6 +60,16 @@ module.exports = Backbone.View.extend({
 
       if(app.user.get('username') == owner) {
         this.collection.remove(shot);
+      }
+    },
+
+    toggleSize: function(e) {
+      // Enlarge or shrink a shot image
+      if($(e.currentTarget).hasClass('big')) {
+        $(e.currentTarget).removeClass('big');
+      }
+      else {
+        $(e.currentTarget).addClass('big');
       }
     },
     render: function() {

@@ -465,7 +465,8 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup .input': 'pressEnter',
       'click #createShot': 'createShot',
-      'click #deleteShot': 'deleteShot'
+      'click #deleteShot': 'deleteShot',
+      'click img': 'toggleSize'
     },
 
     pressEnter: function(e) {
@@ -491,6 +492,7 @@ module.exports = Backbone.View.extend({
         $('#image').val('');
       }
     },
+
     deleteShot: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
       var shotId = $(e.currentTarget).data('id');
@@ -499,6 +501,16 @@ module.exports = Backbone.View.extend({
 
       if(app.user.get('username') == owner) {
         this.collection.remove(shot);
+      }
+    },
+
+    toggleSize: function(e) {
+      // Enlarge or shrink a shot image
+      if($(e.currentTarget).hasClass('big')) {
+        $(e.currentTarget).removeClass('big');
+      }
+      else {
+        $(e.currentTarget).addClass('big');
       }
     },
     render: function() {
@@ -741,7 +753,7 @@ function program1(depth0,data) {
   if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">\n                <p>";
+    + "\" class=\"shot\">\n                <p>";
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

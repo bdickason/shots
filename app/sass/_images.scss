@@ -1,5 +1,13 @@
 /* All Image-related styles */
 
 img {
-  width: 40%;
+  &.shot {
+    width: 40%;
+    cursor: -webkit-zoom-in;
+
+    &.big {
+      width: 80%;
+      cursor: -webkit-zoom-out;
+    }  
+  }
 }

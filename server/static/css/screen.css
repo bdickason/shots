@@ -70,7 +70,13 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* Link Colors */
 /* Background Colors */
 /* All Image-related styles */
-/* line 3, ../../../app/sass/_images.scss */
-img {
+/* line 4, ../../../app/sass/_images.scss */
+img.shot {
   width: 40%;
+  cursor: -webkit-zoom-in;
+}
+/* line 8, ../../../app/sass/_images.scss */
+img.shot.big {
+  width: 80%;
+  cursor: -webkit-zoom-out;
 }

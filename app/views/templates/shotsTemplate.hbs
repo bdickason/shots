@@ -6,7 +6,7 @@
         {{#each this}}
             <li id="{{ id }}" class="shot">
                 <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Posted {{ time }} by {{ user }}</a><br />
-                <img src="{{ image }}">
+                <img src="{{ image }}" class="shot">
                 <p>{{ text }}</p>
                 <p><a href="#" id="deleteShot" data-id="{{ id }}">delete</a></p>
             </li>

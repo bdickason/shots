@@ -127,9 +127,18 @@ module.exports = Backbone.Model.extend({
           model.set(userData);
         }
         else {
-          console.log(error);
+          // User logged out
+          model.clear();
         }
       });
+    },
+    login: function(service) {
+      // Logs a user into the app
+      app.auth.login(service);
+    },
+    logout: function() {
+      // Logs a user out of the app
+      app.auth.logout();
     }
 });
 
@@ -249,7 +258,8 @@ module.exports = Backbone.View.extend({
 
   events: {
     'click #home': 'gotoHome',
-    'click #login': 'login'
+    'click #login': 'login',
+    'click #logout': 'logout'
   },
 
   render: function() {
@@ -259,7 +269,12 @@ module.exports = Backbone.View.extend({
   },
 
   login: function(e) {
-    app.auth.login('twitter');
+    // Relies on Firebase Simple Login
+    this.model.login('twitter');
+  },
+
+  logout: function(e) {
+    this.model.logout();
   },
 
   gotoHome: function(e) {

@@ -14,7 +14,8 @@ module.exports = Backbone.View.extend({
 
   events: {
     'click #home': 'gotoHome',
-    'click #login': 'login'
+    'click #login': 'login',
+    'click #logout': 'logout'
   },
 
   render: function() {
@@ -24,7 +25,12 @@ module.exports = Backbone.View.extend({
   },
 
   login: function(e) {
-    app.auth.login('twitter');
+    // Relies on Firebase Simple Login
+    this.model.login('twitter');
+  },
+
+  logout: function(e) {
+    this.model.logout();
   },
 
   gotoHome: function(e) {

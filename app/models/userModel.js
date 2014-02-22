@@ -17,8 +17,17 @@ module.exports = Backbone.Model.extend({
           model.set(userData);
         }
         else {
-          console.log(error);
+          // User logged out
+          model.clear();
         }
       });
+    },
+    login: function(service) {
+      // Logs a user into the app
+      app.auth.login(service);
+    },
+    logout: function() {
+      // Logs a user out of the app
+      app.auth.logout();
     }
 });

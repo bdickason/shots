@@ -481,7 +481,7 @@ module.exports = Backbone.View.extend({
       if($('#text').val() || $('#image').val()) {
         var input = {
           text: $('#text').val(),
-          image: $('#image').val(),
+          image: this.parseImageUrl($('#image').val()),
           user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
@@ -502,6 +502,29 @@ module.exports = Backbone.View.extend({
       if(app.user.get('username') == owner) {
         this.collection.remove(shot);
       }
+    },
+
+    parseImageUrl: function(url) {
+      console.log(url);
+      switch(url.substring(0, 19)) {
+        case 'http://cl.ly/image/':
+          // Cloudapp link
+          // Example Link: http://cl.ly/image/3w3x2u363M1o
+          // Example Image: http://cl.ly/image/3w3x2u363M1o/download
+          url += '/download';
+          break;
+        case 'https://www.dropbox':
+          // Dropbox Link
+          // Example Link: https://www.dropbox.com/s/axdpwwv3lematw9/Screenshot%202014-02-22%2017.14.46.png
+          // Example Image: https://dl.dropboxusercontent.com/s/axdpwwv3lematw9/Screenshot%202014-02-22%2017.14.46.png?dl=1&token_hash=AAFao11at8PTdSH5T7qKaX0wiDo1deZFfB-5YQgLYiv6gA
+          // Hopefully we don't need the token_hash :x
+          url = 'https://dl.dropboxusercontent.com' + url.slice(23);  // Remove domain and https
+          break;
+        default:
+          // For all other images, just pass the link through
+      }
+
+        return(url);
     },
 
     toggleSize: function(e) {

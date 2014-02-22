@@ -25,7 +25,7 @@ module.exports = Backbone.Router.extend({
         console.log('Route: /');
 
         // Display navigation
-        var navView = new NavView();
+        var navView = new NavView({model: app.user});
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
@@ -38,7 +38,7 @@ module.exports = Backbone.Router.extend({
         console.log('[project]: /#' + project);
         
         // Display navigation
-        var navView = new NavView();
+        var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
         // Display a single project
@@ -52,7 +52,7 @@ module.exports = Backbone.Router.extend({
         console.log('[shot]: /#' + project + '/' + shot);
 
         // Display navigation
-        var navView = new NavView();
+        var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
         // Display 'project' sub-navigation

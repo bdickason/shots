@@ -1,6 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /* Main app js file */
 
+userModel = require('./models/userModel.js');
 app = {};
 
 window.onload = function(){
@@ -11,21 +12,7 @@ window.onload = function(){
     app.utils = require('./utils.js');
 
     app.fbUrl = 'https://shots.firebaseio.com';
-    app.user = {};
-
-    /* Authentication via Twitter/Firebase */
-    var fbRef = new Firebase(app.fbUrl);
-    app.auth = new FirebaseSimpleLogin(fbRef, function(error, user) {
-      if(user) {
-        // Login was successful
-        app.user.displayName = user.displayName;
-        app.user.username = user.username;
-        app.user.profile_image = user.profile_image_url_https;
-      }
-      else {
-        console.log(error);
-      }
-    });
+    app.user = new userModel(); // Attempts to authenticate the current user
 
     var Routes = require('./routes.js');
     
@@ -35,7 +22,7 @@ window.onload = function(){
 };
 
 
-},{"./routes.js":8,"./utils.js":9}],2:[function(require,module,exports){
+},{"./models/userModel.js":8,"./routes.js":9,"./utils.js":10}],2:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('../models/projectModel.js');
 
@@ -81,7 +68,7 @@ module.exports = Backbone.Firebase.Model.extend({
     }
 });
 
-},{"moment":31}],5:[function(require,module,exports){
+},{"moment":32}],5:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 module.exports = Backbone.Model.extend({
@@ -120,7 +107,33 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"moment":31}],8:[function(require,module,exports){
+},{"moment":32}],8:[function(require,module,exports){
+/* User Model - Standalone model integrated w/ Firebase simple login */
+
+module.exports = Backbone.Model.extend({
+    initialize: function() {
+      /* Authentication via Twitter/Firebase */
+      var fbRef = new Firebase(app.fbUrl);
+      var model = this;
+      app.auth = new FirebaseSimpleLogin(fbRef, function(error, user) {
+        if(user) {
+          // Login was successful
+          userData = {
+            displayName: user.displayName,
+            profileImage: user.profile_image_url_https,
+            username: user.username,
+            loggedIn: true
+          };
+          model.set(userData);
+        }
+        else {
+          console.log(error);
+        }
+      });
+    }
+});
+
+},{}],9:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 var NavView = require('./views/navView.js');
@@ -148,7 +161,7 @@ module.exports = Backbone.Router.extend({
         console.log('Route: /');
 
         // Display navigation
-        var navView = new NavView();
+        var navView = new NavView({model: app.user});
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
@@ -161,7 +174,7 @@ module.exports = Backbone.Router.extend({
         console.log('[project]: /#' + project);
         
         // Display navigation
-        var navView = new NavView();
+        var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
         // Display a single project
@@ -175,7 +188,7 @@ module.exports = Backbone.Router.extend({
         console.log('[shot]: /#' + project + '/' + shot);
 
         // Display navigation
-        var navView = new NavView();
+        var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
         // Display 'project' sub-navigation
@@ -199,7 +212,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":10,"./views/projectNavView.js":11,"./views/projectView.js":12,"./views/projectsView.js":13,"./views/shotView.js":14,"./views/singleShotView.js":16}],9:[function(require,module,exports){
+},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":11,"./views/projectNavView.js":12,"./views/projectView.js":13,"./views/projectsView.js":14,"./views/shotView.js":15,"./views/singleShotView.js":17}],10:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -219,7 +232,7 @@ module.exports.debug = function(e, results) {
     console.log(e);
     console.log(results);
 };
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./templates/navTemplate.hbs');
@@ -230,6 +243,7 @@ module.exports = Backbone.View.extend({
   template: navTemplate,
 
   initialize: function() {
+    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();
   },
 
@@ -239,7 +253,8 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template(app.user)); // Nav has no collection associated with it, so just render the tepmlate
+    console.log(this.model.toJSON());
+    this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
     return this;
   },
 
@@ -259,7 +274,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/navTemplate.hbs":17}],11:[function(require,module,exports){
+},{"./templates/navTemplate.hbs":18}],12:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -294,7 +309,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":18}],12:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":19}],13:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
@@ -322,7 +337,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":15,"./templates/projectTemplate.hbs":19}],13:[function(require,module,exports){
+},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":16,"./templates/projectTemplate.hbs":20}],14:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
@@ -376,7 +391,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../views/projectView.js":12,"./templates/projectsTemplate.hbs":20}],14:[function(require,module,exports){
+},{"../views/projectView.js":13,"./templates/projectsTemplate.hbs":21}],15:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -411,7 +426,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/shotTemplate.hbs":21}],15:[function(require,module,exports){
+},{"./templates/shotTemplate.hbs":22}],16:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('../views/shotView.js');
@@ -469,7 +484,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../views/shotView.js":14,"./templates/shotsTemplate.hbs":22}],16:[function(require,module,exports){
+},{"../views/shotView.js":15,"./templates/shotsTemplate.hbs":23}],17:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -502,7 +517,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/shotTemplate.hbs":21}],17:[function(require,module,exports){
+},{"./templates/shotTemplate.hbs":22}],18:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -527,15 +542,13 @@ function program3(depth0,data) {
   return "\n    <a href=\"#\" id=\"login\">Login</a>\n  ";
   }
 
-  buffer += "  <a href=\"/\" id=\"home\">Home</a> | New Project | \n  "
-    + escapeExpression(helpers.log.call(depth0, ((stack1 = (depth0 && depth0.app)),stack1 == null || stack1 === false ? stack1 : stack1.user), {hash:{},data:data}))
-    + "\n  ";
+  buffer += "  <a href=\"/#\" id=\"home\">Home</a> | New Project | \n  ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   return buffer;
   });
 
-},{"hbsfy/runtime":30}],18:[function(require,module,exports){
+},{"hbsfy/runtime":31}],19:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -556,7 +569,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":30}],19:[function(require,module,exports){
+},{"hbsfy/runtime":31}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -573,7 +586,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":30}],20:[function(require,module,exports){
+},{"hbsfy/runtime":31}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -603,7 +616,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":30}],21:[function(require,module,exports){
+},{"hbsfy/runtime":31}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -656,7 +669,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":30}],22:[function(require,module,exports){
+},{"hbsfy/runtime":31}],23:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -718,7 +731,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":30}],23:[function(require,module,exports){
+},{"hbsfy/runtime":31}],24:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -751,7 +764,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":24,"./handlebars/exception":25,"./handlebars/runtime":26,"./handlebars/safe-string":27,"./handlebars/utils":28}],24:[function(require,module,exports){
+},{"./handlebars/base":25,"./handlebars/exception":26,"./handlebars/runtime":27,"./handlebars/safe-string":28,"./handlebars/utils":29}],25:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -932,7 +945,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":25,"./utils":28}],25:[function(require,module,exports){
+},{"./exception":26,"./utils":29}],26:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -961,7 +974,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -1099,7 +1112,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":24,"./exception":25,"./utils":28}],27:[function(require,module,exports){
+},{"./base":25,"./exception":26,"./utils":29}],28:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -1111,7 +1124,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -1188,15 +1201,15 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":27}],29:[function(require,module,exports){
+},{"./safe-string":28}],30:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":23}],30:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":24}],31:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":29}],31:[function(require,module,exports){
+},{"handlebars/runtime":30}],32:[function(require,module,exports){
 //! moment.js
 //! version : 2.5.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors

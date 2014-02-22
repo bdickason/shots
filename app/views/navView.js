@@ -8,6 +8,7 @@ module.exports = Backbone.View.extend({
   template: navTemplate,
 
   initialize: function() {
+    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
     this.render();
   },
 
@@ -17,7 +18,8 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template(app.user)); // Nav has no collection associated with it, so just render the tepmlate
+    console.log(this.model.toJSON());
+    this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
     return this;
   },
 

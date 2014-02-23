@@ -1,0 +1,12 @@
+    <label><h3>{{ this.length }} {{pluralize this.length 'Comment' 'Comments'}}</h3></label>
+    <textarea id="text" type="text" class="input" placeholder="Enter your comment" autofocus /><br />
+    <button id="createComment">save</button>
+    <ul class="comments">
+        {{#each this}}
+            <li id="{{ id }}" class="comment">
+                Posted {{ time }} by {{ user }}<br />
+                <p>{{ text }}</p>
+                <p><a href="#" id="deleteComment" data-id="{{ id }}">delete</a></p>
+            </li>
+        {{/each}}
+    </ul>

@@ -6,6 +6,7 @@ app = {};
 
 window.onload = function(){
     Backbone.$ = window.$;
+    app.Handlebars = require('hbsfy/runtime');
 
     // Firebase.enableLogging(true);
 
@@ -22,7 +23,24 @@ window.onload = function(){
 };
 
 
-},{"./models/userModel.js":8,"./routes.js":9,"./utils.js":10}],2:[function(require,module,exports){
+},{"./models/userModel.js":10,"./routes.js":11,"./utils.js":12,"hbsfy/runtime":35}],2:[function(require,module,exports){
+/* Comments Collection - An ordered list of Comments */
+var CommentModel = require('../models/commentModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: CommentModel,
+    comparator: function(model) {
+      // Sorts model by timestamp, newest first
+      return(-model.get('timestamp'));
+    },
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, options) {
+        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.id;
+    }
+  });
+},{"../models/commentModel.js":6}],3:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('../models/projectModel.js');
 
@@ -32,7 +50,7 @@ module.exports = Backbone.Firebase.Collection.extend({
     initialize: function() {
     }
   });
-},{"../models/projectModel.js":5}],3:[function(require,module,exports){
+},{"../models/projectModel.js":7}],4:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('../models/shotModel.js');
 
@@ -49,7 +67,7 @@ module.exports = Backbone.Firebase.Collection.extend({
         this.fbUrl = app.fbUrl + '/shots/' + options.project;
     }
   });
-},{"../models/shotModel.js":7}],4:[function(require,module,exports){
+},{"../models/shotModel.js":9}],5:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var moment = require('moment');
@@ -72,7 +90,26 @@ module.exports = Backbone.Firebase.Model.extend({
     }
 });
 
-},{"moment":32}],5:[function(require,module,exports){
+},{"moment":36}],6:[function(require,module,exports){
+/* Comment Model - data layer for a single Comment */
+
+var moment = require('moment');
+
+module.exports = Backbone.Model.extend({
+    initialize: function() {
+    },
+    defaults: {
+      text: ''
+    },
+    toJSON: function() {
+        // Generate custom timestamp
+        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
+        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
+        return(json);
+    }
+});
+
+},{"moment":36}],7:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 module.exports = Backbone.Model.extend({
@@ -80,7 +117,7 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
 
 module.exports = Backbone.Firebase.Model.extend({
@@ -92,7 +129,7 @@ module.exports = Backbone.Firebase.Model.extend({
   }
 });
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
 var moment = require('moment');
@@ -111,7 +148,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"moment":32}],8:[function(require,module,exports){
+},{"moment":36}],10:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name
@@ -151,7 +188,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 var NavView = require('./views/navView.js');
@@ -160,8 +197,10 @@ var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
 var SingleShotView = require('./views/singleShotView.js');
+var CommentsView = require('./views/commentsView.js');
 
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
+var CommentsCollectionFirebase = require('./collections/commentsCollectionFirebase.js');
 
 var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
@@ -218,6 +257,12 @@ module.exports = Backbone.Router.extend({
         var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
         var singleShotView = new SingleShotView({model: shotModel });
         this.showView('content', singleShotView);
+
+        // Display comments for a single shot
+        var commentsCollection = new CommentsCollectionFirebase([], {id: shot, projectId: project});
+        var commentsView = new CommentsView({collection: commentsCollection});
+        this.appendView(singleShotView, commentsView);
+
     },
     showView: function(selector, view) {
         // Utility function to show a specific view that overrides a DOM object
@@ -230,7 +275,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":4,"./models/projectModel.js":5,"./models/projectModelFirebase.js":6,"./views/navView.js":11,"./views/projectNavView.js":12,"./views/projectView.js":13,"./views/projectsView.js":14,"./views/shotView.js":15,"./views/singleShotView.js":17}],10:[function(require,module,exports){
+},{"./collections/commentsCollectionFirebase.js":2,"./collections/projectsCollectionFirebase.js":3,"./models/ShotModelFirebase.js":5,"./models/projectModel.js":7,"./models/projectModelFirebase.js":8,"./views/commentsView.js":13,"./views/navView.js":14,"./views/projectNavView.js":15,"./views/projectView.js":16,"./views/projectsView.js":17,"./views/shotView.js":18,"./views/singleShotView.js":20}],12:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -250,7 +295,88 @@ module.exports.debug = function(e, results) {
     console.log(e);
     console.log(results);
 };
-},{}],11:[function(require,module,exports){
+
+// Handlebars helper for plural variables
+// Use: {{pluralize object 'single_string' 'plural_string'}}
+//
+// Example: "0 comments" vs. "1 comment" vs. "5 comments"
+// {{pluralize this.length "comment" "comments" }}
+// Assumes the collection is being loaded as 'this'
+
+app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
+    switch(number) {
+        case 0:
+            return(plural);
+        case 1:
+            return(singular);
+        default:
+            return(plural);
+    }
+});
+},{}],13:[function(require,module,exports){
+/* Comments View - displays a list of comments */
+
+var commentsTemplate = require('./templates/commentsTemplate.hbs');
+
+module.exports = Backbone.View.extend({
+    tagName: 'div',
+    template: commentsTemplate,
+
+    initialize: function() {
+      this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
+      this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
+      this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
+
+      this.setElement(this.$el);
+    },
+    
+    events: {
+      'keyup .input': 'pressEnter',
+      'click #createComment': 'createComment',
+      'click #deleteComment': 'deleteComment'
+    },
+
+    pressEnter: function(e) {
+      // Submit form when user presses enter
+      if(e.which == 13 && $('#text').val()) {
+        this.createComment();
+      }
+      return(false);
+    },
+
+    createComment: function(shot) {
+      if($('#text').val() || $('#image').val()) {
+        var input = {
+          text: $('#text').val(),
+          user: app.user.get('username'),
+          timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
+        };
+
+        this.collection.create(input);
+
+        $('#text').val('');
+        $('#image').val('');
+      }
+    },
+
+    deleteComment: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+      var shotId = $(e.currentTarget).data('id');
+      var shot = this.collection.get(shotId);
+      var owner = shot.get('user');
+
+      if(app.user.get('username') == owner) {
+        this.collection.remove(shot);
+      }
+    },
+    
+    render: function() {
+      this.$el.html(this.template(this.collection.toJSON()));
+      return(this);
+    }
+  });
+
+},{"./templates/commentsTemplate.hbs":21}],14:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./templates/navTemplate.hbs');
@@ -286,7 +412,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/navTemplate.hbs":18}],12:[function(require,module,exports){
+},{"./templates/navTemplate.hbs":22}],15:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -321,7 +447,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":19}],13:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":23}],16:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
@@ -349,7 +475,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":16,"./templates/projectTemplate.hbs":20}],14:[function(require,module,exports){
+},{"../collections/shotsCollectionFirebase.js":4,"../views/shotsView.js":19,"./templates/projectTemplate.hbs":24}],17:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
@@ -400,7 +526,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../views/projectView.js":13,"./templates/projectsTemplate.hbs":21}],15:[function(require,module,exports){
+},{"../views/projectView.js":16,"./templates/projectsTemplate.hbs":25}],18:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -435,7 +561,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/shotTemplate.hbs":22}],16:[function(require,module,exports){
+},{"./templates/shotTemplate.hbs":26}],19:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('../views/shotView.js');
@@ -450,11 +576,7 @@ module.exports = Backbone.View.extend({
       
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
-
-      var view = this;
-      this.collection.bind('add', function(shotModel) {
-        $('.shotList', view.$el).prepend(new ShotView({model: shotModel}, { projectId: view.project} ).render().el);
-      });
+      this.listenTo(this.collection, 'add', this.render);
 
       this.setElement(this.$el);
     },
@@ -536,7 +658,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../views/shotView.js":15,"./templates/shotsTemplate.hbs":23}],17:[function(require,module,exports){
+},{"../views/shotView.js":18,"./templates/shotsTemplate.hbs":27}],20:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -569,7 +691,53 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/shotTemplate.hbs":22}],18:[function(require,module,exports){
+},{"./templates/shotTemplate.hbs":26}],21:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n            <li id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"comment\">\n                Posted ";
+  if (helper = helpers.time) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.time); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " by ";
+  if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "<br />\n                <p>";
+  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n                <p><a href=\"#\" id=\"deleteComment\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">delete</a></p>\n            </li>\n        ";
+  return buffer;
+  }
+
+  buffer += "    <label><h3>"
+    + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
+    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"input\" placeholder=\"Enter your comment\" autofocus /><br />\n    <button id=\"createComment\">save</button>\n    <ul class=\"comments\">\n        ";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    </ul>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":35}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -601,7 +769,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],19:[function(require,module,exports){
+},{"hbsfy/runtime":35}],23:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -622,7 +790,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],20:[function(require,module,exports){
+},{"hbsfy/runtime":35}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -639,7 +807,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],21:[function(require,module,exports){
+},{"hbsfy/runtime":35}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -669,7 +837,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],22:[function(require,module,exports){
+},{"hbsfy/runtime":35}],26:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -722,7 +890,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],23:[function(require,module,exports){
+},{"hbsfy/runtime":35}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -784,7 +952,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":31}],24:[function(require,module,exports){
+},{"hbsfy/runtime":35}],28:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -817,7 +985,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":25,"./handlebars/exception":26,"./handlebars/runtime":27,"./handlebars/safe-string":28,"./handlebars/utils":29}],25:[function(require,module,exports){
+},{"./handlebars/base":29,"./handlebars/exception":30,"./handlebars/runtime":31,"./handlebars/safe-string":32,"./handlebars/utils":33}],29:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -998,7 +1166,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":26,"./utils":29}],26:[function(require,module,exports){
+},{"./exception":30,"./utils":33}],30:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -1027,7 +1195,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],27:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -1165,7 +1333,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":25,"./exception":26,"./utils":29}],28:[function(require,module,exports){
+},{"./base":29,"./exception":30,"./utils":33}],32:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -1177,7 +1345,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],29:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -1254,15 +1422,15 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":28}],30:[function(require,module,exports){
+},{"./safe-string":32}],34:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":24}],31:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":28}],35:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":30}],32:[function(require,module,exports){
+},{"handlebars/runtime":34}],36:[function(require,module,exports){
 //! moment.js
 //! version : 2.5.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors

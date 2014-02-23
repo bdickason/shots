@@ -5,6 +5,7 @@ app = {};
 
 window.onload = function(){
     Backbone.$ = window.$;
+    app.Handlebars = require('hbsfy/runtime');
 
     // Firebase.enableLogging(true);
 

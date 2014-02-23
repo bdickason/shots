@@ -362,12 +362,9 @@ module.exports = Backbone.View.extend({
   template: projectsTemplate,
 
   initialize: function() {
-    this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-
-    var view = this;
-    this.collection.bind('add', function(project) {
-      view.$('.projects').append(new ProjectView({model: project}).render().el);
-    });
+    this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
+    this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
   },
 
   events: {

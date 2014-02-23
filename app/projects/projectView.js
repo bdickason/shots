@@ -1,6 +1,6 @@
 /* Project View - displays a single projects */
 
-var projectTemplate = require('./templates/projectTemplate.hbs');
+var projectTemplate = require('./projectTemplate.hbs');
 
 var ShotsCollectionFirebase = require('../collections/shotsCollectionFirebase.js');
 

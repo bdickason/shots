@@ -1,8 +1,8 @@
 /* Projects View - displays all projects active within the system */
 
-var projectsTemplate = require('./templates/projectsTemplate.hbs');
+var projectsTemplate = require('./projectsTemplate.hbs');
 
-var ProjectView = require('../views/projectView.js');
+var ProjectView = require('./projectView.js');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',

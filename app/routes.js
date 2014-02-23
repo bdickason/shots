@@ -3,16 +3,22 @@
 // Top Navigation
 var NavView = require('./nav/navView.js');
 
-var ProjectNavView = require('./views/projectNavView.js');
-var ProjectsView = require('./views/projectsView.js');
-var ProjectView = require('./views/projectView.js');
+// Projects
+var ProjectsCollectionFirebase = require('./projects/projectsCollectionFirebase.js');
+
+var ProjectModel = require('./projects/projectModel.js');
+var ProjectModelFirebase = require('./projects/projectModelFirebase.js');
+
+var ProjectsView = require('./projects/projectsView.js');
+var ProjectView = require('./projects/projectView.js');
+
+// Projects -> Nav
+var ProjectNavView = require('./projects/projectNav/projectNavView.js');   // Used in Shot view
+
 var ShotView = require('./views/shotView.js');
 
-var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
 
 
-var ProjectModel = require('./models/projectModel.js');
-var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 module.exports = Backbone.Router.extend({

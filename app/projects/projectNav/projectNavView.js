@@ -1,6 +1,6 @@
 /* projectNav View - Renders a sub-nav for a specific project */
 
-var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
+var projectNavTemplate = require('./projectNavTemplate.hbs');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',

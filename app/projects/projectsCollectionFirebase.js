@@ -1,5 +1,5 @@
 /* Projects Collection - An ordered list of Projects */
-var ProjectModel = require('../models/projectModel.js');
+var ProjectModel = require('./projectModel.js');
 
 module.exports = Backbone.Firebase.Collection.extend({
     model: ProjectModel,

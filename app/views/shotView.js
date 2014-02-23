@@ -2,8 +2,8 @@
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../collections/commentsCollectionFirebase');
-var CommentsView = require('../views/commentsView.js');
+var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
+var CommentsView = require('../comments/commentsView.js');
 
 module.exports = Backbone.View.extend({
 

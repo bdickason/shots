@@ -24,24 +24,7 @@ window.onload = function(){
 };
 
 
-},{"./models/userModel.js":10,"./routes.js":13,"./utils.js":14,"hbsfy/runtime":34}],2:[function(require,module,exports){
-/* Comments Collection - An ordered list of Comments */
-var CommentModel = require('../models/commentModel.js');
-
-module.exports = Backbone.Firebase.Collection.extend({
-    model: CommentModel,
-    comparator: function(model) {
-      // Sorts model by timestamp, newest first
-      return(-model.get('timestamp'));
-    },
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
-    initialize: function(models, options) {
-        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.id;
-    }
-  });
-},{"../models/commentModel.js":6}],3:[function(require,module,exports){
+},{"./models/userModel.js":12,"./routes.js":15,"./utils.js":16,"hbsfy/runtime":34}],2:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('../models/projectModel.js');
 
@@ -51,7 +34,7 @@ module.exports = Backbone.Firebase.Collection.extend({
     initialize: function() {
     }
   });
-},{"../models/projectModel.js":7}],4:[function(require,module,exports){
+},{"../models/projectModel.js":9}],3:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('../models/shotModel.js');
 
@@ -68,7 +51,154 @@ module.exports = Backbone.Firebase.Collection.extend({
         this.fbUrl = app.fbUrl + '/shots/' + options.project;
     }
   });
-},{"../models/shotModel.js":9}],5:[function(require,module,exports){
+},{"../models/shotModel.js":11}],4:[function(require,module,exports){
+/* Comment Model - data layer for a single Comment */
+
+var moment = require('moment');
+
+module.exports = Backbone.Model.extend({
+    initialize: function() {
+    },
+    defaults: {
+      text: ''
+    },
+    toJSON: function() {
+        // Generate custom timestamp
+        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
+        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
+        return(json);
+    }
+});
+
+},{"moment":35}],5:[function(require,module,exports){
+/* Comments Collection - An ordered list of Comments */
+var CommentModel = require('./commentModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: CommentModel,
+    comparator: function(model) {
+      // Sorts model by timestamp, newest first
+      return(-model.get('timestamp'));
+    },
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, options) {
+        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.id;
+    }
+  });
+},{"./commentModel.js":4}],6:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n            <li id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"comment\">\n                Posted ";
+  if (helper = helpers.time) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.time); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " by ";
+  if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "<br />\n                <p>";
+  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n                <p><a href=\"#\" id=\"deleteComment\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">delete</a></p>\n            </li>\n        ";
+  return buffer;
+  }
+
+  buffer += "    <label><h3>"
+    + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
+    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" autofocus /><br />\n    <button id=\"createComment\">save</button>\n    <ul class=\"comments\">\n        ";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n    </ul>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":34}],7:[function(require,module,exports){
+/* Comments View - displays a list of comments */
+
+var commentsTemplate = require('./commentsTemplate.hbs');
+
+module.exports = Backbone.View.extend({
+    tagName: 'div',
+    template: commentsTemplate,
+
+    initialize: function() {
+      this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
+      this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
+      this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
+
+      this.setElement(this.$el);
+    },
+    
+    events: {
+      'keyup .input': 'pressEnter',
+      'click #createComment': 'createComment',
+      'click #deleteComment': 'deleteComment'
+    },
+
+    pressEnter: function(e) {
+      // Submit form when user presses enter
+      if(e.which == 13 && $('#text').val()) {
+        this.createComment();
+      }
+      return(false);
+    },
+
+    createComment: function(comment) {
+      textarea = this.$el.find('#text.comment');
+      if(textarea.val()) {
+        var input = {
+          text: textarea.val(),
+          user: app.user.get('username'),
+          timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
+        };
+
+        console.log(this.collection.toJSON());
+        this.collection.create(input);
+
+        textarea.val('');
+      }
+    },
+
+    deleteComment: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+      var shotId = $(e.currentTarget).data('id');
+      var shot = this.collection.get(shotId);
+      var owner = shot.get('user');
+
+      if(app.user.get('username') == owner) {
+        this.collection.remove(shot);
+      }
+    },
+    
+    render: function() {
+      this.$el.html(this.template(this.collection.toJSON()));
+      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
+      return(this);
+    }
+  });
+
+},{"./commentsTemplate.hbs":6}],8:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var moment = require('moment');
@@ -91,26 +221,7 @@ module.exports = Backbone.Firebase.Model.extend({
     }
 });
 
-},{"moment":35}],6:[function(require,module,exports){
-/* Comment Model - data layer for a single Comment */
-
-var moment = require('moment');
-
-module.exports = Backbone.Model.extend({
-    initialize: function() {
-    },
-    defaults: {
-      text: ''
-    },
-    toJSON: function() {
-        // Generate custom timestamp
-        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
-        return(json);
-    }
-});
-
-},{"moment":35}],7:[function(require,module,exports){
+},{"moment":35}],9:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 module.exports = Backbone.Model.extend({
@@ -118,7 +229,7 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
 
 module.exports = Backbone.Firebase.Model.extend({
@@ -130,7 +241,7 @@ module.exports = Backbone.Firebase.Model.extend({
   }
 });
 
-},{}],9:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
 var moment = require('moment');
@@ -149,7 +260,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"moment":35}],10:[function(require,module,exports){
+},{"moment":35}],12:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name
@@ -189,7 +300,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -221,7 +332,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],12:[function(require,module,exports){
+},{"hbsfy/runtime":34}],14:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./navTemplate.hbs');
@@ -257,7 +368,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./navTemplate.hbs":11}],13:[function(require,module,exports){
+},{"./navTemplate.hbs":13}],15:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 // Top Navigation
@@ -267,15 +378,13 @@ var ProjectNavView = require('./views/projectNavView.js');
 var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
-var CommentsView = require('./views/commentsView.js');
 
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
-var CommentsCollectionFirebase = require('./collections/commentsCollectionFirebase.js');
+
 
 var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
-
 
 module.exports = Backbone.Router.extend({
     routes: {
@@ -350,7 +459,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./collections/commentsCollectionFirebase.js":2,"./collections/projectsCollectionFirebase.js":3,"./models/ShotModelFirebase.js":5,"./models/projectModel.js":7,"./models/projectModelFirebase.js":8,"./nav/navView.js":12,"./views/commentsView.js":15,"./views/projectNavView.js":16,"./views/projectView.js":17,"./views/projectsView.js":18,"./views/shotView.js":19}],14:[function(require,module,exports){
+},{"./collections/projectsCollectionFirebase.js":2,"./models/ShotModelFirebase.js":8,"./models/projectModel.js":9,"./models/projectModelFirebase.js":10,"./nav/navView.js":14,"./views/projectNavView.js":17,"./views/projectView.js":18,"./views/projectsView.js":19,"./views/shotView.js":20}],16:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -389,72 +498,7 @@ app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
             return(plural);
     }
 });
-},{}],15:[function(require,module,exports){
-/* Comments View - displays a list of comments */
-
-var commentsTemplate = require('./templates/commentsTemplate.hbs');
-
-module.exports = Backbone.View.extend({
-    tagName: 'div',
-    template: commentsTemplate,
-
-    initialize: function() {
-      this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
-      this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
-      this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
-
-      this.setElement(this.$el);
-    },
-    
-    events: {
-      'keyup .input': 'pressEnter',
-      'click #createComment': 'createComment',
-      'click #deleteComment': 'deleteComment'
-    },
-
-    pressEnter: function(e) {
-      // Submit form when user presses enter
-      if(e.which == 13 && $('#text').val()) {
-        this.createComment();
-      }
-      return(false);
-    },
-
-    createComment: function(comment) {
-      textarea = this.$el.find('#text.comment');
-      if(textarea.val()) {
-        var input = {
-          text: textarea.val(),
-          user: app.user.get('username'),
-          timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
-        };
-
-        console.log(this.collection.toJSON());
-        this.collection.create(input);
-
-        textarea.val('');
-      }
-    },
-
-    deleteComment: function(e) {
-      e.preventDefault(); // Have to disable the default behavior of the anchor
-      var shotId = $(e.currentTarget).data('id');
-      var shot = this.collection.get(shotId);
-      var owner = shot.get('user');
-
-      if(app.user.get('username') == owner) {
-        this.collection.remove(shot);
-      }
-    },
-    
-    render: function() {
-      this.$el.html(this.template(this.collection.toJSON()));
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
-    }
-  });
-
-},{"./templates/commentsTemplate.hbs":21}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -489,7 +533,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":22}],17:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":22}],18:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
@@ -523,7 +567,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/shotsCollectionFirebase.js":4,"../views/shotsView.js":20,"./templates/projectTemplate.hbs":23}],18:[function(require,module,exports){
+},{"../collections/shotsCollectionFirebase.js":3,"../views/shotsView.js":21,"./templates/projectTemplate.hbs":23}],19:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
@@ -573,13 +617,13 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../views/projectView.js":17,"./templates/projectsTemplate.hbs":24}],19:[function(require,module,exports){
+},{"../views/projectView.js":18,"./templates/projectsTemplate.hbs":24}],20:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../collections/commentsCollectionFirebase');
-var CommentsView = require('../views/commentsView.js');
+var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
+var CommentsView = require('../comments/commentsView.js');
 
 module.exports = Backbone.View.extend({
 
@@ -619,14 +663,11 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/commentsCollectionFirebase":2,"../views/commentsView.js":15,"./templates/shotTemplate.hbs":25}],20:[function(require,module,exports){
+},{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./templates/shotTemplate.hbs":25}],21:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
-
-var CommentsView = require('../views/commentsView.js');
-var CommentsCollection = require('../collections/commentsCollectionFirebase.js');
 
 module.exports = Backbone.View.extend({
     tagName: 'div',
@@ -727,53 +768,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../collections/commentsCollectionFirebase.js":2,"../views/commentsView.js":15,"../views/shotView.js":19,"./templates/shotsTemplate.hbs":26}],21:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\n            <li id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"comment\">\n                Posted ";
-  if (helper = helpers.time) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.time); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " by ";
-  if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "<br />\n                <p>";
-  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</p>\n                <p><a href=\"#\" id=\"deleteComment\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">delete</a></p>\n            </li>\n        ";
-  return buffer;
-  }
-
-  buffer += "    <label><h3>"
-    + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
-    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" autofocus /><br />\n    <button id=\"createComment\">save</button>\n    <ul class=\"comments\">\n        ";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </ul>";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":34}],22:[function(require,module,exports){
+},{"../views/shotView.js":20,"./templates/shotsTemplate.hbs":26}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

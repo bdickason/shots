@@ -3,9 +3,6 @@
 var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
-var CommentsView = require('../views/commentsView.js');
-var CommentsCollection = require('../collections/commentsCollectionFirebase.js');
-
 module.exports = Backbone.View.extend({
     tagName: 'div',
     template: shotsTemplate,

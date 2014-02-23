@@ -7,15 +7,13 @@ var ProjectNavView = require('./views/projectNavView.js');
 var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
-var CommentsView = require('./views/commentsView.js');
 
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
-var CommentsCollectionFirebase = require('./collections/commentsCollectionFirebase.js');
+
 
 var ProjectModel = require('./models/projectModel.js');
 var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ShotModelFirebase = require('./models/ShotModelFirebase.js');
-
 
 module.exports = Backbone.Router.extend({
     routes: {

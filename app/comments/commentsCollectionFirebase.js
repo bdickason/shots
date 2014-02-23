@@ -1,5 +1,5 @@
 /* Comments Collection - An ordered list of Comments */
-var CommentModel = require('../models/commentModel.js');
+var CommentModel = require('./commentModel.js');
 
 module.exports = Backbone.Firebase.Collection.extend({
     model: CommentModel,

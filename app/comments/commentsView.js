@@ -1,6 +1,6 @@
 /* Comments View - displays a list of comments */
 
-var commentsTemplate = require('./templates/commentsTemplate.hbs');
+var commentsTemplate = require('./commentsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
     tagName: 'div',

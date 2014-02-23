@@ -146,7 +146,6 @@ module.exports = Backbone.View.extend({
           timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
 
-        console.log(this.collection.toJSON());
         this.collection.create(input);
 
         textarea.val('');
@@ -511,7 +510,6 @@ module.exports = Backbone.Router.extend({
         var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
-        console.log('got here');
         // Display a single project
         var projectModelFirebase = new ProjectModelFirebase({id: project});
         var projectView = new ProjectView({model: projectModelFirebase});
@@ -876,7 +874,6 @@ module.exports = Backbone.Model.extend({
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
-    console.log('called close');
     // Removes all reference to a view (avoids memory leaks)
     if(view.model) {
         // View has a model, unbind change events

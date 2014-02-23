@@ -37,7 +37,6 @@ module.exports = Backbone.View.extend({
           timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
 
-        console.log(this.collection.toJSON());
         this.collection.create(input);
 
         textarea.val('');

@@ -1,7 +1,6 @@
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
-    console.log('called close');
     // Removes all reference to a view (avoids memory leaks)
     if(view.model) {
         // View has a model, unbind change events

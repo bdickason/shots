@@ -52,7 +52,6 @@ module.exports = Backbone.Router.extend({
         var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
-        console.log('got here');
         // Display a single project
         var projectModelFirebase = new ProjectModelFirebase({id: project});
         var projectView = new ProjectView({model: projectModelFirebase});

@@ -2,6 +2,7 @@
 
 userModel = require('./models/userModel.js');
 app = {};
+app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;

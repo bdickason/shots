@@ -31,7 +31,6 @@ module.exports = Backbone.View.extend({
 
     projectId = e.target.id;
     route = projectId;
-    console.log(route);
     app.router.navigate(route, {trigger: true});
   },
 

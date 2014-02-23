@@ -25,6 +25,8 @@ module.exports = Backbone.Router.extend({
         // Default Route (/) - Display a list of the most recently updated projects
         console.log('Route: /');
 
+        app.views.forEach(app.utils.close);
+
         // Display navigation
         var navView = new NavView({model: app.user});
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
@@ -37,11 +39,14 @@ module.exports = Backbone.Router.extend({
     project: function(project) {
         // (/:projectName) - Loads a single project
         console.log('[project]: /#' + project);
+
+        app.views.forEach(app.utils.close);
         
         // Display navigation
         var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
+        console.log('got here');
         // Display a single project
         var projectModelFirebase = new ProjectModelFirebase({id: project});
         var projectView = new ProjectView({model: projectModelFirebase});
@@ -51,6 +56,8 @@ module.exports = Backbone.Router.extend({
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
         console.log('[shot]: /#' + project + '/' + shot);
+
+        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
@@ -69,11 +76,13 @@ module.exports = Backbone.Router.extend({
     showView: function(selector, view) {
         // Utility function to show a specific view that overrides a DOM object
         $(selector).html(view.render().el);
+        app.views.push(view);
         return(view);
     },
     appendView: function(masterView, childView) {
         // Utility function to show a specific view that is displayed after an existing view
         masterView.$el.after(childView.render().el);
+        app.views.push(childView);
         return(childView);
     }
 });

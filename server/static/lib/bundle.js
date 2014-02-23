@@ -3,6 +3,7 @@
 
 userModel = require('./models/userModel.js');
 app = {};
+app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;
@@ -216,6 +217,8 @@ module.exports = Backbone.Router.extend({
         // Default Route (/) - Display a list of the most recently updated projects
         console.log('Route: /');
 
+        app.views.forEach(app.utils.close);
+
         // Display navigation
         var navView = new NavView({model: app.user});
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
@@ -228,11 +231,14 @@ module.exports = Backbone.Router.extend({
     project: function(project) {
         // (/:projectName) - Loads a single project
         console.log('[project]: /#' + project);
+
+        app.views.forEach(app.utils.close);
         
         // Display navigation
         var navView = new NavView({model: app.user});
         this.showView('nav', navView);
 
+        console.log('got here');
         // Display a single project
         var projectModelFirebase = new ProjectModelFirebase({id: project});
         var projectView = new ProjectView({model: projectModelFirebase});
@@ -242,6 +248,8 @@ module.exports = Backbone.Router.extend({
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
         console.log('[shot]: /#' + project + '/' + shot);
+
+        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
@@ -260,11 +268,13 @@ module.exports = Backbone.Router.extend({
     showView: function(selector, view) {
         // Utility function to show a specific view that overrides a DOM object
         $(selector).html(view.render().el);
+        app.views.push(view);
         return(view);
     },
     appendView: function(masterView, childView) {
         // Utility function to show a specific view that is displayed after an existing view
         masterView.$el.after(childView.render().el);
+        app.views.push(childView);
         return(childView);
     }
 });
@@ -272,6 +282,7 @@ module.exports = Backbone.Router.extend({
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
+    console.log('called close');
     // Removes all reference to a view (avoids memory leaks)
     if(view.model) {
         // View has a model, unbind change events
@@ -458,14 +469,20 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.model, 'all', app.utils.debug);
+    console.log('got here');
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id')});
   },
 
   render: function() {
+
     this.$el.html(this.template(this.model.toJSON()));
 
-    $('.shots', this.$el).html(this.shotsView.render().el);
+    shotDiv = this.$el.find('div.shots');
+    shotDiv.html(this.shotsView.render().el);
+
+    this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js    
     return this;
   }
 });
@@ -504,7 +521,6 @@ module.exports = Backbone.View.extend({
 
     projectId = e.target.id;
     route = projectId;
-    console.log(route);
     app.router.navigate(route, {trigger: true});
   },
 

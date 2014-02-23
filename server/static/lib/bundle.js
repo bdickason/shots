@@ -24,7 +24,7 @@ window.onload = function(){
 };
 
 
-},{"./models/userModel.js":10,"./routes.js":11,"./utils.js":12,"hbsfy/runtime":34}],2:[function(require,module,exports){
+},{"./models/userModel.js":10,"./routes.js":13,"./utils.js":14,"hbsfy/runtime":34}],2:[function(require,module,exports){
 /* Comments Collection - An ordered list of Comments */
 var CommentModel = require('../models/commentModel.js');
 
@@ -190,9 +190,79 @@ module.exports = Backbone.Model.extend({
 });
 
 },{}],11:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n  \n    <a href=\"#\" id=\"username\">@";
+  if (helper = helpers.username) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.username); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a> | \n    <a href=\"#\" id=\"logout\">Logout</a>\n  ";
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "\n    <a href=\"#\" id=\"login\">Login</a>\n  ";
+  }
+
+  buffer += "  <a href=\"/#\" id=\"home\">Home</a> | \n  ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":34}],12:[function(require,module,exports){
+/* Nav View - Renders the navigation */
+
+var navTemplate = require('./navTemplate.hbs');
+
+module.exports = Backbone.View.extend({
+  tagName: 'div',
+
+  template: navTemplate,
+
+  initialize: function() {
+    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
+    this.render();
+  },
+
+  events: {
+    'click #home': 'gotoHome',
+    'click #login': 'login',
+    'click #logout': 'logout'
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
+    return this;
+  },
+
+  login: function(e) {
+    // Relies on Firebase Simple Login
+    this.model.login('twitter');
+  },
+
+  logout: function(e) {
+    this.model.logout();
+  }
+});
+
+},{"./navTemplate.hbs":11}],13:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
-var NavView = require('./views/navView.js');
+// Top Navigation
+var NavView = require('./nav/navView.js');
+
 var ProjectNavView = require('./views/projectNavView.js');
 var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');
@@ -280,7 +350,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./collections/commentsCollectionFirebase.js":2,"./collections/projectsCollectionFirebase.js":3,"./models/ShotModelFirebase.js":5,"./models/projectModel.js":7,"./models/projectModelFirebase.js":8,"./views/commentsView.js":13,"./views/navView.js":14,"./views/projectNavView.js":15,"./views/projectView.js":16,"./views/projectsView.js":17,"./views/shotView.js":18}],12:[function(require,module,exports){
+},{"./collections/commentsCollectionFirebase.js":2,"./collections/projectsCollectionFirebase.js":3,"./models/ShotModelFirebase.js":5,"./models/projectModel.js":7,"./models/projectModelFirebase.js":8,"./nav/navView.js":12,"./views/commentsView.js":15,"./views/projectNavView.js":16,"./views/projectView.js":17,"./views/projectsView.js":18,"./views/shotView.js":19}],14:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {
@@ -319,7 +389,7 @@ app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
             return(plural);
     }
 });
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
 var commentsTemplate = require('./templates/commentsTemplate.hbs');
@@ -384,43 +454,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"./templates/commentsTemplate.hbs":20}],14:[function(require,module,exports){
-/* Nav View - Renders the navigation */
-
-var navTemplate = require('./templates/navTemplate.hbs');
-
-module.exports = Backbone.View.extend({
-  tagName: 'div',
-
-  template: navTemplate,
-
-  initialize: function() {
-    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
-    this.render();
-  },
-
-  events: {
-    'click #home': 'gotoHome',
-    'click #login': 'login',
-    'click #logout': 'logout'
-  },
-
-  render: function() {
-    this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
-    return this;
-  },
-
-  login: function(e) {
-    // Relies on Firebase Simple Login
-    this.model.login('twitter');
-  },
-
-  logout: function(e) {
-    this.model.logout();
-  }
-});
-
-},{"./templates/navTemplate.hbs":21}],15:[function(require,module,exports){
+},{"./templates/commentsTemplate.hbs":21}],16:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./templates/projectNavTemplate.hbs');
@@ -455,7 +489,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/projectNavTemplate.hbs":22}],16:[function(require,module,exports){
+},{"./templates/projectNavTemplate.hbs":22}],17:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./templates/projectTemplate.hbs');
@@ -489,7 +523,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/shotsCollectionFirebase.js":4,"../views/shotsView.js":19,"./templates/projectTemplate.hbs":23}],17:[function(require,module,exports){
+},{"../collections/shotsCollectionFirebase.js":4,"../views/shotsView.js":20,"./templates/projectTemplate.hbs":23}],18:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./templates/projectsTemplate.hbs');
@@ -539,7 +573,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../views/projectView.js":16,"./templates/projectsTemplate.hbs":24}],18:[function(require,module,exports){
+},{"../views/projectView.js":17,"./templates/projectsTemplate.hbs":24}],19:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -585,7 +619,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/commentsCollectionFirebase":2,"../views/commentsView.js":13,"./templates/shotTemplate.hbs":25}],19:[function(require,module,exports){
+},{"../collections/commentsCollectionFirebase":2,"../views/commentsView.js":15,"./templates/shotTemplate.hbs":25}],20:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('../views/shotView.js');
@@ -693,7 +727,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../collections/commentsCollectionFirebase.js":2,"../views/commentsView.js":13,"../views/shotView.js":18,"./templates/shotsTemplate.hbs":26}],20:[function(require,module,exports){
+},{"../collections/commentsCollectionFirebase.js":2,"../views/commentsView.js":15,"../views/shotView.js":19,"./templates/shotsTemplate.hbs":26}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -736,38 +770,6 @@ function program1(depth0,data) {
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </ul>";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":34}],21:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\n  \n    <a href=\"#\" id=\"username\">@";
-  if (helper = helpers.username) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.username); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a> | \n    <a href=\"#\" id=\"logout\">Logout</a>\n  ";
-  return buffer;
-  }
-
-function program3(depth0,data) {
-  
-  
-  return "\n    <a href=\"#\" id=\"login\">Login</a>\n  ";
-  }
-
-  buffer += "  <a href=\"/#\" id=\"home\">Home</a> | \n  ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n";
   return buffer;
   });
 

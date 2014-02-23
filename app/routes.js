@@ -1,6 +1,8 @@
 /* Routes - Contains all routes for client-side app */
 
-var NavView = require('./views/navView.js');
+// Top Navigation
+var NavView = require('./nav/navView.js');
+
 var ProjectNavView = require('./views/projectNavView.js');
 var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');

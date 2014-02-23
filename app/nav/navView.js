@@ -1,6 +1,6 @@
 /* Nav View - Renders the navigation */
 
-var navTemplate = require('./templates/navTemplate.hbs');
+var navTemplate = require('./navTemplate.hbs');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',

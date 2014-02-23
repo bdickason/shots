@@ -76,13 +76,15 @@ module.exports = Backbone.Router.extend({
     showView: function(selector, view) {
         // Utility function to show a specific view that overrides a DOM object
         $(selector).html(view.render().el);
-        app.views.push(view);
+        
+        app.views.push(view);   // Keep track of views so we can close them
         return(view);
     },
     appendView: function(masterView, childView) {
         // Utility function to show a specific view that is displayed after an existing view
         masterView.$el.after(childView.render().el);
-        app.views.push(childView);
+        
+        app.views.push(childView);  // Keep track of views so we can close them
         return(childView);
     }
 });

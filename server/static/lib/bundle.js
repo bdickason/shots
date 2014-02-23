@@ -268,13 +268,15 @@ module.exports = Backbone.Router.extend({
     showView: function(selector, view) {
         // Utility function to show a specific view that overrides a DOM object
         $(selector).html(view.render().el);
-        app.views.push(view);
+        
+        app.views.push(view);   // Keep track of views so we can close them
         return(view);
     },
     appendView: function(masterView, childView) {
         // Utility function to show a specific view that is displayed after an existing view
         masterView.$el.after(childView.render().el);
-        app.views.push(childView);
+        
+        app.views.push(childView);  // Keep track of views so we can close them
         return(childView);
     }
 });
@@ -470,7 +472,7 @@ module.exports = Backbone.View.extend({
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     this.listenTo(this.model, 'all', app.utils.debug);
-    console.log('got here');
+    
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id')});
   },
@@ -683,7 +685,7 @@ module.exports = Backbone.View.extend({
       var self = this;
       this.collection.each(function(shot) {
         var shotView = new ShotView({model: shot, projectId: self.project});
-        $('ul.shots').append(shotView.render().el);
+        this.$el.find('ul.shots').append(shotView.render().el);
       }, this);
 
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js

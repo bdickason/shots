@@ -5,7 +5,6 @@ var ProjectNavView = require('./views/projectNavView.js');
 var ProjectsView = require('./views/projectsView.js');
 var ProjectView = require('./views/projectView.js');
 var ShotView = require('./views/shotView.js');
-var SingleShotView = require('./views/singleShotView.js');
 var CommentsView = require('./views/commentsView.js');
 
 var ProjectsCollectionFirebase = require('./collections/projectsCollectionFirebase.js');
@@ -64,7 +63,7 @@ module.exports = Backbone.Router.extend({
 
         // Display a single shot
         var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var singleShotView = new SingleShotView({model: shotModel });
+        var singleShotView = new ShotView({model: shotModel });
         this.showView('content', singleShotView);
 
         // Display comments for a single shot

@@ -536,8 +536,8 @@ module.exports = Backbone.View.extend({
   template: shotTemplate,
 
   initialize: function(data, options) {
-    this.model.set('projectId', options.projectId); // Allows us to use the project Id in our template
-    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
+    this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
   },
 
   events: {
@@ -567,6 +567,9 @@ module.exports = Backbone.View.extend({
 var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
+var CommentsView = require('../views/commentsView.js');
+var CommentsCollection = require('../collections/commentsCollectionFirebase.js');
+
 module.exports = Backbone.View.extend({
     tagName: 'div',
     template: shotsTemplate,
@@ -577,7 +580,7 @@ module.exports = Backbone.View.extend({
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
       this.listenTo(this.collection, 'add', this.render);
-
+      
       this.setElement(this.$el);
     },
     
@@ -653,12 +656,20 @@ module.exports = Backbone.View.extend({
     
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
+
+      // Iterate through each comment model and add it to our list of shots
+      var self = this;
+      this.collection.each(function(shot) {
+        var shotView = new ShotView({model: shot, projectId: self.project});
+        $('ul.shotList').append(shotView.render().el);
+      }, this);
+
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
       return(this);
     }
   });
 
-},{"../views/shotView.js":18,"./templates/shotsTemplate.hbs":27}],20:[function(require,module,exports){
+},{"../collections/commentsCollectionFirebase.js":2,"../views/commentsView.js":13,"../views/shotView.js":18,"./templates/shotsTemplate.hbs":27}],20:[function(require,module,exports){
 /* Shot View - displays a single shot by itself on a page */
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
@@ -896,60 +907,10 @@ var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
   
-  var buffer = "", stack1, helper;
-  buffer += "\n            <li id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"shot\">\n                <a href=\"/#";
-  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "/";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"shotlink\" id=\"";
-  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "/";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">Posted ";
-  if (helper = helpers.time) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.time); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " by ";
-  if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a><br />\n                <img src=\"";
-  if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"shot\">\n                <p>";
-  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</p>\n                <p><a href=\"#\" id=\"deleteShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">delete</a></p>\n            </li>\n        ";
-  return buffer;
-  }
 
-  buffer += "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shotList\">\n        ";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n    </ul>";
-  return buffer;
+
+  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shotList\">\n    </ul>";
   });
 
 },{"hbsfy/runtime":35}],28:[function(require,module,exports){

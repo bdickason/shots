@@ -7,8 +7,8 @@ module.exports = Backbone.View.extend({
   template: shotTemplate,
 
   initialize: function(data, options) {
-    this.model.set('projectId', options.projectId); // Allows us to use the project Id in our template
-    this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
+    this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
   },
 
   events: {

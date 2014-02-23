@@ -3,6 +3,9 @@
 var ShotView = require('../views/shotView.js');
 var shotsTemplate = require('./templates/shotsTemplate.hbs');
 
+var CommentsView = require('../views/commentsView.js');
+var CommentsCollection = require('../collections/commentsCollectionFirebase.js');
+
 module.exports = Backbone.View.extend({
     tagName: 'div',
     template: shotsTemplate,
@@ -13,7 +16,7 @@ module.exports = Backbone.View.extend({
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
       this.listenTo(this.collection, 'add', this.render);
-
+      
       this.setElement(this.$el);
     },
     
@@ -89,6 +92,14 @@ module.exports = Backbone.View.extend({
     
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
+
+      // Iterate through each comment model and add it to our list of shots
+      var self = this;
+      this.collection.each(function(shot) {
+        var shotView = new ShotView({model: shot, projectId: self.project});
+        $('ul.shotList').append(shotView.render().el);
+      }, this);
+
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
       return(this);
     }

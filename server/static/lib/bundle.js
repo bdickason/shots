@@ -529,13 +529,9 @@ module.exports = Backbone.View.extend({
 
     toggleSize: function(e) {
       // Enlarge or shrink a shot image
-      if($(e.currentTarget).hasClass('big')) {
-        $(e.currentTarget).removeClass('big');
-      }
-      else {
-        $(e.currentTarget).addClass('big');
-      }
+      $(e.currentTarget).toggleClass('big');
     },
+    
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js

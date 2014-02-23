@@ -45,7 +45,7 @@ project: function(project) {
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
 
-    $('.shots', this.$el).html(this.shotsView.render().el);
+    this.$el.find('.shots').html(this.shotsView.render().el);
     return this;
   }
 ````

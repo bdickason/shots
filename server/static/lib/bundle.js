@@ -566,7 +566,7 @@ module.exports = Backbone.View.extend({
     this.$el.html(this.template(this.model.toJSON()));
 
     // Render comments
-    $('.comments', this.$el).html(this.commentsView.render().el);
+    this.$el.find('.comments').html(this.commentsView.render().el);
     
     this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
     

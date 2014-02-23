@@ -1,13 +1,13 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /* Main app js file */
 
-userModel = require('./models/userModel.js');
+userModel = require('./users/userModel.js');
 app = {};
 app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;
-    app.Handlebars = require('hbsfy/runtime');
+    app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 
     // Firebase.enableLogging(true);
 
@@ -24,7 +24,7 @@ window.onload = function(){
 };
 
 
-},{"./models/userModel.js":6,"./routes.js":18,"./utils.js":26,"hbsfy/runtime":34}],2:[function(require,module,exports){
+},{"./routes.js":17,"./users/userModel.js":25,"./utils.js":26,"hbsfy/runtime":34}],2:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
 var moment = require('moment');
@@ -172,46 +172,6 @@ module.exports = Backbone.View.extend({
   });
 
 },{"./commentsTemplate.hbs":4}],6:[function(require,module,exports){
-/* User Model - Standalone model integrated w/ Firebase simple login 
-
-displayName: User's full name
-profileImage: User's avatar
-username: user's handle
-*/
-
-module.exports = Backbone.Model.extend({
-    initialize: function() {
-      /* Authentication via Twitter/Firebase */
-      var fbRef = new Firebase(app.fbUrl);
-      var model = this;
-      app.auth = new FirebaseSimpleLogin(fbRef, function(error, user) {
-        if(user) {
-          // Login was successful
-          userData = {
-            displayName: user.displayName,
-            profileImage: user.profile_image_url_https,
-            username: user.username,
-            loggedIn: true
-          };
-          model.set(userData);
-        }
-        else {
-          // User logged out
-          model.clear();
-        }
-      });
-    },
-    login: function(service) {
-      // Logs a user into the app
-      app.auth.login(service);
-    },
-    logout: function() {
-      // Logs a user out of the app
-      app.auth.logout();
-    }
-});
-
-},{}],7:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -243,7 +203,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],8:[function(require,module,exports){
+},{"hbsfy/runtime":34}],7:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./navTemplate.hbs');
@@ -279,7 +239,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./navTemplate.hbs":7}],9:[function(require,module,exports){
+},{"./navTemplate.hbs":6}],8:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 module.exports = Backbone.Model.extend({
@@ -287,7 +247,7 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
 
 module.exports = Backbone.Firebase.Model.extend({
@@ -299,7 +259,7 @@ module.exports = Backbone.Firebase.Model.extend({
   }
 });
 
-},{}],11:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -320,7 +280,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],12:[function(require,module,exports){
+},{"hbsfy/runtime":34}],11:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./projectNavTemplate.hbs');
@@ -355,7 +315,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./projectNavTemplate.hbs":11}],13:[function(require,module,exports){
+},{"./projectNavTemplate.hbs":10}],12:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -372,7 +332,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],14:[function(require,module,exports){
+},{"hbsfy/runtime":34}],13:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./projectTemplate.hbs');
@@ -406,7 +366,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../shots/shotsCollectionFirebase.js":23,"../shots/shotsView.js":25,"./projectTemplate.hbs":13}],15:[function(require,module,exports){
+},{"../shots/shotsCollectionFirebase.js":22,"../shots/shotsView.js":24,"./projectTemplate.hbs":12}],14:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('./projectModel.js');
 
@@ -416,7 +376,7 @@ module.exports = Backbone.Firebase.Collection.extend({
     initialize: function() {
     }
   });
-},{"./projectModel.js":9}],16:[function(require,module,exports){
+},{"./projectModel.js":8}],15:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -446,7 +406,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],17:[function(require,module,exports){
+},{"hbsfy/runtime":34}],16:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./projectsTemplate.hbs');
@@ -496,7 +456,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./projectView.js":14,"./projectsTemplate.hbs":16}],18:[function(require,module,exports){
+},{"./projectView.js":13,"./projectsTemplate.hbs":15}],17:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 // Top Navigation
@@ -593,7 +553,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./nav/navView.js":8,"./projects/projectModel.js":9,"./projects/projectModelFirebase.js":10,"./projects/projectNav/projectNavView.js":12,"./projects/projectView.js":14,"./projects/projectsCollectionFirebase.js":15,"./projects/projectsView.js":17,"./shots/ShotModelFirebase.js":19,"./shots/shotView.js":22}],19:[function(require,module,exports){
+},{"./nav/navView.js":7,"./projects/projectModel.js":8,"./projects/projectModelFirebase.js":9,"./projects/projectNav/projectNavView.js":11,"./projects/projectView.js":13,"./projects/projectsCollectionFirebase.js":14,"./projects/projectsView.js":16,"./shots/ShotModelFirebase.js":18,"./shots/shotView.js":21}],18:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var moment = require('moment');
@@ -616,7 +576,7 @@ module.exports = Backbone.Firebase.Model.extend({
     }
 });
 
-},{"moment":35}],20:[function(require,module,exports){
+},{"moment":35}],19:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
 var moment = require('moment');
@@ -635,7 +595,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"moment":35}],21:[function(require,module,exports){
+},{"moment":35}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -692,7 +652,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],22:[function(require,module,exports){
+},{"hbsfy/runtime":34}],21:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var shotTemplate = require('./shotTemplate.hbs');
@@ -738,7 +698,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../comments/commentsCollectionFirebase":3,"../comments/commentsView.js":5,"./shotTemplate.hbs":21}],23:[function(require,module,exports){
+},{"../comments/commentsCollectionFirebase":3,"../comments/commentsView.js":5,"./shotTemplate.hbs":20}],22:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('./shotModel.js');
 
@@ -755,7 +715,7 @@ module.exports = Backbone.Firebase.Collection.extend({
         this.fbUrl = app.fbUrl + '/shots/' + options.project;
     }
   });
-},{"./shotModel.js":20}],24:[function(require,module,exports){
+},{"./shotModel.js":19}],23:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -767,7 +727,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shots\">\n    </ul>";
   });
 
-},{"hbsfy/runtime":34}],25:[function(require,module,exports){
+},{"hbsfy/runtime":34}],24:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('./shotView.js');
@@ -872,7 +832,47 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"./shotView.js":22,"./shotsTemplate.hbs":24}],26:[function(require,module,exports){
+},{"./shotView.js":21,"./shotsTemplate.hbs":23}],25:[function(require,module,exports){
+/* User Model - Standalone model integrated w/ Firebase simple login 
+
+displayName: User's full name
+profileImage: User's avatar
+username: user's handle
+*/
+
+module.exports = Backbone.Model.extend({
+    initialize: function() {
+      /* Authentication via Twitter/Firebase */
+      var fbRef = new Firebase(app.fbUrl);
+      var model = this;
+      app.auth = new FirebaseSimpleLogin(fbRef, function(error, user) {
+        if(user) {
+          // Login was successful
+          userData = {
+            displayName: user.displayName,
+            profileImage: user.profile_image_url_https,
+            username: user.username,
+            loggedIn: true
+          };
+          model.set(userData);
+        }
+        else {
+          // User logged out
+          model.clear();
+        }
+      });
+    },
+    login: function(service) {
+      // Logs a user into the app
+      app.auth.login(service);
+    },
+    logout: function() {
+      // Logs a user out of the app
+      app.auth.logout();
+    }
+});
+
+},{}],26:[function(require,module,exports){
 /* utils - Utility functions */
 
 module.exports.close = function(view) {

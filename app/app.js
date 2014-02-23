@@ -1,12 +1,12 @@
 /* Main app js file */
 
-userModel = require('./models/userModel.js');
+userModel = require('./users/userModel.js');
 app = {};
 app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;
-    app.Handlebars = require('hbsfy/runtime');
+    app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 
     // Firebase.enableLogging(true);
 

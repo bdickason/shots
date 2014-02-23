@@ -63,14 +63,8 @@ module.exports = Backbone.Router.extend({
 
         // Display a single shot
         var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var singleShotView = new ShotView({model: shotModel });
-        this.showView('content', singleShotView);
-
-        // Display comments for a single shot
-        var commentsCollection = new CommentsCollectionFirebase([], {id: shot, projectId: project});
-        var commentsView = new CommentsView({collection: commentsCollection});
-        this.appendView(singleShotView, commentsView);
-
+        var shotView = new ShotView({model: shotModel });
+        this.showView('content', shotView);
     },
     showView: function(selector, view) {
         // Utility function to show a specific view that overrides a DOM object

@@ -97,7 +97,7 @@ module.exports = Backbone.View.extend({
       var self = this;
       this.collection.each(function(shot) {
         var shotView = new ShotView({model: shot, projectId: self.project});
-        $('ul.shotList').append(shotView.render().el);
+        $('ul.shots').append(shotView.render().el);
       }, this);
 
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js

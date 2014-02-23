@@ -254,14 +254,8 @@ module.exports = Backbone.Router.extend({
 
         // Display a single shot
         var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var singleShotView = new ShotView({model: shotModel });
-        this.showView('content', singleShotView);
-
-        // Display comments for a single shot
-        var commentsCollection = new CommentsCollectionFirebase([], {id: shot, projectId: project});
-        var commentsView = new CommentsView({collection: commentsCollection});
-        this.appendView(singleShotView, commentsView);
-
+        var shotView = new ShotView({model: shotModel });
+        this.showView('content', shotView);
     },
     showView: function(selector, view) {
         // Utility function to show a specific view that overrides a DOM object
@@ -343,18 +337,19 @@ module.exports = Backbone.View.extend({
       return(false);
     },
 
-    createComment: function(shot) {
-      if($('#text').val() || $('#image').val()) {
+    createComment: function(comment) {
+      textarea = this.$el.find('#text.comment');
+      if(textarea.val()) {
         var input = {
-          text: $('#text').val(),
+          text: textarea.val(),
           user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
 
+        console.log(this.collection.toJSON());
         this.collection.create(input);
 
-        $('#text').val('');
-        $('#image').val('');
+        textarea.val('');
       }
     },
 
@@ -371,6 +366,7 @@ module.exports = Backbone.View.extend({
     
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
+      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
       return(this);
     }
   });
@@ -530,6 +526,9 @@ module.exports = Backbone.View.extend({
 
 var shotTemplate = require('./templates/shotTemplate.hbs');
 
+var CommentsCollectionFirebase = require('../collections/commentsCollectionFirebase');
+var CommentsView = require('../views/commentsView.js');
+
 module.exports = Backbone.View.extend({
 
   template: shotTemplate,
@@ -537,6 +536,8 @@ module.exports = Backbone.View.extend({
   initialize: function(data, options) {
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
+    this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {id: this.model.get('id'), projectId: this.model.get('projectId')});
+    this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});
   },
 
   events: {
@@ -545,6 +546,12 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
+
+    // Render comments
+    $('.comments', this.$el).html(this.commentsView.render().el);
+    
+    this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
+    
     return this;
   },
 
@@ -560,7 +567,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./templates/shotTemplate.hbs":25}],19:[function(require,module,exports){
+},{"../collections/commentsCollectionFirebase":2,"../views/commentsView.js":13,"./templates/shotTemplate.hbs":25}],19:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('../views/shotView.js');
@@ -660,7 +667,7 @@ module.exports = Backbone.View.extend({
       var self = this;
       this.collection.each(function(shot) {
         var shotView = new ShotView({model: shot, projectId: self.project});
-        $('ul.shotList').append(shotView.render().el);
+        $('ul.shots').append(shotView.render().el);
       }, this);
 
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
@@ -707,7 +714,7 @@ function program1(depth0,data) {
     + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " "
     + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
-    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"input\" placeholder=\"Enter your comment\" autofocus /><br />\n    <button id=\"createComment\">save</button>\n    <ul class=\"comments\">\n        ";
+    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" autofocus /><br />\n    <button id=\"createComment\">save</button>\n    <ul class=\"comments\">\n        ";
   stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </ul>";
@@ -863,7 +870,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">delete</a></p>\n</li>";
+    + "\">delete</a></p>\n  <ul id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"comments\">\n  </ul>\n</li>";
   return buffer;
   });
 
@@ -876,7 +887,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shotList\">\n    </ul>";
+  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shots\">\n    </ul>";
   });
 
 },{"hbsfy/runtime":34}],27:[function(require,module,exports){

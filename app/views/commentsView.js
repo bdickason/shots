@@ -28,18 +28,19 @@ module.exports = Backbone.View.extend({
       return(false);
     },
 
-    createComment: function(shot) {
-      if($('#text').val() || $('#image').val()) {
+    createComment: function(comment) {
+      textarea = this.$el.find('#text.comment');
+      if(textarea.val()) {
         var input = {
-          text: $('#text').val(),
+          text: textarea.val(),
           user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
         };
 
+        console.log(this.collection.toJSON());
         this.collection.create(input);
 
-        $('#text').val('');
-        $('#image').val('');
+        textarea.val('');
       }
     },
 
@@ -56,6 +57,7 @@ module.exports = Backbone.View.extend({
     
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
+      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
       return(this);
     }
   });

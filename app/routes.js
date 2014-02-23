@@ -15,11 +15,11 @@ var ProjectView = require('./projects/projectView.js');
 // Projects -> Nav
 var ProjectNavView = require('./projects/projectNav/projectNavView.js');   // Used in Shot view
 
-var ShotView = require('./views/shotView.js');
+// Shots
+var ShotModelFirebase = require('./shots/ShotModelFirebase.js');
 
+var ShotView = require('./shots/shotView.js');
 
-
-var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 module.exports = Backbone.Router.extend({
     routes: {

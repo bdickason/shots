@@ -24,24 +24,7 @@ window.onload = function(){
 };
 
 
-},{"./models/userModel.js":9,"./routes.js":21,"./utils.js":22,"hbsfy/runtime":34}],2:[function(require,module,exports){
-/* Shots Collection - An ordered list of Shots */
-var ShotModel = require('../models/shotModel.js');
-
-module.exports = Backbone.Firebase.Collection.extend({
-    model: ShotModel,
-    comparator: function(model) {
-      // Sorts model by timestamp, newest first
-      return(-model.get('timestamp'));
-    },
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
-    initialize: function(models, options) {
-        this.fbUrl = app.fbUrl + '/shots/' + options.project;
-    }
-  });
-},{"../models/shotModel.js":8}],3:[function(require,module,exports){
+},{"./models/userModel.js":6,"./routes.js":18,"./utils.js":26,"hbsfy/runtime":34}],2:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
 var moment = require('moment');
@@ -60,7 +43,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"moment":35}],4:[function(require,module,exports){
+},{"moment":35}],3:[function(require,module,exports){
 /* Comments Collection - An ordered list of Comments */
 var CommentModel = require('./commentModel.js');
 
@@ -77,7 +60,7 @@ module.exports = Backbone.Firebase.Collection.extend({
         this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.id;
     }
   });
-},{"./commentModel.js":3}],5:[function(require,module,exports){
+},{"./commentModel.js":2}],4:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -123,7 +106,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],6:[function(require,module,exports){
+},{"hbsfy/runtime":34}],5:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
 var commentsTemplate = require('./commentsTemplate.hbs');
@@ -188,49 +171,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"./commentsTemplate.hbs":5}],7:[function(require,module,exports){
-/* Shot Model - Standalone model (do not use in collections) */
-
-var moment = require('moment');
-
-module.exports = Backbone.Firebase.Model.extend({
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
-    initialize: function() {
-        this.fbUrl = app.fbUrl + '/shots/' + this.get('projectId') + '/' + this.get('id');
-    },
-    defaults: {
-      text: ''
-    },
-    toJSON: function() {
-        // Generate custom timestamp
-        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
-        return(json);
-    }
-});
-
-},{"moment":35}],8:[function(require,module,exports){
-/* Shot Model - data layer for a single Shot */
-
-var moment = require('moment');
-
-module.exports = Backbone.Model.extend({
-    initialize: function() {
-    },
-    defaults: {
-      text: ''
-    },
-    toJSON: function() {
-        // Generate custom timestamp
-        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
-        return(json);
-    }
-});
-
-},{"moment":35}],9:[function(require,module,exports){
+},{"./commentsTemplate.hbs":4}],6:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name
@@ -270,7 +211,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{}],10:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -302,7 +243,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],11:[function(require,module,exports){
+},{"hbsfy/runtime":34}],8:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./navTemplate.hbs');
@@ -338,7 +279,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./navTemplate.hbs":10}],12:[function(require,module,exports){
+},{"./navTemplate.hbs":7}],9:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 module.exports = Backbone.Model.extend({
@@ -346,7 +287,7 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{}],13:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
 
 module.exports = Backbone.Firebase.Model.extend({
@@ -358,7 +299,7 @@ module.exports = Backbone.Firebase.Model.extend({
   }
 });
 
-},{}],14:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -379,7 +320,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],15:[function(require,module,exports){
+},{"hbsfy/runtime":34}],12:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./projectNavTemplate.hbs');
@@ -414,7 +355,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./projectNavTemplate.hbs":14}],16:[function(require,module,exports){
+},{"./projectNavTemplate.hbs":11}],13:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -431,14 +372,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],17:[function(require,module,exports){
+},{"hbsfy/runtime":34}],14:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./projectTemplate.hbs');
 
-var ShotsCollectionFirebase = require('../collections/shotsCollectionFirebase.js');
+var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
 
-var ShotsView = require('../views/shotsView.js');
+var ShotsView = require('../shots/shotsView.js');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',
@@ -465,7 +406,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../collections/shotsCollectionFirebase.js":2,"../views/shotsView.js":24,"./projectTemplate.hbs":16}],18:[function(require,module,exports){
+},{"../shots/shotsCollectionFirebase.js":23,"../shots/shotsView.js":25,"./projectTemplate.hbs":13}],15:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('./projectModel.js');
 
@@ -475,7 +416,7 @@ module.exports = Backbone.Firebase.Collection.extend({
     initialize: function() {
     }
   });
-},{"./projectModel.js":12}],19:[function(require,module,exports){
+},{"./projectModel.js":9}],16:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -505,7 +446,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":34}],20:[function(require,module,exports){
+},{"hbsfy/runtime":34}],17:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./projectsTemplate.hbs');
@@ -555,7 +496,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./projectView.js":17,"./projectsTemplate.hbs":19}],21:[function(require,module,exports){
+},{"./projectView.js":14,"./projectsTemplate.hbs":16}],18:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 // Top Navigation
@@ -573,11 +514,11 @@ var ProjectView = require('./projects/projectView.js');
 // Projects -> Nav
 var ProjectNavView = require('./projects/projectNav/projectNavView.js');   // Used in Shot view
 
-var ShotView = require('./views/shotView.js');
+// Shots
+var ShotModelFirebase = require('./shots/ShotModelFirebase.js');
 
+var ShotView = require('./shots/shotView.js');
 
-
-var ShotModelFirebase = require('./models/ShotModelFirebase.js');
 
 module.exports = Backbone.Router.extend({
     routes: {
@@ -652,49 +593,109 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./models/ShotModelFirebase.js":7,"./nav/navView.js":11,"./projects/projectModel.js":12,"./projects/projectModelFirebase.js":13,"./projects/projectNav/projectNavView.js":15,"./projects/projectView.js":17,"./projects/projectsCollectionFirebase.js":18,"./projects/projectsView.js":20,"./views/shotView.js":23}],22:[function(require,module,exports){
-/* utils - Utility functions */
+},{"./nav/navView.js":8,"./projects/projectModel.js":9,"./projects/projectModelFirebase.js":10,"./projects/projectNav/projectNavView.js":12,"./projects/projectView.js":14,"./projects/projectsCollectionFirebase.js":15,"./projects/projectsView.js":17,"./shots/ShotModelFirebase.js":19,"./shots/shotView.js":22}],19:[function(require,module,exports){
+/* Shot Model - Standalone model (do not use in collections) */
 
-module.exports.close = function(view) {
-    console.log('called close');
-    // Removes all reference to a view (avoids memory leaks)
-    if(view.model) {
-        // View has a model, unbind change events
-        view.model.unbind("change", view.modelChanged);
-    }
+var moment = require('moment');
 
-    view.remove();
-    view.unbind();
-};
-
-module.exports.debug = function(e, results) {
-    // spits out whatever event is fired
-    // Usage (within a view): this.listenTo(this.model, 'all', app.utils.debug);
-    console.log(e);
-    console.log(results);
-};
-
-// Handlebars helper for plural variables
-// Use: {{pluralize object 'single_string' 'plural_string'}}
-//
-// Example: "0 comments" vs. "1 comment" vs. "5 comments"
-// {{pluralize this.length "comment" "comments" }}
-// Assumes the collection is being loaded as 'this'
-
-app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
-    switch(number) {
-        case 0:
-            return(plural);
-        case 1:
-            return(singular);
-        default:
-            return(plural);
+module.exports = Backbone.Firebase.Model.extend({
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function() {
+        this.fbUrl = app.fbUrl + '/shots/' + this.get('projectId') + '/' + this.get('id');
+    },
+    defaults: {
+      text: ''
+    },
+    toJSON: function() {
+        // Generate custom timestamp
+        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
+        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
+        return(json);
     }
 });
-},{}],23:[function(require,module,exports){
+
+},{"moment":35}],20:[function(require,module,exports){
+/* Shot Model - data layer for a single Shot */
+
+var moment = require('moment');
+
+module.exports = Backbone.Model.extend({
+    initialize: function() {
+    },
+    defaults: {
+      text: ''
+    },
+    toJSON: function() {
+        // Generate custom timestamp
+        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
+        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
+        return(json);
+    }
+});
+
+},{"moment":35}],21:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<li id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shot\">\n  <a href=\"/#";
+  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shotlink\" id=\"";
+  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "/";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">Posted ";
+  if (helper = helpers.time) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.time); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " by ";
+  if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a><br />\n  <img src=\"";
+  if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"shot\">\n  <p>";
+  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n  <p><a href=\"#\" id=\"deleteShot\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">delete</a></p>\n  <ul id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"comments\">\n  </ul>\n</li>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":34}],22:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
-var shotTemplate = require('./templates/shotTemplate.hbs');
+var shotTemplate = require('./shotTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
 var CommentsView = require('../comments/commentsView.js');
@@ -737,11 +738,40 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../comments/commentsCollectionFirebase":4,"../comments/commentsView.js":6,"./templates/shotTemplate.hbs":25}],24:[function(require,module,exports){
+},{"../comments/commentsCollectionFirebase":3,"../comments/commentsView.js":5,"./shotTemplate.hbs":21}],23:[function(require,module,exports){
+/* Shots Collection - An ordered list of Shots */
+var ShotModel = require('./shotModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: ShotModel,
+    comparator: function(model) {
+      // Sorts model by timestamp, newest first
+      return(-model.get('timestamp'));
+    },
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, options) {
+        this.fbUrl = app.fbUrl + '/shots/' + options.project;
+    }
+  });
+},{"./shotModel.js":20}],24:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shots\">\n    </ul>";
+  });
+
+},{"hbsfy/runtime":34}],25:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
-var ShotView = require('../views/shotView.js');
-var shotsTemplate = require('./templates/shotsTemplate.hbs');
+var ShotView = require('./shotView.js');
+var shotsTemplate = require('./shotsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
     tagName: 'div',
@@ -842,76 +872,46 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"../views/shotView.js":23,"./templates/shotsTemplate.hbs":26}],25:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+},{"./shotView.js":22,"./shotsTemplate.hbs":24}],26:[function(require,module,exports){
+/* utils - Utility functions */
 
+module.exports.close = function(view) {
+    console.log('called close');
+    // Removes all reference to a view (avoids memory leaks)
+    if(view.model) {
+        // View has a model, unbind change events
+        view.model.unbind("change", view.modelChanged);
+    }
 
-  buffer += "<li id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"shot\">\n  <a href=\"/#";
-  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "/";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"shotlink\" id=\"";
-  if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "/";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">Posted ";
-  if (helper = helpers.time) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.time); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + " by ";
-  if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a><br />\n  <img src=\"";
-  if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"shot\">\n  <p>";
-  if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</p>\n  <p><a href=\"#\" id=\"deleteShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">delete</a></p>\n  <ul id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"comments\">\n  </ul>\n</li>";
-  return buffer;
-  });
+    view.remove();
+    view.unbind();
+};
 
-},{"hbsfy/runtime":34}],26:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+module.exports.debug = function(e, results) {
+    // spits out whatever event is fired
+    // Usage (within a view): this.listenTo(this.model, 'all', app.utils.debug);
+    console.log(e);
+    console.log(results);
+};
 
+// Handlebars helper for plural variables
+// Use: {{pluralize object 'single_string' 'plural_string'}}
+//
+// Example: "0 comments" vs. "1 comment" vs. "5 comments"
+// {{pluralize this.length "comment" "comments" }}
+// Assumes the collection is being loaded as 'this'
 
-  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"80\" class=\"input\" placeholder=\"Enter any additional info\" autofocus /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shots\">\n    </ul>";
-  });
-
-},{"hbsfy/runtime":34}],27:[function(require,module,exports){
+app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
+    switch(number) {
+        case 0:
+            return(plural);
+        case 1:
+            return(singular);
+        default:
+            return(plural);
+    }
+});
+},{}],27:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");

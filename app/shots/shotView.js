@@ -1,6 +1,6 @@
 /* Shot View - displays a shot module embedded inside another page */
 
-var shotTemplate = require('./templates/shotTemplate.hbs');
+var shotTemplate = require('./shotTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
 var CommentsView = require('../comments/commentsView.js');

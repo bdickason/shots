@@ -2,9 +2,9 @@
 
 var projectTemplate = require('./projectTemplate.hbs');
 
-var ShotsCollectionFirebase = require('../collections/shotsCollectionFirebase.js');
+var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
 
-var ShotsView = require('../views/shotsView.js');
+var ShotsView = require('../shots/shotsView.js');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',

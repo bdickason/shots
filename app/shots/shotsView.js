@@ -1,7 +1,7 @@
 /* Shots View - displays a list of shots */
 
-var ShotView = require('../views/shotView.js');
-var shotsTemplate = require('./templates/shotsTemplate.hbs');
+var ShotView = require('./shotView.js');
+var shotsTemplate = require('./shotsTemplate.hbs');
 
 module.exports = Backbone.View.extend({
     tagName: 'div',

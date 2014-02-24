@@ -5,8 +5,8 @@
         {{#each this}}
             <li id="{{ id }}" class="comment">
                 Posted {{ time }} by {{ user }}<br />
-                <p>{{ text }}</p>
-                <p><a href="#" id="deleteComment" data-id="{{ id }}">delete</a></p>
+                <p id="text">{{ text }}</p>
+                <p><a href="#" id="editComment" data-id="{{ id }}">edit</a>  <a href="#" id="deleteComment" data-id="{{ id }}">delete</a></p>
             </li>
         {{/each}}
     </ul>

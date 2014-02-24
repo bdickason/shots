@@ -17,7 +17,8 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup .input': 'pressEnter',
       'click #createComment': 'createComment',
-      'click #deleteComment': 'deleteComment'
+      'click #deleteComment': 'deleteComment',
+      'click #editComment': 'editComment'
     },
 
     pressEnter: function(e) {
@@ -52,6 +53,44 @@ module.exports = Backbone.View.extend({
       if(app.user.get('username') == owner) {
         this.collection.remove(shot);
       }
+    },
+
+    editComment: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+
+      // Determine what comment we're editing
+      var commentId = $(e.currentTarget).data('id');
+
+      // Replace edit button with cancel link
+      $(e.currentTarget).html('<a href="#" id="cancelEdit" data-id="' + commentId + '">cancel</a>');
+      $(e.currentTarget).one('click', cancelEdit);
+      
+      // Turn text into textarea
+      commentText = $('li#' + commentId).children('#text');
+      commentText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
+      commentText.focus();
+
+
+      // Add save button
+    },
+
+    cancelEdit: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+
+      var commentId = $(e.currentTarget).data('id');
+      var comment = this.collection.get(commentId);
+
+      // Replace cancel link with edit button
+      $(e.currentTarget.html('<a href="#" id="editComment" data-id="' + commentId + '">edit</a>'));
+      $(e.currentTarget).one('click', this.editComment);
+      this.listenToOnce($(e.currentTarget), 'click #editComment', this.editComment);
+
+      // reset text to normal
+      commentText = $('li#' + commentId).children('#text');
+      commentText.attr('contenEditable', 'false');
+      commentText.val(comment.get('text'));
+      commentText.blur();
+
     },
     
     render: function() {

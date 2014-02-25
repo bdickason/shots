@@ -20,6 +20,7 @@ module.exports = Backbone.Model.extend({
             loggedIn: true
           };
           model.set(userData);
+          mixpanel.track('Login Successful', userData);
         }
         else {
           // User logged out

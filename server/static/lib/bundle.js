@@ -9,11 +9,13 @@ window.onload = function(){
     Backbone.$ = window.$;
     app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 
-    // Firebase.enableLogging(true);
-
+    // Generic utility functions used throughout the app
     app.utils = require('./utils.js');
 
+    // Firebase URL for accessing data
     app.fbUrl = 'https://shots.firebaseio.com';
+
+    // User authentication (via Firebase)
     app.user = new userModel(); // Attempts to authenticate the current user
 
     var Routes = require('./routes.js');
@@ -21,6 +23,7 @@ window.onload = function(){
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
     Backbone.history.start();
+
 };
 
 
@@ -218,7 +221,6 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
-    'click #home': 'gotoHome',
     'click #login': 'login',
     'click #logout': 'logout'
   },
@@ -230,10 +232,12 @@ module.exports = Backbone.View.extend({
 
   login: function(e) {
     // Relies on Firebase Simple Login
+    mixpanel.track('Login Attempt');
     this.model.login('twitter');
   },
 
   logout: function(e) {
+    mixpanel.track('Logout', app.user.toJSON());
     this.model.logout();
   }
 });
@@ -387,6 +391,10 @@ function program1(depth0,data) {
   
   var buffer = "", stack1, helper;
   buffer += "\n        <li class=\"project\"><a href=\"#\" id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-event=\"Show Project\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -853,6 +861,7 @@ module.exports = Backbone.Model.extend({
             loggedIn: true
           };
           model.set(userData);
+          mixpanel.track('Login Successful', userData);
         }
         else {
           // User logged out

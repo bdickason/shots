@@ -4,7 +4,7 @@
     <button class="save">save</button>
     <ul class="projects">
       {{#each this}}
-        <li class="project"><a href="#" id="{{ id }}">{{ id }}</a></li>
+        <li class="project"><a href="#" id="{{ id }}" data-event="Show Project" data-id="{{ id }}">{{ id }}</a></li>
       {{/each}}
     </ul>
   </div> 

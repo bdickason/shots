@@ -96,7 +96,11 @@ function program1(depth0,data) {
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">edit</a>  <a href=\"#\" id=\"deleteComment\" data-id=\"";
+    + "\">edit</a> <a href=\"#\" id=\"cancelEdit\" style=\"display: none\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">cancel</a> <a href=\"#\" id=\"deleteComment\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -181,8 +185,10 @@ module.exports = Backbone.View.extend({
       var commentId = $(e.currentTarget).data('id');
 
       // Replace edit button with cancel link
-      $(e.currentTarget).html('<a href="#" id="cancelEdit" data-id="' + commentId + '">cancel</a>');
-      $(e.currentTarget).one('click', cancelEdit);
+      $(e.currentTarget).hide();  // Hide edit button
+
+      cancelButton = $('#cancelEdit').show();
+      cancelButton.on('click', _.bind(this.cancelEdit, this));
       
       // Turn text into textarea
       commentText = $('li#' + commentId).children('#text');
@@ -200,9 +206,8 @@ module.exports = Backbone.View.extend({
       var comment = this.collection.get(commentId);
 
       // Replace cancel link with edit button
-      $(e.currentTarget.html('<a href="#" id="editComment" data-id="' + commentId + '">edit</a>'));
-      $(e.currentTarget).one('click', this.editComment);
-      this.listenToOnce($(e.currentTarget), 'click #editComment', this.editComment);
+      $(e.currentTarget).hide();
+      editButton = $('#editComment').show();
 
       // reset text to normal
       commentText = $('li#' + commentId).children('#text');
@@ -395,7 +400,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    this.listenTo(this.model, 'all', app.utils.debug);
+    // this.listenTo(this.model, 'all', app.utils.debug);
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id')});

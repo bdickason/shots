@@ -63,8 +63,10 @@ module.exports = Backbone.View.extend({
       var commentId = $(e.currentTarget).data('id');
 
       // Replace edit button with cancel link
-      $(e.currentTarget).html('<a href="#" id="cancelEdit" data-id="' + commentId + '">cancel</a>');
-      $(e.currentTarget).one('click', cancelEdit);
+      $(e.currentTarget).hide();  // Hide edit button
+
+      cancelButton = $('#cancelEdit').show();
+      cancelButton.on('click', _.bind(this.cancelEdit, this));
       
       // Turn text into textarea
       commentText = $('li#' + commentId).children('#text');
@@ -82,9 +84,8 @@ module.exports = Backbone.View.extend({
       var comment = this.collection.get(commentId);
 
       // Replace cancel link with edit button
-      $(e.currentTarget.html('<a href="#" id="editComment" data-id="' + commentId + '">edit</a>'));
-      $(e.currentTarget).one('click', this.editComment);
-      this.listenToOnce($(e.currentTarget), 'click #editComment', this.editComment);
+      $(e.currentTarget).hide();
+      editButton = $('#editComment').show();
 
       // reset text to normal
       commentText = $('li#' + commentId).children('#text');

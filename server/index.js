@@ -18,7 +18,7 @@ module.exports.startServer = function() {
   /* Client-side Routes */
   app.get('/', function(req, res) {
     // Default Route - serves the Backbone app
-    res.render('client');
+    res.render('client', { cfg: cfg } );
   });
 
   app.get('*', function(req, res) {

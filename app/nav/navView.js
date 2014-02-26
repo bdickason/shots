@@ -13,7 +13,6 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
-    'click #home': 'gotoHome',
     'click #login': 'login',
     'click #logout': 'logout'
   },

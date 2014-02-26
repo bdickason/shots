@@ -42,6 +42,8 @@ module.exports = Backbone.View.extend({
 
       this.collection.add(input);
 
+      mixpanel.track('Create Project', input);
+
       $('#name').val('');
     }
   }

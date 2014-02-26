@@ -9,18 +9,23 @@ window.onload = function(){
     Backbone.$ = window.$;
     app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 
-    // Firebase.enableLogging(true);
-
+    // Generic utility functions used throughout the app
     app.utils = require('./utils.js');
 
+    // Firebase URL for accessing data
     app.fbUrl = 'https://shots.firebaseio.com';
+
+    // User authentication (via Firebase)
     app.user = new userModel(); // Attempts to authenticate the current user
+
+
 
     var Routes = require('./routes.js');
     
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
     Backbone.history.start();
+
 };
 
 
@@ -152,6 +157,7 @@ module.exports = Backbone.View.extend({
         };
 
         this.collection.create(input);
+        mixpanel.track('Comment', input);
 
         textarea.val('');
       }
@@ -261,7 +267,6 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
-    'click #home': 'gotoHome',
     'click #login': 'login',
     'click #logout': 'logout'
   },
@@ -433,6 +438,10 @@ function program1(depth0,data) {
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
+    + "\" data-event=\"Show Project\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
     + "\">";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
@@ -492,6 +501,8 @@ module.exports = Backbone.View.extend({
       };
 
       this.collection.add(input);
+
+      mixpanel.track('Create Project', input);
 
       $('#name').val('');
     }
@@ -809,10 +820,12 @@ module.exports = Backbone.View.extend({
           text: $('#text').val(),
           image: this.parseImageUrl($('#image').val()),
           user: app.user.get('username'),
-          timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
+          timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
+          project: this.project
         };
 
         this.collection.create(input);
+        mixpanel.track('Create Shot', input);
 
         $('#text').val('');
         $('#image').val('');
@@ -886,16 +899,27 @@ module.exports = Backbone.Model.extend({
       /* Authentication via Twitter/Firebase */
       var fbRef = new Firebase(app.fbUrl);
       var model = this;
+
+      // Firebase auth library, triggered on sign in/sign out
       app.auth = new FirebaseSimpleLogin(fbRef, function(error, user) {
         if(user) {
           // Login was successful
           userData = {
             displayName: user.displayName,
             profileImage: user.profile_image_url_https,
+            lastLogin: new Date(),
             username: user.username,
             loggedIn: true
           };
           model.set(userData);
+
+          mixpanel.identify(userData.username);
+          mixpanel.people.set({
+            "$last_login": userData.lastLogin,
+            "$name": userData.displayName,
+            "$username": userData.username,
+            "service": "Twitter"
+          });
         }
         else {
           // User logged out

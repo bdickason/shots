@@ -169,9 +169,9 @@ module.exports = Backbone.View.extend({
 
     deleteComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
-      var shotId = $(e.currentTarget).data('id');
-      var shot = this.collection.get(shotId);
-      var owner = shot.get('user');
+      var commentId = $(e.currentTarget).data('id');
+      var comment = this.collection.get(commentId);
+      var owner = comment.get('user');
 
       if(app.user.get('username') == owner) {
         this.collection.remove(shot);
@@ -183,42 +183,50 @@ module.exports = Backbone.View.extend({
 
       // Determine what comment we're editing
       var commentId = $(e.currentTarget).data('id');
+      var comment = this.collection.get(commentId);
+      var owner = comment.get('user');
 
-      var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
+      if(app.user.get('username') == owner) {
+        var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
 
-      // Replace current edit button with cancel link
-      $(e.currentTarget).hide();  // Hide edit button      
+        // Replace current edit button with cancel link
+        $(e.currentTarget).hide();  // Hide edit button      
 
-      cancelButton = commentElement.find('#cancelEdit').show();
-      cancelButton.on('click', _.bind(this.cancelEdit, this));
-      
-      // Turn text into textarea
-      commentText = commentElement.children('#text');
-      commentText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
-      commentText.focus();
+        cancelButton = commentElement.find('#cancelEdit').show();
+        cancelButton.on('click', _.bind(this.cancelEdit, this));
+        
+        // Turn text into textarea
+        commentText = commentElement.children('#text');
+        commentText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
+        commentText.focus();
 
-
+      }
       // Add save button
     },
 
     cancelEdit: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
       
+      // Determine what comment we're editing
       var commentId = $(e.currentTarget).data('id');
       var comment = this.collection.get(commentId);
+      var owner = comment.get('user');
 
-      var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
-      
-      // Replace cancel link with edit button
-      $(e.currentTarget).hide();
-      editButton = commentElement.find('#editComment').show();
+      if(app.user.get('username') == owner) {
 
-      // reset text to normal
-      commentText = commentElement.children('#text');
-      commentText.attr('contenEditable', 'false');
-      commentText.blur();
+        var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
+        
+        // Replace cancel link with edit button
+        $(e.currentTarget).hide();
+        editButton = commentElement.find('#editComment').show();
 
-      this.render();  // commentText does not update unless we re-render
+        // reset text to normal
+        commentText = commentElement.children('#text');
+        commentText.attr('contenEditable', 'false');
+        commentText.blur();
+
+        this.render();  // commentText does not update unless we re-render
+      }
     },
     
     render: function() {

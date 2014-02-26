@@ -94,9 +94,9 @@ module.exports = Backbone.View.extend({
       // reset text to normal
       commentText = commentElement.children('#text');
       commentText.attr('contenEditable', 'false');
-      commentText.val(comment.get('text'));
       commentText.blur();
 
+      this.render();  // commentText does not update unless we re-render
     },
     
     render: function() {

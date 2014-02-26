@@ -24,12 +24,10 @@ module.exports = Backbone.View.extend({
 
   login: function(e) {
     // Relies on Firebase Simple Login
-    mixpanel.track('Login Attempt');
     this.model.login('twitter');
   },
 
   logout: function(e) {
-    mixpanel.track('Logout', app.user.toJSON());
     this.model.logout();
   }
 });

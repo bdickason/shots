@@ -38,6 +38,7 @@ module.exports = Backbone.View.extend({
         };
 
         this.collection.create(input);
+        mixpanel.track('Comment', input);
 
         textarea.val('');
       }

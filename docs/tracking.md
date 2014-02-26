@@ -47,3 +47,12 @@ To add a tracking event, use the following command:
 `mixpanel.track('Event Name', { key1: value1, key2: value2 });`
 
 Event Name is a string that will be used in the Mixpanel reporting dashboard to identify events. The second parameter is a JSON object that 
+
+# Testing tracking
+
+To test tracking, you need a Mixpanel key. Visit www.mixpanel.com and sign up for a free account.
+
+1. Enter your key into your environment variables. On OSX, edit ~/.profile and add the line: `export MIXPANEL_KEY=insert_key_here`
+2. Save your ~/.profile file.
+3. Reload your ~/.profile in your current shell: `source ~/.profile`
+4. Restart node: `node .`

@@ -61,11 +61,13 @@ module.exports = Backbone.View.extend({
 
       // Determine what comment we're editing
       var commentId = $(e.currentTarget).data('id');
+      var parent = $(e.currentTarget).parent();
 
-      // Replace edit button with cancel link
+
+      // Replace current edit button with cancel link
       $(e.currentTarget).hide();  // Hide edit button
 
-      cancelButton = $('#cancelEdit').show();
+      cancelButton = parent.find('#cancelEdit').show();
       cancelButton.on('click', _.bind(this.cancelEdit, this));
       
       // Turn text into textarea
@@ -82,10 +84,11 @@ module.exports = Backbone.View.extend({
 
       var commentId = $(e.currentTarget).data('id');
       var comment = this.collection.get(commentId);
+      var parent = $(e.currentTarget).parent();
 
       // Replace cancel link with edit button
       $(e.currentTarget).hide();
-      editButton = $('#editComment').show();
+      editButton = parent.find('#editComment').show();
 
       // reset text to normal
       commentText = $('li#' + commentId).children('#text');

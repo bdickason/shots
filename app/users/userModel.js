@@ -31,8 +31,6 @@ module.exports = Backbone.Model.extend({
             "$username": userData.username,
             "service": "Twitter"
           });
-
-          mixpanel.track('Login Successful', userData);
         }
         else {
           // User logged out

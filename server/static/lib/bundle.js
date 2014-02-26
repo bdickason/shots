@@ -183,17 +183,17 @@ module.exports = Backbone.View.extend({
 
       // Determine what comment we're editing
       var commentId = $(e.currentTarget).data('id');
-      var parent = $(e.currentTarget).parent();
 
+      var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
 
       // Replace current edit button with cancel link
-      $(e.currentTarget).hide();  // Hide edit button
+      $(e.currentTarget).hide();  // Hide edit button      
 
-      cancelButton = parent.find('#cancelEdit').show();
+      cancelButton = commentElement.find('#cancelEdit').show();
       cancelButton.on('click', _.bind(this.cancelEdit, this));
       
       // Turn text into textarea
-      commentText = $('li#' + commentId).children('#text');
+      commentText = commentElement.children('#text');
       commentText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
       commentText.focus();
 
@@ -203,17 +203,18 @@ module.exports = Backbone.View.extend({
 
     cancelEdit: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
-
+      
       var commentId = $(e.currentTarget).data('id');
       var comment = this.collection.get(commentId);
-      var parent = $(e.currentTarget).parent();
 
+      var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
+      
       // Replace cancel link with edit button
       $(e.currentTarget).hide();
-      editButton = parent.find('#editComment').show();
+      editButton = commentElement.find('#editComment').show();
 
       // reset text to normal
-      commentText = $('li#' + commentId).children('#text');
+      commentText = commentElement.children('#text');
       commentText.attr('contenEditable', 'false');
       commentText.val(comment.get('text'));
       commentText.blur();

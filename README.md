@@ -76,6 +76,19 @@ Do not push to `master` with failing tests. `master` must always be deployable (
 *Coming soon: Browser tests!*
 
 
+# Contributing
+
+## As a Designer
+
+Fork the repository, follow the above steps for setting up a repo, and go!
+
+## As a Developer
+
+Fork the repository, follow the above steps for setting up a repo, and go!
+
+See also:
+* [Patterns](docs/patterns.md)
+* [Event Tracking](docs/tracking.md)
 
 # License
 

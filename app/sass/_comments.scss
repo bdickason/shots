@@ -1,0 +1,22 @@
+/* Comment Styles */
+
+.comments {
+  width: 50%;
+
+}
+
+.comment {
+  & p #save {
+    /* Save button is hidden until editing is enabled */
+    display: none;
+  }
+
+  & p #cancel {
+    /* Cancel button is hidden until editing is enabled */
+    display: none;
+  }
+}
+
+[contenteditable="true"] {
+  background: yellow;
+}

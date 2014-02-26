@@ -18,7 +18,9 @@ module.exports = Backbone.View.extend({
       'keyup .input': 'pressEnter',
       'click #createComment': 'createComment',
       'click #deleteComment': 'deleteComment',
-      'click #editComment': 'editComment'
+      'click #editComment': 'editComment',
+      'click #cancelEdit': 'cancelEdit',
+      'click #save': 'saveComment'
     },
 
     pressEnter: function(e) {
@@ -71,7 +73,9 @@ module.exports = Backbone.View.extend({
         $(e.currentTarget).hide();  // Hide edit button      
 
         cancelButton = commentElement.find('#cancelEdit').show();
-        cancelButton.on('click', _.bind(this.cancelEdit, this));
+        // cancelButton.on('click', _.bind(this.cancelEdit, this));
+
+        saveButton = commentElement.find('#save').show();
         
         // Turn text into textarea
         commentText = commentElement.children('#text');
@@ -79,7 +83,6 @@ module.exports = Backbone.View.extend({
         commentText.focus();
 
       }
-      // Add save button
     },
 
     cancelEdit: function(e) {
@@ -104,6 +107,31 @@ module.exports = Backbone.View.extend({
         commentText.blur();
 
         this.render();  // commentText does not update unless we re-render
+      }
+    },
+
+    saveComment: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+      
+      // Determine what comment we're editing
+      var commentId = $(e.currentTarget).data('id');
+      var comment = this.collection.get(commentId);
+      var owner = comment.get('user');
+
+      if(app.user.get('username') == owner) {
+
+        var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
+        
+        // Replace cancel link with edit button
+        $(e.currentTarget).hide();
+        editButton = commentElement.find('#editComment').show();
+
+        // reset text to normal
+        commentText = commentElement.children('#text');
+        commentText.attr('contenEditable', 'false');
+        commentText.blur();
+
+        comment.set('text', commentText.val());  // commentText does not update unless we re-render
       }
     },
     

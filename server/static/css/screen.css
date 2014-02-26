@@ -69,6 +69,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* Text Colors */
 /* Link Colors */
 /* Background Colors */
+/* Core App styles */
 /* All Image-related styles */
 /* line 4, ../../../app/sass/_images.scss */
 img.shot {
@@ -79,4 +80,26 @@ img.shot {
 img.shot.big {
   width: 80%;
   cursor: -webkit-zoom-out;
+}
+
+/* Comment Styles */
+/* line 3, ../../../app/sass/_comments.scss */
+.comments {
+  width: 50%;
+}
+
+/* line 9, ../../../app/sass/_comments.scss */
+.comment p #save {
+  /* Save button is hidden until editing is enabled */
+  display: none;
+}
+/* line 14, ../../../app/sass/_comments.scss */
+.comment p #cancel {
+  /* Cancel button is hidden until editing is enabled */
+  display: none;
+}
+
+/* line 20, ../../../app/sass/_comments.scss */
+[contenteditable="true"] {
+  background: yellow;
 }

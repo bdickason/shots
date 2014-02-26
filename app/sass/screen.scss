@@ -7,5 +7,7 @@
 
 /* Custom Partials */
 @import "_variables.scss";	// Variables: Color, size, etc. 
+@import "_app.scss";        // Base app styles (body, etc)
 @import "_images.scss";     // Anything related to images
+@import "_comments.scss";   // Comments
 // Trey - Feel free to re-organize this structure however you see fit. 

@@ -113,7 +113,7 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup #text': 'pressEnter',
       'click #createComment': 'createComment',
-      'click #deleteComment': 'deleteComment',
+      // 'click #deleteComment': 'deleteComment',
       'click #editComment': 'editComment',
       'click #cancelEdit': 'cancelEdit',
       'click #save': 'saveComment'
@@ -127,6 +127,9 @@ module.exports = Backbone.View.extend({
       return(false);
     },
 
+    /* Cannot call this.model.destroy for some reason o_O
+       Tentatively moving delete back to commentsView.js
+
     deleteComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
 
@@ -136,7 +139,7 @@ module.exports = Backbone.View.extend({
         console.log('got here');
         this.model.destroy();
       }
-    },
+    }, */
 
     editComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
@@ -267,6 +270,7 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup .input': 'pressEnter',
       'click #createComment': 'createComment',
+      'click #deleteComment': 'deleteComment'
     },
 
     pressEnter: function(e) {
@@ -290,6 +294,20 @@ module.exports = Backbone.View.extend({
         mixpanel.track('Comment', input);
 
         textarea.val('');
+      }
+    },
+
+    // Temporary fix, this should be moved back to commentView.js
+    deleteComment: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+
+      var commentId = $(e.currentTarget).data('id');
+      var comment = this.collection.get(commentId);
+      var owner = comment.get('user');
+
+      if(app.user.get('username') == owner) {
+        console.log('got here');
+        this.collection.remove(comment);
       }
     },
     

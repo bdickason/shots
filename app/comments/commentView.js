@@ -18,7 +18,7 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup #text': 'pressEnter',
       'click #createComment': 'createComment',
-      'click #deleteComment': 'deleteComment',
+      // 'click #deleteComment': 'deleteComment',
       'click #editComment': 'editComment',
       'click #cancelEdit': 'cancelEdit',
       'click #save': 'saveComment'
@@ -32,6 +32,9 @@ module.exports = Backbone.View.extend({
       return(false);
     },
 
+    /* Cannot call this.model.destroy for some reason o_O
+       Tentatively moving delete back to commentsView.js
+
     deleteComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
 
@@ -41,7 +44,7 @@ module.exports = Backbone.View.extend({
         console.log('got here');
         this.model.destroy();
       }
-    },
+    }, */
 
     editComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor

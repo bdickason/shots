@@ -116,11 +116,12 @@ module.exports = Backbone.View.extend({
       // Determine what comment we're editing
       var commentId = $(e.currentTarget).data('id');
       var comment = this.collection.get(commentId);
+      
       var owner = comment.get('user');
 
       if(app.user.get('username') == owner) {
-
-        var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
+        // Locate parent <li> for this comment
+        var commentElement = this.$el.find('li#' + commentId);
         
         // Replace cancel link with edit button
         $(e.currentTarget).hide();
@@ -128,10 +129,11 @@ module.exports = Backbone.View.extend({
 
         // reset text to normal
         commentText = commentElement.children('#text');
-        commentText.attr('contenEditable', 'false');
+        commentText.attr('contentEditable', 'false');
         commentText.blur();
 
-        comment.set('text', commentText.val());  // commentText does not update unless we re-render
+        // Save next text value
+        comment.set('text', commentText.text());
       }
     },
     

@@ -25,7 +25,6 @@ window.onload = function(){
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
     Backbone.history.start();
-
 };
 
 
@@ -92,15 +91,19 @@ function program1(depth0,data) {
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</p>\n                <p><a href=\"#\" id=\"editComment\" data-id=\"";
+    + "</p>\n                <p>\n                    <a href=\"#\" id=\"editComment\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">edit</a> <a href=\"#\" id=\"cancelEdit\" style=\"display: none\" data-id=\"";
+    + "\">edit</a> \n                    <a href=\"#\" id=\"cancelEdit\" style=\"display: none\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">cancel</a> <button id=\"save\">Save</button> <a href=\"#\" id=\"deleteComment\" data-id=\"";
+    + "\">cancel</a> \n                    <button id=\"save\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">Save</button> \n                    <a href=\"#\" id=\"deleteComment\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -238,11 +241,12 @@ module.exports = Backbone.View.extend({
       // Determine what comment we're editing
       var commentId = $(e.currentTarget).data('id');
       var comment = this.collection.get(commentId);
+      
       var owner = comment.get('user');
 
       if(app.user.get('username') == owner) {
-
-        var commentElement = this.$el.find('li#' + commentId);  // Locate parent <li> for this comment
+        // Locate parent <li> for this comment
+        var commentElement = this.$el.find('li#' + commentId);
         
         // Replace cancel link with edit button
         $(e.currentTarget).hide();
@@ -250,10 +254,11 @@ module.exports = Backbone.View.extend({
 
         // reset text to normal
         commentText = commentElement.children('#text');
-        commentText.attr('contenEditable', 'false');
+        commentText.attr('contentEditable', 'false');
         commentText.blur();
 
-        comment.set('text', commentText.val());  // commentText does not update unless we re-render
+        // Save next text value
+        comment.set('text', commentText.text());
       }
     },
     
@@ -416,11 +421,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"view\">\n    <h1>";
+  buffer += "<div class=\"view\">\n  <h1>";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</h1>\n    <div class=\"shots\">\n    </div>\n</div>";
+    + "</h1>\n  <div class=\"shots\">\n  </div>\n</div>";
   return buffer;
   });
 

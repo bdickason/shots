@@ -92,7 +92,7 @@ module.exports = Backbone.View.extend({
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
 
-      // Iterate through each comment model and add it to our list of shots
+      // Iterate through each shot model and add it to our list of shots
       var self = this;
       this.collection.each(function(shot) {
         var shotView = new ShotView({model: shot, projectId: self.project});

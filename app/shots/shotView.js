@@ -12,6 +12,7 @@ module.exports = Backbone.View.extend({
   initialize: function(data, options) {
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
+    
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {id: this.model.get('id'), projectId: this.model.get('projectId')});
     this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});
   },

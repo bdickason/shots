@@ -1,0 +1,9 @@
+<li id="{{ id }}" class="comment">
+    Posted {{ time }} by {{ user }}<br />
+    <p id="text">{{ text }}</p>
+    <p>
+        <a href="#" id="editComment" data-id="{{ id }}">edit</a> 
+        <a href="#" id="cancelEdit" style="display: none" data-id="{{ id }}">cancel</a> 
+        <button id="save" data-id="{{ id }}">Save</button> 
+        <a href="#" id="deleteComment" data-id="{{ id }}">delete</a></p>
+</li>

@@ -23,7 +23,7 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup .input': 'pressEnter',
       'click #createComment': 'createComment',
-      'click #delete': 'deleteComment'
+      'click #deleteComment': 'deleteComment'
     },
 
     pressEnter: function(e) {

@@ -15,10 +15,16 @@ describe('App', function() {
   });
 
   describe('loads', function() {
-    it('loads', function() {
+    it('loads the app javascript', function() {
+      var app = require('../../app/app.js');
+      should.exist(app);
+    });
+
+    it('loads the app javascript', function() {
       require('../../app/app.js');
       true.should.equal(true);
     });
   });
+
 });
 

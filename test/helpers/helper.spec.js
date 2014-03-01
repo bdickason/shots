@@ -19,9 +19,9 @@ module.exports.setup = setup = function(callback) {
     scripts: ['../../server/static/lib/jquery-2.1.0.min.js',
               '../../server/static/lib/underscore.js',
               '../../server/static/lib/backbone.js',
-              'https://cdn.firebase.com/v0/firebase.js',
-              'https://cdn.firebase.com/libs/backfire/0.3.0/backbone-firebase.js',
-              'https://cdn.firebase.com/js/simple-login/1.2.5/firebase-simple-login.js'
+              '../../server/static/lib/firebase.js',
+              '../../server/static/lib/backbone-firebase.js',
+              '../../server/static/lib/firebase-simple-login.js'
               ],
     done: function(errs, window) {
       global.window = window;

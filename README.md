@@ -89,6 +89,7 @@ Fork the repository, follow the above steps for setting up a repo, and go!
 See also:
 * [Patterns](docs/patterns.md)
 * [Event Tracking](docs/tracking.md)
+* [Testing](docs/testing.md)
 
 # License
 

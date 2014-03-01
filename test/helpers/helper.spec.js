@@ -16,8 +16,7 @@ module.exports.setup = setup = function(callback) {
   // Setup a jsdom env and globally expose window along with other libraries
   jsdom.env({
     html: "<html><body></body></html>",
-    scripts: ['//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js',
-              '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js',
+    scripts: ['//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js',
               '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.0/backbone-min.js',
               'https://cdn.firebase.com/v0/firebase.js',
               'https://cdn.firebase.com/libs/backfire/0.3.0/backbone-firebase.js',
@@ -25,7 +24,9 @@ module.exports.setup = setup = function(callback) {
               ],
     done: function(errs, window) {
       global.window = window;
-      global.backbone = window.Backbone;
+      global._ = window._;
+      global.Backbone = window.Backbone;
+      global.Backbone.$ = global.$ = require('jquery');
 
       /*
       global.Backbone = require('../../public/javascripts/vendor/backbone.js');

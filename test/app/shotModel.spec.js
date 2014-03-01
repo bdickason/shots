@@ -1,0 +1,54 @@
+/* Tester for App */
+
+var clientenv = require('../helpers/helper.spec.js'),
+    should = require('should'),
+    sinon = require('sinon');
+
+describe('shotModel', function() {
+
+  var Shot;
+
+  beforeEach(function(done) {
+    clientenv.setup(function() {
+      app.fbUrl = 'http://blah.firebaseio.com';
+      ShotModelFirebase = require(appDir + 'shots/shotModelFirebase.js');
+      // fbStub = sinon.stub(global, 'Firebase', function(fbRef, callback) {
+        // callback();
+      // });
+      fbSpy = sinon.spy(global, 'Firebase');
+
+      done();
+    });
+  });
+
+  afterEach(function() {
+    fbSpy.restore();
+    // fbStub.restore();
+  });
+
+  describe('loads the model', function() {
+    it('without errors', function() {
+      should.exist(ShotModelFirebase);
+      shotModel = new ShotModelFirebase();
+      should.exist(shotModel);
+    });
+  });
+
+  describe('connects to Firebase', function() {
+    it('Properly constructs Firebase URL', function() {
+      // Input
+      
+      input = {
+        id: 0,
+        projectId: 'test'
+      };
+
+      shotModel = new ShotModelFirebase(input);
+      should.exist(shotModel);
+      var url = app.fbUrl + '/shots/' + input.projectId + '/' + input.id;
+    
+      fbSpy.args[0][0].should.equal(url);
+    });
+  });
+});
+

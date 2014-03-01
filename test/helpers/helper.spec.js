@@ -25,16 +25,15 @@ module.exports.setup = setup = function(callback) {
               ],
     done: function(errs, window) {
       global.window = window;
+      
       global._ = window._;
       global.Backbone = window.Backbone;
       global.Backbone.$ = global.$ = window.$;
 
-      /*
-      global.Backbone = require('../../public/javascripts/vendor/backbone.js');
-      global.Backbone.$ = global.$ = require('../../public/javascripts/vendor/jquery.js');
-      global._ = require('../../public/javascripts/vendor/underscore.js');
-      */
+      global.appDir = '../../app/';
+
       global.app = {};
+      
       callback();
     }
   });

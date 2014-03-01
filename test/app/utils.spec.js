@@ -3,7 +3,6 @@
 var clientenv = require('../helpers/helper.spec.js');
 var should = require('should');
 
-
 describe('App', function() {
   var view;
 

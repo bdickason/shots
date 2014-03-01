@@ -5,19 +5,20 @@ var clientenv = require('../helpers/helper.spec.js'),
 
 describe('userModel', function() {
 
+  var User;
+
   beforeEach(function(done) {
     clientenv.setup(function() {
-      Backbone = window.Backbone;
-      _ = window._;
+      console.log(appDir);
+      UserModel = require(appDir + 'users/userModel.js');
+
       done();
     });
   });
 
   describe('loads', function() {
     it('loads', function() {
-      var UserModel = require('../../app/users/userModel.js');
-      should.exist(userModel);
-      // console.log(userModel);
+      should.exist(UserModel);
     });
   });
 });

@@ -1,5 +1,7 @@
 /* Projects View - displays all projects active within the system */
 
+var ProjectsCollectionFirebase = require('./projectsCollectionFirebase.js');
+
 var projectsTemplate = require('./projectsTemplate.hbs');
 
 var ProjectView = require('./projectView.js');
@@ -10,6 +12,7 @@ module.exports = Backbone.View.extend({
   template: projectsTemplate,
 
   initialize: function() {
+    this.collection = new ProjectsCollectionFirebase();
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
     this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.

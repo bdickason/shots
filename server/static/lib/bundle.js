@@ -568,6 +568,8 @@ function program1(depth0,data) {
 },{"hbsfy/runtime":36}],18:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
+var ProjectsCollectionFirebase = require('./projectsCollectionFirebase.js');
+
 var projectsTemplate = require('./projectsTemplate.hbs');
 
 var ProjectView = require('./projectView.js');
@@ -578,6 +580,7 @@ module.exports = Backbone.View.extend({
   template: projectsTemplate,
 
   initialize: function() {
+    this.collection = new ProjectsCollectionFirebase();
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
     this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
@@ -617,14 +620,14 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"./projectView.js":15,"./projectsTemplate.hbs":17}],19:[function(require,module,exports){
+},{"./projectView.js":15,"./projectsCollectionFirebase.js":16,"./projectsTemplate.hbs":17}],19:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
 // Top Navigation
 var NavView = require('./nav/navView.js');
 
 // Projects
-var ProjectsCollectionFirebase = require('./projects/projectsCollectionFirebase.js');
+// var ProjectsCollectionFirebase = require('./projects/projectsCollectionFirebase.js');
 
 var ProjectModel = require('./projects/projectModel.js');
 var ProjectModelFirebase = require('./projects/projectModelFirebase.js');
@@ -658,8 +661,7 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        var projectsCollectionFirebase = new ProjectsCollectionFirebase();
-        var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
+        var projectsView = new ProjectsView();
         this.showView('content', projectsView);
     },
     project: function(project) {
@@ -713,7 +715,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./nav/navView.js":9,"./projects/projectModel.js":10,"./projects/projectModelFirebase.js":11,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsCollectionFirebase.js":16,"./projects/projectsView.js":18,"./shots/ShotModelFirebase.js":20,"./shots/shotView.js":23}],20:[function(require,module,exports){
+},{"./nav/navView.js":9,"./projects/projectModel.js":10,"./projects/projectModelFirebase.js":11,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/ShotModelFirebase.js":20,"./shots/shotView.js":23}],20:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var moment = require('moment');

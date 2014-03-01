@@ -4,7 +4,7 @@
 var NavView = require('./nav/navView.js');
 
 // Projects
-var ProjectsCollectionFirebase = require('./projects/projectsCollectionFirebase.js');
+// var ProjectsCollectionFirebase = require('./projects/projectsCollectionFirebase.js');
 
 var ProjectModel = require('./projects/projectModel.js');
 var ProjectModelFirebase = require('./projects/projectModelFirebase.js');
@@ -38,8 +38,7 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        var projectsCollectionFirebase = new ProjectsCollectionFirebase();
-        var projectsView = new ProjectsView({collection: projectsCollectionFirebase});
+        var projectsView = new ProjectsView();
         this.showView('content', projectsView);
     },
     project: function(project) {

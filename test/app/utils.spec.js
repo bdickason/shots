@@ -27,10 +27,11 @@ describe('App', function() {
 
     describe('close(view)', function() {
       it('Closes a view without a model', function() {
-        var View = Backbone.View.extend({});
-        var view = new View();
         var Model = Backbone.Model.extend({});
         var model = new Model();
+
+        var View = Backbone.View.extend({});
+        var view = new View(model);
 
         view.listenTo(model, 'sync', function() {
         });
@@ -43,12 +44,23 @@ describe('App', function() {
       });
 
       it('Closes a view without a model', function() {
+        var View = Backbone.View.extend({});
+        var view = new View({});
+
+        view.on('change', function() {
+
+        });
+        
+        should.exist(view._events);
+
+        utils.close(view);
+        
+        should.not.exist(view._events);
       });
     });
 
     describe('debug', function() {
       it('Outputs events', function() {
-        
       });
 
     });

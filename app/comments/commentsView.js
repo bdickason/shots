@@ -59,7 +59,6 @@ module.exports = Backbone.View.extend({
       var owner = comment.get('user');
 
       if(app.user.get('username') == owner) {
-        console.log('got here');
         this.collection.remove(comment);
       }
     },

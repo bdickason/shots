@@ -102,8 +102,6 @@ module.exports = Backbone.View.extend({
     template: commentTemplate,
 
     initialize: function() {
-      console.log(this);
-      
       this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
       this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
 
@@ -307,7 +305,6 @@ module.exports = Backbone.View.extend({
       var owner = comment.get('user');
 
       if(app.user.get('username') == owner) {
-        console.log('got here');
         this.collection.remove(comment);
       }
     },
@@ -490,6 +487,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":36}],15:[function(require,module,exports){
 /* Project View - displays a single projects */
 
+var ProjectModelFirebase = require('./projectModelFirebase.js');
+
 var projectTemplate = require('./projectTemplate.hbs');
 
 var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
@@ -502,8 +501,9 @@ module.exports = Backbone.View.extend({
   template: projectTemplate,
 
   initialize: function() {
+    this.model = new ProjectModelFirebase({id: this.id});
+
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    // this.listenTo(this.model, 'all', app.utils.debug);
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id')});
@@ -521,7 +521,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../shots/shotsCollectionFirebase.js":24,"../shots/shotsView.js":26,"./projectTemplate.hbs":14}],16:[function(require,module,exports){
+},{"../shots/shotsCollectionFirebase.js":24,"../shots/shotsView.js":26,"./projectModelFirebase.js":11,"./projectTemplate.hbs":14}],16:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('./projectModel.js');
 
@@ -627,10 +627,7 @@ module.exports = Backbone.View.extend({
 var NavView = require('./nav/navView.js');
 
 // Projects
-// var ProjectsCollectionFirebase = require('./projects/projectsCollectionFirebase.js');
-
 var ProjectModel = require('./projects/projectModel.js');
-var ProjectModelFirebase = require('./projects/projectModelFirebase.js');
 
 var ProjectsView = require('./projects/projectsView.js');
 var ProjectView = require('./projects/projectView.js');
@@ -675,8 +672,7 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView);
 
         // Display a single project
-        var projectModelFirebase = new ProjectModelFirebase({id: project});
-        var projectView = new ProjectView({model: projectModelFirebase});
+        var projectView = new ProjectView({id: project});
 
         this.showView('content', projectView);
     },
@@ -715,7 +711,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./nav/navView.js":9,"./projects/projectModel.js":10,"./projects/projectModelFirebase.js":11,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/ShotModelFirebase.js":20,"./shots/shotView.js":23}],20:[function(require,module,exports){
+},{"./nav/navView.js":9,"./projects/projectModel.js":10,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/ShotModelFirebase.js":20,"./shots/shotView.js":23}],20:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var moment = require('moment');

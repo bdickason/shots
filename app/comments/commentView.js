@@ -7,8 +7,6 @@ module.exports = Backbone.View.extend({
     template: commentTemplate,
 
     initialize: function() {
-      console.log(this);
-      
       this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
       this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
 

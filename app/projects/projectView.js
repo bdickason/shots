@@ -1,5 +1,7 @@
 /* Project View - displays a single projects */
 
+var ProjectModelFirebase = require('./projectModelFirebase.js');
+
 var projectTemplate = require('./projectTemplate.hbs');
 
 var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
@@ -12,8 +14,9 @@ module.exports = Backbone.View.extend({
   template: projectTemplate,
 
   initialize: function() {
+    this.model = new ProjectModelFirebase({id: this.id});
+
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-    // this.listenTo(this.model, 'all', app.utils.debug);
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id')});

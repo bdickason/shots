@@ -4,10 +4,7 @@
 var NavView = require('./nav/navView.js');
 
 // Projects
-// var ProjectsCollectionFirebase = require('./projects/projectsCollectionFirebase.js');
-
 var ProjectModel = require('./projects/projectModel.js');
-var ProjectModelFirebase = require('./projects/projectModelFirebase.js');
 
 var ProjectsView = require('./projects/projectsView.js');
 var ProjectView = require('./projects/projectView.js');
@@ -52,8 +49,7 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView);
 
         // Display a single project
-        var projectModelFirebase = new ProjectModelFirebase({id: project});
-        var projectView = new ProjectView({model: projectModelFirebase});
+        var projectView = new ProjectView({id: project});
 
         this.showView('content', projectView);
     },

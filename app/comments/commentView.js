@@ -16,12 +16,11 @@ module.exports = Backbone.View.extend({
     },
     
     events: {
-      'keyup #text': 'pressEnter',
-      'click #createComment': 'createComment',
+      'keyup #commentText': 'pressEnter',
       // 'click #deleteComment': 'deleteComment',
       'click #editComment': 'editComment',
       'click #cancelEdit': 'cancelEdit',
-      'click #save': 'saveComment'
+      'click #saveComment': 'saveComment'
     },
 
     pressEnter: function(e) {
@@ -49,7 +48,6 @@ module.exports = Backbone.View.extend({
     editComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
 
-      console.log('double trigger!');
       // Determine what comment we're editing
       var owner = this.model.get('user');
 
@@ -60,10 +58,10 @@ module.exports = Backbone.View.extend({
         cancelButton = this.$el.find('#cancelEdit').show();
         // cancelButton.on('click', _.bind(this.cancelEdit, this));
 
-        saveButton = this.$el.find('#save').show();
+        saveButton = this.$el.find('#saveComment').show();
         
         // Turn text into textarea
-        commentText = this.$el.find('#text');
+        commentText = this.$el.find('#commentText');
         commentText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
         commentText.focus();
       }
@@ -80,7 +78,7 @@ module.exports = Backbone.View.extend({
         editButton = this.$el.find('#editComment').show();
 
         // reset text to normal
-        commentText = this.$el.find('#text');
+        commentText = this.$el.find('#commentText');
         commentText.attr('contenEditable', 'false');
         commentText.blur();
 
@@ -101,7 +99,7 @@ module.exports = Backbone.View.extend({
 
 
         // reset text to normal
-        commentText = this.$el.find('#text');
+        commentText = this.$el.find('#commentText');
         commentText.attr('contentEditable', 'false');
         commentText.blur();
 

@@ -68,7 +68,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "<br />\n    <p id=\"text\">";
+    + "<br />\n    <p id=\"commentText\">";
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -76,11 +76,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">edit</a> \n      <a href=\"#\" id=\"cancelEdit\" style=\"display: none\" data-id=\"";
+    + "\">edit</a> \n      <a href=\"#\" id=\"cancelCommentEdit\" style=\"display: none\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">cancel</a> \n      <button id=\"save\" data-id=\"";
+    + "\">cancel</a> \n      <button id=\"saveComment\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -111,12 +111,11 @@ module.exports = Backbone.View.extend({
     },
     
     events: {
-      'keyup #text': 'pressEnter',
-      'click #createComment': 'createComment',
+      'keyup #commentText': 'pressEnter',
       // 'click #deleteComment': 'deleteComment',
       'click #editComment': 'editComment',
       'click #cancelEdit': 'cancelEdit',
-      'click #save': 'saveComment'
+      'click #saveComment': 'saveComment'
     },
 
     pressEnter: function(e) {
@@ -144,7 +143,6 @@ module.exports = Backbone.View.extend({
     editComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
 
-      console.log('double trigger!');
       // Determine what comment we're editing
       var owner = this.model.get('user');
 
@@ -155,10 +153,10 @@ module.exports = Backbone.View.extend({
         cancelButton = this.$el.find('#cancelEdit').show();
         // cancelButton.on('click', _.bind(this.cancelEdit, this));
 
-        saveButton = this.$el.find('#save').show();
+        saveButton = this.$el.find('#saveComment').show();
         
         // Turn text into textarea
-        commentText = this.$el.find('#text');
+        commentText = this.$el.find('#commentText');
         commentText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
         commentText.focus();
       }
@@ -175,7 +173,7 @@ module.exports = Backbone.View.extend({
         editButton = this.$el.find('#editComment').show();
 
         // reset text to normal
-        commentText = this.$el.find('#text');
+        commentText = this.$el.find('#commentText');
         commentText.attr('contenEditable', 'false');
         commentText.blur();
 
@@ -196,7 +194,7 @@ module.exports = Backbone.View.extend({
 
 
         // reset text to normal
-        commentText = this.$el.find('#text');
+        commentText = this.$el.find('#commentText');
         commentText.attr('contentEditable', 'false');
         commentText.blur();
 
@@ -273,7 +271,7 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup .input': 'pressEnter',
       'click #createComment': 'createComment',
-      'click #deleteComment': 'deleteComment'
+      'click #delete': 'deleteComment'
     },
 
     pressEnter: function(e) {
@@ -794,23 +792,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" id=\"image\" class=\"shot\">\n<p id=\"text\">";
+    + "\" id=\"shotImage\" class=\"shot\">\n<p id=\"shotText\">";
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</p>\n<p>\n  <a href=\"#\" id=\"edit\" data-id=\"";
+    + "</p>\n<p>\n  <a href=\"#\" id=\"editShot\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">edit</a> \n  <a href=\"#\" id=\"cancel\" style=\"display: none\" data-id=\"";
+    + "\">edit</a> \n  <a href=\"#\" id=\"cancelShotEdit\" style=\"display: none\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">cancel</a> \n  <button id=\"save\" data-id=\"";
+    + "\">cancel</a> \n  <button id=\"saveShot\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">Save</button> \n  <a href=\"#\" id=\"delete\" data-id=\"";
+    + "\">Save</button> \n  <a href=\"#\" id=\"deleteShot\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -849,9 +847,9 @@ module.exports = Backbone.View.extend({
 
   events: {
     'click .shotlink': 'gotoShot',
-    'click #edit': 'editShot',
-    'click #cancel': 'cancelEdit',
-    'click #save': 'saveShot'
+    'click #editShot': 'editShot',
+    'click #cancelShotEdit': 'cancelEdit',
+    'click #saveShot': 'saveShot'
   },
 
   render: function() {
@@ -884,17 +882,17 @@ module.exports = Backbone.View.extend({
       // Replace current edit button with cancel link
       $(e.currentTarget).hide();  // Hide edit button   
 
-      cancelButton = this.$el.children('p').children('#cancel').show();
+      cancelButton = this.$el.children('p').children('#cancelShotEdit').show();
       // cancelButton.on('click', _.bind(this.cancelEdit, this));
 
-      saveButton = this.$el.children('p').children('#save').show();
+      saveButton = this.$el.children('p').children('#saveShot').show();
 
       // Turn image into textarea
-      shotImage = this.$el.children('#image');
+      shotImage = this.$el.children('#shotImage');
       shotImage.attr('contentEditable', 'true');
 
       // Turn text into textarea
-      shotText = this.$el.children('#text');
+      shotText = this.$el.children('#shotText');
       shotText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
       shotText.focus();
     }
@@ -908,15 +906,15 @@ module.exports = Backbone.View.extend({
     if(app.user.get('username') == owner) {
       // Replace cancel link with edit button
       $(e.currentTarget).hide();
-      saveButton = this.$el.children('p').children('#save').hide();
-      editButton = this.$el.children('p').children('#edit').show();
+      saveButton = this.$el.children('p').children('#saveShot').hide();
+      editButton = this.$el.children('p').children('#editShot').show();
 
       // reset image to normal
-      shotImage = this.$el.children('#image');
+      shotImage = this.$el.children('#shotImage');
       shotImage.attr('contentEditable', 'false');
 
       // reset text to normal
-      shotText = this.$el.children('#text');
+      shotText = this.$el.children('#shotText');
       shotText.attr('contenEditable', 'false');
       shotText.blur();
 
@@ -933,16 +931,16 @@ module.exports = Backbone.View.extend({
 
       // Return interface to normal
       $(e.currentTarget).hide();  // Hide save button
-      cancelButton = this.$el.children('p').children('#cancel').hide();
-      editButton = this.$el.children('p').children('#edit').show();
+      cancelButton = this.$el.children('p').children('#cancelShotEdit').hide();
+      editButton = this.$el.children('p').children('#editShot').show();
 
       // image is no longer editable
-      shotImage = this.$el.children('#image');
+      shotImage = this.$el.children('#shotImage');
       shotImage.attr('contentEditable', 'false');
       shotImage.blur();
       
       // text is no longer editable
-      shotText = this.$el.children('#text');
+      shotText = this.$el.children('#shotText');
       shotText.attr('contentEditable', 'false');
       shotText.blur();
 

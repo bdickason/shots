@@ -24,9 +24,9 @@ module.exports = Backbone.View.extend({
 
   events: {
     'click .shotlink': 'gotoShot',
-    'click #edit': 'editShot',
-    'click #cancel': 'cancelEdit',
-    'click #save': 'saveShot'
+    'click #editShot': 'editShot',
+    'click #cancelShotEdit': 'cancelEdit',
+    'click #saveShot': 'saveShot'
   },
 
   render: function() {
@@ -59,17 +59,17 @@ module.exports = Backbone.View.extend({
       // Replace current edit button with cancel link
       $(e.currentTarget).hide();  // Hide edit button   
 
-      cancelButton = this.$el.children('p').children('#cancel').show();
+      cancelButton = this.$el.children('p').children('#cancelShotEdit').show();
       // cancelButton.on('click', _.bind(this.cancelEdit, this));
 
-      saveButton = this.$el.children('p').children('#save').show();
+      saveButton = this.$el.children('p').children('#saveShot').show();
 
       // Turn image into textarea
-      shotImage = this.$el.children('#image');
+      shotImage = this.$el.children('#shotImage');
       shotImage.attr('contentEditable', 'true');
 
       // Turn text into textarea
-      shotText = this.$el.children('#text');
+      shotText = this.$el.children('#shotText');
       shotText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
       shotText.focus();
     }
@@ -83,15 +83,15 @@ module.exports = Backbone.View.extend({
     if(app.user.get('username') == owner) {
       // Replace cancel link with edit button
       $(e.currentTarget).hide();
-      saveButton = this.$el.children('p').children('#save').hide();
-      editButton = this.$el.children('p').children('#edit').show();
+      saveButton = this.$el.children('p').children('#saveShot').hide();
+      editButton = this.$el.children('p').children('#editShot').show();
 
       // reset image to normal
-      shotImage = this.$el.children('#image');
+      shotImage = this.$el.children('#shotImage');
       shotImage.attr('contentEditable', 'false');
 
       // reset text to normal
-      shotText = this.$el.children('#text');
+      shotText = this.$el.children('#shotText');
       shotText.attr('contenEditable', 'false');
       shotText.blur();
 
@@ -108,16 +108,16 @@ module.exports = Backbone.View.extend({
 
       // Return interface to normal
       $(e.currentTarget).hide();  // Hide save button
-      cancelButton = this.$el.children('p').children('#cancel').hide();
-      editButton = this.$el.children('p').children('#edit').show();
+      cancelButton = this.$el.children('p').children('#cancelShotEdit').hide();
+      editButton = this.$el.children('p').children('#editShot').show();
 
       // image is no longer editable
-      shotImage = this.$el.children('#image');
+      shotImage = this.$el.children('#shotImage');
       shotImage.attr('contentEditable', 'false');
       shotImage.blur();
       
       // text is no longer editable
-      shotText = this.$el.children('#text');
+      shotText = this.$el.children('#shotText');
       shotText.attr('contentEditable', 'false');
       shotText.blur();
 

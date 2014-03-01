@@ -1,17 +1,17 @@
-/* Comment Styles */
+/* Shots Styles */
 
 .comments {
   width: 50%;
 
 }
 
-.comment {
-  & p #saveComment {
+.shot {
+  & p #saveShot {
     /* Save button is hidden until editing is enabled */
     display: none;
   }
 
-  & p #cancelCommentEdit {
+  & p #cancelShotEdit {
     /* Cancel button is hidden until editing is enabled */
     display: none;
   }

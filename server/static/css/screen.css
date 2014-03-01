@@ -88,19 +88,40 @@ img.shot.big {
   width: 50%;
 }
 
-/* line 8, ../../../app/sass/_comments.scss */
-p #save {
+/* line 9, ../../../app/sass/_comments.scss */
+.comment p #saveComment {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
-
-/* line 13, ../../../app/sass/_comments.scss */
-p #cancel {
+/* line 14, ../../../app/sass/_comments.scss */
+.comment p #cancelCommentEdit {
   /* Cancel button is hidden until editing is enabled */
   display: none;
 }
 
-/* line 18, ../../../app/sass/_comments.scss */
+/* line 20, ../../../app/sass/_comments.scss */
+[contenteditable="true"] {
+  background: yellow;
+}
+
+/* Shots Styles */
+/* line 3, ../../../app/sass/_shots.scss */
+.comments {
+  width: 50%;
+}
+
+/* line 9, ../../../app/sass/_shots.scss */
+.shot p #saveShot {
+  /* Save button is hidden until editing is enabled */
+  display: none;
+}
+/* line 14, ../../../app/sass/_shots.scss */
+.shot p #cancelShotEdit {
+  /* Cancel button is hidden until editing is enabled */
+  display: none;
+}
+
+/* line 20, ../../../app/sass/_shots.scss */
 [contenteditable="true"] {
   background: yellow;
 }

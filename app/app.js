@@ -6,7 +6,6 @@ app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;
-    app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 
     // Generic utility functions used throughout the app
     app.utils = require('./utils.js');

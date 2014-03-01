@@ -1,5 +1,7 @@
 /* utils - Utility functions */
 
+app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
+
 module.exports.close = function(view) {
     // Removes all reference to a view (avoids memory leaks)
     if(view.model) {

@@ -7,7 +7,6 @@ app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;
-    app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 
     // Generic utility functions used throughout the app
     app.utils = require('./utils.js');
@@ -28,7 +27,7 @@ window.onload = function(){
 };
 
 
-},{"./routes.js":19,"./users/userModel.js":27,"./utils.js":28,"hbsfy/runtime":36}],2:[function(require,module,exports){
+},{"./routes.js":19,"./users/userModel.js":27,"./utils.js":28}],2:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
 var moment = require('moment');
@@ -1142,6 +1141,8 @@ module.exports = Backbone.Model.extend({
 },{}],28:[function(require,module,exports){
 /* utils - Utility functions */
 
+app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
+
 module.exports.close = function(view) {
     // Removes all reference to a view (avoids memory leaks)
     if(view.model) {
@@ -1177,7 +1178,7 @@ app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
             return(plural);
     }
 });
-},{}],29:[function(require,module,exports){
+},{"hbsfy/runtime":36}],29:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");

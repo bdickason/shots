@@ -11,14 +11,14 @@ describe('userModel', function() {
   beforeEach(function(done) {
     clientenv.setup(function() {
       UserModel = require(appDir + 'users/userModel.js');
-      sinon.stub(Firebase, 'initialize');
+      sinon.stub(Firebase, 'constructor');
 
       done();
     });
   });
 
   afterEach(function() {
-    Firebase.initialize.restore();
+    Firebase.constructor.restore();
   });
 
   describe('loads', function() {

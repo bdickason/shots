@@ -10,7 +10,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-compass');
-  grunt.loadNpmTasks('grunt-istanbul-coverage');
 
   grunt.initConfig({
     compass: {
@@ -20,12 +19,6 @@ module.exports = function(grunt) {
           imagesDir: 'server/static/images',
           sassDir: 'app/sass'
         }
-      }
-    },
-    coverage: {
-      options: {
-        dir: 'coverage',
-        root: 'test',
       }
     },
     mochaTest: {

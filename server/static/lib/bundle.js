@@ -627,8 +627,6 @@ module.exports = Backbone.View.extend({
 var NavView = require('./nav/navView.js');
 
 // Projects
-var ProjectModel = require('./projects/projectModel.js');
-
 var ProjectsView = require('./projects/projectsView.js');
 var ProjectView = require('./projects/projectView.js');
 
@@ -687,8 +685,7 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView);
 
         // Display 'project' sub-navigation
-        var projectModelFirebase = new ProjectModelFirebase({id: project});
-        var projectNav = new ProjectNavView(projectModelFirebase);
+        var projectNav = new ProjectNavView({id: project});
         this.appendView(navView, projectNav);
 
         // Display a single shot
@@ -711,7 +708,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./nav/navView.js":9,"./projects/projectModel.js":10,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/ShotModelFirebase.js":20,"./shots/shotView.js":23}],20:[function(require,module,exports){
+},{"./nav/navView.js":9,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/ShotModelFirebase.js":20,"./shots/shotView.js":23}],20:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var moment = require('moment');

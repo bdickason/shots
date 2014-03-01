@@ -4,8 +4,6 @@
 var NavView = require('./nav/navView.js');
 
 // Projects
-var ProjectModel = require('./projects/projectModel.js');
-
 var ProjectsView = require('./projects/projectsView.js');
 var ProjectView = require('./projects/projectView.js');
 
@@ -64,8 +62,7 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView);
 
         // Display 'project' sub-navigation
-        var projectModelFirebase = new ProjectModelFirebase({id: project});
-        var projectNav = new ProjectNavView(projectModelFirebase);
+        var projectNav = new ProjectNavView({id: project});
         this.appendView(navView, projectNav);
 
         // Display a single shot

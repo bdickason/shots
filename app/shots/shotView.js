@@ -1,5 +1,7 @@
 /* Shot View - displays a shot module embedded inside another page */
 
+var ShotModelFirebase = require('./ShotModelFirebase.js');
+
 var shotTemplate = require('./shotTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
@@ -9,7 +11,12 @@ module.exports = Backbone.View.extend({
   tagName: 'li',
   template: shotTemplate,
 
-  initialize: function(data, options) {
+  initialize: function(options) {
+    if(!this.model) {
+      // Model is not passed in by parent View
+      this.model = new ShotModelFirebase({id: options.id, projectId: options.projectId});
+    }
+    
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
     

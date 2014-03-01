@@ -66,8 +66,8 @@ module.exports = Backbone.Router.extend({
         this.appendView(navView, projectNav);
 
         // Display a single shot
-        var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var shotView = new ShotView({model: shotModel });
+        console.log(project);
+        var shotView = new ShotView({id: shot, projectId: project });
         this.showView('content', shotView);
     },
     showView: function(selector, view) {

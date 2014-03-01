@@ -39,7 +39,7 @@ module.exports = Backbone.View.extend({
           image: this.parseImageUrl($('#image').val()),
           user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
-          project: this.project
+          projectId: this.project
         };
 
         this.collection.create(input);

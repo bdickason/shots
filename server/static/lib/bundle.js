@@ -689,8 +689,8 @@ module.exports = Backbone.Router.extend({
         this.appendView(navView, projectNav);
 
         // Display a single shot
-        var shotModel = new ShotModelFirebase({id: shot, projectId: project});   // We need to use projectId because project is used elsewhere
-        var shotView = new ShotView({model: shotModel });
+        console.log(project);
+        var shotView = new ShotView({id: shot, projectId: project });
         this.showView('content', shotView);
     },
     showView: function(selector, view) {
@@ -818,6 +818,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":36}],23:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
+var ShotModelFirebase = require('./ShotModelFirebase.js');
+
 var shotTemplate = require('./shotTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
@@ -827,7 +829,12 @@ module.exports = Backbone.View.extend({
   tagName: 'li',
   template: shotTemplate,
 
-  initialize: function(data, options) {
+  initialize: function(options) {
+    if(!this.model) {
+      // Model is not passed in by parent View
+      this.model = new ShotModelFirebase({id: options.id, projectId: options.projectId});
+    }
+    
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
     
@@ -946,7 +953,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./shotTemplate.hbs":22}],24:[function(require,module,exports){
+},{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./ShotModelFirebase.js":20,"./shotTemplate.hbs":22}],24:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('./shotModel.js');
 
@@ -1017,7 +1024,7 @@ module.exports = Backbone.View.extend({
           image: this.parseImageUrl($('#image').val()),
           user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
-          project: this.project
+          projectId: this.project
         };
 
         this.collection.create(input);

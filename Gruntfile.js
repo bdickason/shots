@@ -27,7 +27,7 @@ module.exports = function(grunt) {
           reporter: 'nyan',
           timeout: '25000ms'
         },
-        src: ['server/test/*.js']
+        src: ['test/**/*.spec.js']
       }
     },
     browserify: {

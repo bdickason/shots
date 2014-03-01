@@ -2,7 +2,7 @@
 
 var should = require('should');
 
-var cfg = require('../cfg/config.js');
+var cfg = require('../../server/cfg/config.js');
 
 describe('SERVER', function() {
 

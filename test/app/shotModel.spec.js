@@ -46,8 +46,18 @@ describe('shotModel', function() {
       shotModel = new ShotModelFirebase(input);
       should.exist(shotModel);
       var url = app.fbUrl + '/shots/' + input.projectId + '/' + input.id;
+      
+      spyCall = fbSpy.getCall(0);
+      spyCall.args[0].should.equal(url);  // URL is constructed
+    });
+
+    it('Properly constructs Firebase URL', function() {
+      // Input
+      
+      shotModel = new ShotModelFirebase(input);
     
-      fbSpy.args[0][0].should.equal(url);
+      spyCall = fbSpy.getCall(0);
+      console.log(spyCall);
     });
   });
 });

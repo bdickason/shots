@@ -1,7 +1,5 @@
 /* Main app js file */
 
-$ = require('jquery');
-
 userModel = require('./users/userModel.js');
 app = {};
 app.views = [];

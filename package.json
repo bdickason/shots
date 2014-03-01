@@ -29,7 +29,9 @@
     "handlebars": "~1.3.0",
     "hbsfy": "~1.3.1",
     "moment": "~2.5.1",
-    "jquery": "^2.1.0"
+    "jquery": "^2.1.0",
+    "backbone": "^1.1.2",
+    "underscore": "^1.6.0"
   },
   "devDependencies": {
     "mocha": "~1.17.1",

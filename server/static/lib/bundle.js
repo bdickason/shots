@@ -943,7 +943,7 @@ module.exports = Backbone.View.extend({
       shotText.blur();
 
       // Save next text value
-      this.model.set('image', shotImage.val());
+      this.model.set('image', shotImage.attr('src'));
       this.model.set('text', shotText.text());
     }
   }

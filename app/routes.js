@@ -11,8 +11,6 @@ var ProjectView = require('./projects/projectView.js');
 var ProjectNavView = require('./projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
-var ShotModelFirebase = require('./shots/ShotModelFirebase.js');
-
 var ShotView = require('./shots/shotView.js');
 
 
@@ -66,7 +64,6 @@ module.exports = Backbone.Router.extend({
         this.appendView(navView, projectNav);
 
         // Display a single shot
-        console.log(project);
         var shotView = new ShotView({id: shot, projectId: project });
         this.showView('content', shotView);
     },

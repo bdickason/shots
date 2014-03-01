@@ -14,8 +14,10 @@ module.exports = Backbone.View.extend({
   template: projectTemplate,
 
   initialize: function() {
-    this.model = new ProjectModelFirebase({id: this.id});
-
+    if(!this.model) {
+      this.model = new ProjectModelFirebase({id: this.id});
+    }
+  
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});

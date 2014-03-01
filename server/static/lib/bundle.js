@@ -269,7 +269,7 @@ module.exports = Backbone.View.extend({
     events: {
       'keyup .input': 'pressEnter',
       'click #createComment': 'createComment',
-      'click #delete': 'deleteComment'
+      'click #deleteComment': 'deleteComment'
     },
 
     pressEnter: function(e) {
@@ -501,8 +501,10 @@ module.exports = Backbone.View.extend({
   template: projectTemplate,
 
   initialize: function() {
-    this.model = new ProjectModelFirebase({id: this.id});
-
+    if(!this.model) {
+      this.model = new ProjectModelFirebase({id: this.id});
+    }
+  
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
@@ -634,8 +636,6 @@ var ProjectView = require('./projects/projectView.js');
 var ProjectNavView = require('./projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
-var ShotModelFirebase = require('./shots/ShotModelFirebase.js');
-
 var ShotView = require('./shots/shotView.js');
 
 
@@ -689,7 +689,6 @@ module.exports = Backbone.Router.extend({
         this.appendView(navView, projectNav);
 
         // Display a single shot
-        console.log(project);
         var shotView = new ShotView({id: shot, projectId: project });
         this.showView('content', shotView);
     },
@@ -708,7 +707,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./nav/navView.js":9,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/ShotModelFirebase.js":20,"./shots/shotView.js":23}],20:[function(require,module,exports){
+},{"./nav/navView.js":9,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/shotView.js":23}],20:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var moment = require('moment');

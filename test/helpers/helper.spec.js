@@ -30,6 +30,7 @@ module.exports.setup = setup = function(callback) {
       global.Backbone = window.Backbone;
       global.Backbone.$ = global.$ = window.$;
       global.Firebase = window.Firebase;
+      global.FirebaseSimpleLogin = window.FirebaseSimpleLogin;
 
       global.appDir = '../../app/';
 

@@ -49,6 +49,7 @@ module.exports = Backbone.View.extend({
     editComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
 
+      console.log('double trigger!');
       // Determine what comment we're editing
       var owner = this.model.get('user');
 
@@ -94,8 +95,10 @@ module.exports = Backbone.View.extend({
 
       if(app.user.get('username') == owner) {
         // Replace cancel link with edit button
-        $(e.currentTarget).hide();
+        $(e.currentTarget).hide();  // Hide save button
+        cancelButton = this.$el.find('#cancelEdit').hide();
         editButton = this.$el.find('#editComment').show();
+
 
         // reset text to normal
         commentText = this.$el.find('#text');

@@ -1,8 +1,11 @@
-<li id="{{ id }}" class="shot">
-  <a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Posted {{ time }} by {{ user }}</a><br />
-  <img src="{{ image }}" class="shot">
-  <p>{{ text }}</p>
-  <p><a href="#" id="deleteShot" data-id="{{ id }}">delete</a></p>
-  <ul id="{{ id }}" class="comments">
-  </ul>
-</li>
+<a href="/#{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Posted {{ time }} by {{ user }}</a><br />
+<img src="{{ image }}" id="image" class="shot">
+<p id="text">{{ text }}</p>
+<p>
+  <a href="#" id="edit" data-id="{{ id }}">edit</a> 
+  <a href="#" id="cancel" style="display: none" data-id="{{ id }}">cancel</a> 
+  <button id="save" data-id="{{ id }}">Save</button> 
+  <a href="#" id="delete" data-id="{{ id }}">delete</a>
+</p>
+<ul id="{{ id }}" class="comments">
+</ul>

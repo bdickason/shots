@@ -5,16 +5,14 @@
 
 }
 
-.comment {
-  & p #save {
-    /* Save button is hidden until editing is enabled */
-    display: none;
-  }
+p #save {
+  /* Save button is hidden until editing is enabled */
+  display: none;
+}
 
-  & p #cancel {
-    /* Cancel button is hidden until editing is enabled */
-    display: none;
-  }
+p #cancel {
+  /* Cancel button is hidden until editing is enabled */
+  display: none;
 }
 
 [contenteditable="true"] {

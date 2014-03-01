@@ -6,7 +6,7 @@ var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase
 var CommentsView = require('../comments/commentsView.js');
 
 module.exports = Backbone.View.extend({
-
+  tagName: 'li',
   template: shotTemplate,
 
   initialize: function(data, options) {
@@ -15,10 +15,18 @@ module.exports = Backbone.View.extend({
     
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {id: this.model.get('id'), projectId: this.model.get('projectId')});
     this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});
+
+    this.$el.attr('id', this.model.get('id'));
+    this.$el.addClass('shot');
+
+    this.setElement(this.$el);
   },
 
   events: {
-    'click .shotlink': 'gotoShot'
+    'click .shotlink': 'gotoShot',
+    'click #edit': 'editShot',
+    'click #cancel': 'cancelEdit',
+    'click #save': 'saveShot'
   },
 
   render: function() {
@@ -27,7 +35,7 @@ module.exports = Backbone.View.extend({
     // Render comments
     this.$el.find('.comments').html(this.commentsView.render().el);
     
-    this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
+    // this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
     
     return this;
   },
@@ -40,6 +48,82 @@ module.exports = Backbone.View.extend({
     route = shotId;
 
     app.router.navigate(route, {trigger: true});
+  },
 
+  editShot: function(e) {
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    var owner = this.model.get('user');
+
+    if(app.user.get('username') == owner) {
+      // Replace current edit button with cancel link
+      $(e.currentTarget).hide();  // Hide edit button   
+
+      cancelButton = this.$el.children('p').children('#cancel').show();
+      // cancelButton.on('click', _.bind(this.cancelEdit, this));
+
+      saveButton = this.$el.children('p').children('#save').show();
+
+      // Turn image into textarea
+      shotImage = this.$el.children('#image');
+      shotImage.attr('contentEditable', 'true');
+
+      // Turn text into textarea
+      shotText = this.$el.children('#text');
+      shotText.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
+      shotText.focus();
+    }
+  },
+
+  cancelEdit: function(e) {
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+    
+    var owner = this.model.get('user');
+
+    if(app.user.get('username') == owner) {
+      // Replace cancel link with edit button
+      $(e.currentTarget).hide();
+      saveButton = this.$el.children('p').children('#save').hide();
+      editButton = this.$el.children('p').children('#edit').show();
+
+      // reset image to normal
+      shotImage = this.$el.children('#image');
+      shotImage.attr('contentEditable', 'false');
+
+      // reset text to normal
+      shotText = this.$el.children('#text');
+      shotText.attr('contenEditable', 'false');
+      shotText.blur();
+
+      this.render();  // commentText does not update unless we re-render
+    }
+  },
+
+  saveShot: function(e) {
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    var owner = this.model.get('user');
+
+    if(app.user.get('username') == owner) {
+
+      // Return interface to normal
+      $(e.currentTarget).hide();  // Hide save button
+      cancelButton = this.$el.children('p').children('#cancel').hide();
+      editButton = this.$el.children('p').children('#edit').show();
+
+      // image is no longer editable
+      shotImage = this.$el.children('#image');
+      shotImage.attr('contentEditable', 'false');
+      shotImage.blur();
+      
+      // text is no longer editable
+      shotText = this.$el.children('#text');
+      shotText.attr('contentEditable', 'false');
+      shotText.blur();
+
+      // Save next text value
+      this.model.set('image', shotImage.val());
+      this.model.set('text', shotText.text());
+    }
   }
 });

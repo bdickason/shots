@@ -88,18 +88,19 @@ img.shot.big {
   width: 50%;
 }
 
-/* line 9, ../../../app/sass/_comments.scss */
-.comment p #save {
+/* line 8, ../../../app/sass/_comments.scss */
+p #save {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
-/* line 14, ../../../app/sass/_comments.scss */
-.comment p #cancel {
+
+/* line 13, ../../../app/sass/_comments.scss */
+p #cancel {
   /* Cancel button is hidden until editing is enabled */
   display: none;
 }
 
-/* line 20, ../../../app/sass/_comments.scss */
+/* line 18, ../../../app/sass/_comments.scss */
 [contenteditable="true"] {
   background: yellow;
 }

@@ -11,7 +11,9 @@ describe('userModel', function() {
   beforeEach(function(done) {
     clientenv.setup(function() {
       UserModel = require(appDir + 'users/userModel.js');
-      fbStub = sinon.stub(global, 'Firebase');
+      fbStub = sinon.stub(global, 'Firebase', function(fbRef, callback) {
+        // callback();
+      });
       loginStub = sinon.stub(global, 'FirebaseSimpleLogin');
 
       done();
@@ -53,33 +55,17 @@ describe('userModel', function() {
 
   describe('User signed out', function() {
     it('User can login', function() {
-      userModel = new UserModel();
-
     });
   });
 
   describe('User signed in', function() {
     it('Should remain logged in', function() {
-      should.exist(UserModel);
-
       userModel = new UserModel();
-      should.exist(userModel);
+      // console.log(userModel);
+      // loginStub.expects(getCall(0)).returns()
     });
 
     it('User can log out', function() {
-      // Input
-      userModel = new UserModel();
-
-      // userModel.logout();
-
-      // loginStub.logout.returns(true);
-
-      // userModel.logout();
-      // 'Logout' was clicked elsewhere in the app
-      // console.log(loginStub);
-
-      // console.log(logout);
-
     });
   });
 });

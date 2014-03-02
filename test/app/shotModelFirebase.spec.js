@@ -60,5 +60,25 @@ describe('shotModel', function() {
       // console.log(spyCall);
     });
   });
+
+  describe('toJSON', function() {
+    it('renders a proper timestamp', function() {
+      // input
+      var input = {
+        text: 'This is a shot comment',
+        image: 'This is a sample image',
+        user: 'username',
+        timestamp: new Date()
+      };
+
+      shotModel = new ShotModelFirebase(input);
+
+      output = shotModel.toJSON();
+
+      should.exist(output.timestamp);
+      should.exist(output.time);
+      output.time.should.equal('a few seconds ago');
+    });
+  });
 });
 

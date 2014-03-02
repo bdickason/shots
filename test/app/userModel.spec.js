@@ -90,6 +90,17 @@ describe('userModel', function() {
     });
 
     it('User can log out', function() {
+
+      // stub out app.auth.logout
+      loginStub.prototype.logout = function() {
+        // Fake out logout actions (wipe user)
+        console.log('got here');
+      };
+      // logout should trigger FirebaseSimpleLogin constructor again
+      // expect model to be empty
+      userModel = new UserModel();
+      userModel.logout();
+
     });
   });
 });

@@ -70,6 +70,27 @@ describe('App', function() {
 
     });
 
+    describe('formatTime', function() {
+      it("Returns a model's json with human-readable time", function() {
+        // Input
+        var input = {
+          name: 'Test Name',
+          timestamp: new Date()
+        };
+
+        var testModel = new Backbone.Model(input);
+
+        input.should.eql(testModel.toJSON());
+
+        var formattedJSON = utils.formatTime(testModel);
+
+        input.time = "a few seconds ago";
+
+        input.should.eql(formattedJSON);
+
+      });
+    });
+
   });
 
 });

@@ -30,7 +30,7 @@ window.onload = function(){
 },{"./routes.js":19,"./users/userModel.js":27,"./utils.js":28}],2:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
-var moment = require('moment');
+var utils = require('../utils.js');
 
 module.exports = Backbone.Model.extend({
     initialize: function() {
@@ -39,14 +39,11 @@ module.exports = Backbone.Model.extend({
       text: ''
     },
     toJSON: function() {
-        // Generate custom timestamp
-        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
-        return(json);
+        return(utils.formatTime(this));         // Generate human-readable timestamp
     }
 });
 
-},{"moment":37}],3:[function(require,module,exports){
+},{"../utils.js":28}],3:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -709,7 +706,7 @@ module.exports = Backbone.Router.extend({
 },{"./nav/navView.js":9,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/shotView.js":23}],20:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
-var moment = require('moment');
+var utils = require('../utils.js');
 
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {
@@ -722,17 +719,14 @@ module.exports = Backbone.Firebase.Model.extend({
       text: ''
     },
     toJSON: function() {
-        // Generate custom timestamp
-        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
-        return(json);
+        return(utils.formatTime(this));         // Generate human-readable timestamp
     }
 });
 
-},{"moment":37}],21:[function(require,module,exports){
+},{"../utils.js":28}],21:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
-var moment = require('moment');
+var utils = require('../utils.js');
 
 module.exports = Backbone.Model.extend({
     initialize: function() {
@@ -741,14 +735,11 @@ module.exports = Backbone.Model.extend({
       text: ''
     },
     toJSON: function() {
-        // Generate custom timestamp
-        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
-        return(json);
+        return(utils.formatTime(this));         // Generate human-readable timestamp
     }
 });
 
-},{"moment":37}],22:[function(require,module,exports){
+},{"../utils.js":28}],22:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1143,6 +1134,7 @@ module.exports = Backbone.Model.extend({
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
+var moment = require('moment');
 
 module.exports.close = function(view) {
     // Removes all reference to a view (avoids memory leaks)
@@ -1162,14 +1154,24 @@ module.exports.debug = function(e, results) {
     console.log(results);
 };
 
-// Handlebars helper for plural variables
-// Use: {{pluralize object 'single_string' 'plural_string'}}
-//
-// Example: "0 comments" vs. "1 comment" vs. "5 comments"
-// {{pluralize this.length "comment" "comments" }}
-// Assumes the collection is being loaded as 'this'
+module.exports.formatTime = function(model) {
+    // Takes a model and adds a `time` object that has string-formatted time via moment
+    // Usage (within a model): app.utils.formatTime(this);
+
+    var json = Backbone.Model.prototype.toJSON.call(model);  // Get existing toJSON data
+    json.time = moment(model.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
+    return(json);
+};
+
 
 app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
+    // Handlebars helper for plural variables
+    // Use: {{pluralize object 'single_string' 'plural_string'}}
+    //
+    // Example: "0 comments" vs. "1 comment" vs. "5 comments"
+    // {{pluralize this.length "comment" "comments" }}
+    // Assumes the collection is being loaded as 'this'
+
     switch(number) {
         case 0:
             return(plural);
@@ -1179,7 +1181,7 @@ app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
             return(plural);
     }
 });
-},{"hbsfy/runtime":36}],29:[function(require,module,exports){
+},{"hbsfy/runtime":36,"moment":37}],29:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");

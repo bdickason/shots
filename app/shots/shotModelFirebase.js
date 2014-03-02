@@ -1,6 +1,6 @@
 /* Shot Model - Standalone model (do not use in collections) */
 
-var moment = require('moment');
+var utils = require('../utils.js');
 
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {
@@ -13,9 +13,6 @@ module.exports = Backbone.Firebase.Model.extend({
       text: ''
     },
     toJSON: function() {
-        // Generate custom timestamp
-        var json = Backbone.Model.prototype.toJSON.call(this);  // Get existing toJSON data
-        json.time = moment(this.get('timestamp')).fromNow();    // Get time in the format Time from Now: http://momentjs.com/docs/#/displaying/fromnow/
-        return(json);
+        return(utils.formatTime(this));         // Generate human-readable timestamp
     }
 });

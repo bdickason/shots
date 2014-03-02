@@ -90,17 +90,29 @@ describe('userModel', function() {
     });
 
     it('User can log out', function() {
+      // userModel.logout successfully triggers FirebaseSimpleLogin.logout()
 
       // stub out app.auth.logout
       loginStub.prototype.logout = function() {
         // Fake out logout actions (wipe user)
-        console.log('got here');
       };
-      // logout should trigger FirebaseSimpleLogin constructor again
-      // expect model to be empty
-      userModel = new UserModel();
-      userModel.logout();
+      
+      //Input
+      var input = {
+        displayName: 'User Name',
+        profile_image_url_https: 'http://blah.com/img.jpg',
+        lastLogin: new Date(),
+        username: 'username',
+        loggedIn: true
+      };
 
+      // Create a new model as if we were logged in
+      userModel = new UserModel(input);
+
+      logoutSpy = sinon.spy(loginStub);
+
+      userModel.logout();
+      // slogoutSpy.calledOnce.should.equal(true);
     });
   });
 });

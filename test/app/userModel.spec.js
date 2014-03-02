@@ -11,10 +11,19 @@ describe('userModel', function() {
   beforeEach(function(done) {
     clientenv.setup(function() {
       UserModel = require(appDir + 'users/userModel.js');
-      fbStub = sinon.stub(global, 'Firebase', function(fbRef, callback) {
-        // callback();
-      });
+
+      fbStub = sinon.stub(global, 'Firebase');
       loginStub = sinon.stub(global, 'FirebaseSimpleLogin');
+
+      // Fake mixpanel object
+      global.mixpanel = {
+        identify: sinon.stub().returns('123'),
+        people: {
+          set: function(data) {
+            return(data);
+          }
+        }
+      };
 
       done();
     });
@@ -60,9 +69,24 @@ describe('userModel', function() {
 
   describe('User signed in', function() {
     it('Should remain logged in', function() {
+      // Input
+      var input = {
+        displayName: 'User Name',
+        profile_image_url_https: 'http://blah.com/img.jpg',
+        lastLogin: new Date(),
+        username: 'username',
+        loggedIn: true
+      };
+
+      loginStub.yields(null, input);  // FirebaseSimpleLogin will generate a callback which contains these two parameters
+
       userModel = new UserModel();
-      // console.log(userModel);
-      // loginStub.expects(getCall(0)).returns()
+
+      input.displayName.should.equal(userModel.get('displayName'));
+      input.profile_image_url_https.should.equal(userModel.get('profileImage'));
+      should.exist(userModel.get('lastLogin')); // Time is not always synced
+      input.username.should.equal(userModel.get('username'));
+      input.loggedIn.should.equal(userModel.get('loggedIn'));
     });
 
     it('User can log out', function() {

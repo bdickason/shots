@@ -57,7 +57,7 @@ describe('shotModel', function() {
       shotModel = new ShotModelFirebase(input);
     
       spyCall = fbSpy.getCall(0);
-      console.log(spyCall);
+      // console.log(spyCall);
     });
   });
 });

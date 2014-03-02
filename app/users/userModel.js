@@ -13,6 +13,7 @@ module.exports = Backbone.Model.extend({
 
       // Firebase auth library, triggered on sign in/sign out
       app.auth = new FirebaseSimpleLogin(fbRef, function(error, user) {
+
         if(user) {
           // Login was successful
           userData = {

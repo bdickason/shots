@@ -33,6 +33,8 @@ In a perfect world, every function/object only references itself and is loosely 
 
 We use [sinon](http://sinonjs.org) to allow us to test external services without the app calling out to the actual service. This keeps tests fast and prevents us from mucking up live data with tests.
 
+### Writing Stubs
+
 For example, let's say you're testing a function that uses FirebaseSimpleLogin:
 
 ````
@@ -108,3 +110,32 @@ The final step now is to make sure we clean up the stub in case future functions
 ````
 
 This will restore each function to its original state, and now we can test our dependent functions!
+
+### Stubbing out class objects (prototypes)
+
+Once you've mastered stubs you'll probably find yourself wanting to stub out methods and constructors at the same time. 
+
+For example, we have a stub for `FirebaseSimpleLogin`, but we also later have to call `FirebaseSimpleLogin.logout()` which does not exist once we stub the class constructor.
+
+The solution is to override the prototype of the stub, in this case `prototype.logout`:
+
+````
+beforeEach(function(done) {
+  // Stub out constructor
+  loginStub = sinon.stub(global, 'FirebaseSimpleLogin');
+});
+
+afterEach(function() {
+  loginStub.restore();
+})
+
+it('User can log out', function() {
+  // stub out FirebaseSimpleLogin.logout
+  loginStub.prototype.logout = function() {
+
+  // Fake out logout actions (wipe user)
+  console.log('got here');
+};
+````
+
+Now when any object creates a new instance of FirebaseSimpleLogin, the stub is referenced and the stub will have a .logout() function.

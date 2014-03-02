@@ -12,9 +12,7 @@ describe('shotModel', function() {
     clientenv.setup(function() {
       app.fbUrl = 'http://blah.firebaseio.com';
       ShotModelFirebase = require(appDir + 'shots/shotModelFirebase.js');
-      // fbStub = sinon.stub(global, 'Firebase', function(fbRef, callback) {
-        // callback();
-      // });
+      
       fbSpy = sinon.spy(global, 'Firebase');
 
       done();
@@ -49,15 +47,6 @@ describe('shotModel', function() {
       
       spyCall = fbSpy.getCall(0);
       spyCall.args[0].should.equal(url);  // URL is constructed
-    });
-
-    it('Properly constructs Firebase URL', function() {
-      // Input
-      
-      shotModel = new ShotModelFirebase(input);
-    
-      spyCall = fbSpy.getCall(0);
-      // console.log(spyCall);
     });
   });
 

@@ -43,9 +43,9 @@ Templates (.hbs) - Contain the actual html and variables to render the view.
 
 # Browserify - Client-side modular .js
 
-In traditional Javascript development, you would add a bunch of <script> tags to your page with a ton of different variables and functions and hope for the best. You had to pay close attention to the order in which things were loaded, unique names, etc.
+In traditional Javascript development, you would add a bunch of `<script>` tags to your page with a ton of different variables and functions and hope for the best. You had to pay close attention to the order in which things were loaded, unique names, etc.
 
-[Browserify](http://www.browserify.com/) takes the nodejs-style `require('component.js')` syntax and makes it available on the client. This lets you do cool things like:
+[Browserify](http://www.browserify.com) takes the nodejs-style `require('component.js')` syntax and makes it available on the client. This lets you do cool things like:
 
 ````
 var CommentModel = require('comments/commentModel.js');

@@ -12,7 +12,7 @@ var jsdom = require ('jsdom'),
 
 module.exports.setup = setup = function(callback) {
   if(typeof window != 'undefined') return callback(window);
-  
+
   // Setup a jsdom env and globally expose window along with other libraries
   jsdom.env({
     html: "<html><body></body></html>",

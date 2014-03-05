@@ -1,7 +1,9 @@
 /* Tester for Comment Model */
 
 var clientenv = require('../helpers/helper.spec.js'),
-    should = require('should');
+    should = require('should'),
+    fs = require('fs'),
+    path = require('path');
     
 describe('commentView', function() {
 
@@ -9,8 +11,13 @@ describe('commentView', function() {
 
   beforeEach(function(done) {
     clientenv.setup(function() {
-      // CommentView = require('../../app/comments/commentView.js');
-      // CommentModel = Backbone.Model;
+      // Pre-compile Handlebars template
+      var templateFilename = path.resolve(__dirname, componentsDir + 'comments/commentTemplate.hbs');
+      var commentTemplate = require('handlebars').compile(templateFilename);
+
+      CommentView = require(componentsDir + 'comments/commentView.js');
+
+      CommentModel = Backbone.Model;  // Dummy model to pass into view
 
       done();
     });
@@ -18,9 +25,10 @@ describe('commentView', function() {
 
   describe('initialize', function() {
     it('loads without errors', function() {
-      // should.exist(CommentView);
-      // commentView = new CommentView();
-      // should.exist(commentView);
+      should.exist(CommentView);
+      commentModel = new CommentModel({});
+      commentView = new CommentView({model: commentModel});
+      should.exist(commentView);
     });
   });
 });

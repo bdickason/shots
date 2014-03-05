@@ -10,7 +10,7 @@ describe('userModel', function() {
 
   beforeEach(function(done) {
     clientenv.setup(function() {
-      UserModel = require(appDir + 'users/userModel.js');
+      UserModel = require(componentsDir + 'users/userModel.js');
 
       fbStub = sinon.stub(global, 'Firebase');
       loginStub = sinon.stub(global, 'FirebaseSimpleLogin');

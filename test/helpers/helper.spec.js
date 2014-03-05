@@ -33,6 +33,7 @@ module.exports.setup = setup = function(callback) {
       global.FirebaseSimpleLogin = window.FirebaseSimpleLogin;
 
       global.appDir = '../../app/';
+      global.componentsDir = global.appDir + 'components/';
 
       global.app = {};
       

@@ -1,17 +1,17 @@
 /* Routes - Contains all routes for client-side app */
 
 // Top Navigation
-var NavView = require('./nav/navView.js');
+var NavView = require('./components/nav/navView.js');
 
 // Projects
-var ProjectsView = require('./projects/projectsView.js');
-var ProjectView = require('./projects/projectView.js');
+var ProjectsView = require('./components/projects/projectsView.js');
+var ProjectView = require('./components/projects/projectView.js');
 
 // Projects -> Nav
-var ProjectNavView = require('./projects/projectNav/projectNavView.js');   // Used in Shot view
+var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
-var ShotView = require('./shots/shotView.js');
+var ShotView = require('./components/shots/shotView.js');
 
 
 module.exports = Backbone.Router.extend({

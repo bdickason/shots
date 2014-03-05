@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /* Main app js file */
 
-userModel = require('./users/userModel.js');
+userModel = require('./components/users/userModel.js');
 app = {};
 app.views = [];
 
@@ -27,10 +27,10 @@ window.onload = function(){
 };
 
 
-},{"./routes.js":19,"./users/userModel.js":27,"./utils.js":28}],2:[function(require,module,exports){
+},{"./components/users/userModel.js":26,"./routes.js":27,"./utils.js":28}],2:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
-var utils = require('../utils.js');
+var utils = require('../../utils.js');
 
 module.exports = Backbone.Model.extend({
     initialize: function() {
@@ -43,7 +43,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"../utils.js":28}],3:[function(require,module,exports){
+},{"../../utils.js":28}],3:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -519,7 +519,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../shots/shotsCollectionFirebase.js":24,"../shots/shotsView.js":26,"./projectModelFirebase.js":11,"./projectTemplate.hbs":14}],16:[function(require,module,exports){
+},{"../shots/shotsCollectionFirebase.js":23,"../shots/shotsView.js":25,"./projectModelFirebase.js":11,"./projectTemplate.hbs":14}],16:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('./projectModel.js');
 
@@ -619,94 +619,9 @@ module.exports = Backbone.View.extend({
 });
 
 },{"./projectView.js":15,"./projectsCollectionFirebase.js":16,"./projectsTemplate.hbs":17}],19:[function(require,module,exports){
-/* Routes - Contains all routes for client-side app */
-
-// Top Navigation
-var NavView = require('./nav/navView.js');
-
-// Projects
-var ProjectsView = require('./projects/projectsView.js');
-var ProjectView = require('./projects/projectView.js');
-
-// Projects -> Nav
-var ProjectNavView = require('./projects/projectNav/projectNavView.js');   // Used in Shot view
-
-// Shots
-var ShotView = require('./shots/shotView.js');
-
-
-module.exports = Backbone.Router.extend({
-    routes: {
-        '': 'home',
-        ':project/:shot(/)': 'shot',    // the (/) catches both :shot and :shot/
-        ':project(/)': 'project',
-    },
-    home: function(params) {
-        // Default Route (/) - Display a list of the most recently updated projects
-        console.log('Route: /');
-
-        app.views.forEach(app.utils.close);
-
-        // Display navigation
-        var navView = new NavView({model: app.user});
-        this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
-
-        // Display list of latest projects
-        var projectsView = new ProjectsView();
-        this.showView('content', projectsView);
-    },
-    project: function(project) {
-        // (/:projectName) - Loads a single project
-        console.log('[project]: /#' + project);
-
-        app.views.forEach(app.utils.close);
-        
-        // Display navigation
-        var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
-
-        // Display a single project
-        var projectView = new ProjectView({id: project});
-
-        this.showView('content', projectView);
-    },
-    shot: function(project, shot) {
-        // (/:projectName/shotName) - Loads a single shot
-        console.log('[shot]: /#' + project + '/' + shot);
-
-        app.views.forEach(app.utils.close);
-
-        // Display navigation
-        var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
-
-        // Display 'project' sub-navigation
-        var projectNav = new ProjectNavView({id: project});
-        this.appendView(navView, projectNav);
-
-        // Display a single shot
-        var shotView = new ShotView({id: shot, projectId: project });
-        this.showView('content', shotView);
-    },
-    showView: function(selector, view) {
-        // Utility function to show a specific view that overrides a DOM object
-        $(selector).html(view.render().el);
-        
-        app.views.push(view);   // Keep track of views so we can close them
-        return(view);
-    },
-    appendView: function(masterView, childView) {
-        // Utility function to show a specific view that is displayed after an existing view
-        masterView.$el.after(childView.render().el);
-        
-        app.views.push(childView);  // Keep track of views so we can close them
-        return(childView);
-    }
-});
-},{"./nav/navView.js":9,"./projects/projectNav/projectNavView.js":13,"./projects/projectView.js":15,"./projects/projectsView.js":18,"./shots/shotView.js":23}],20:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
-var utils = require('../utils.js');
+var utils = require('../../utils.js');
 
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {
@@ -723,10 +638,10 @@ module.exports = Backbone.Firebase.Model.extend({
     }
 });
 
-},{"../utils.js":28}],21:[function(require,module,exports){
+},{"../../utils.js":28}],20:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
-var utils = require('../utils.js');
+var utils = require('../../utils.js');
 
 module.exports = Backbone.Model.extend({
     initialize: function() {
@@ -739,7 +654,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"../utils.js":28}],22:[function(require,module,exports){
+},{"../../utils.js":28}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -804,7 +719,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":36}],23:[function(require,module,exports){
+},{"hbsfy/runtime":36}],22:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var ShotModelFirebase = require('./ShotModelFirebase.js');
@@ -942,7 +857,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./ShotModelFirebase.js":20,"./shotTemplate.hbs":22}],24:[function(require,module,exports){
+},{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./ShotModelFirebase.js":19,"./shotTemplate.hbs":21}],23:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('./shotModel.js');
 
@@ -959,7 +874,7 @@ module.exports = Backbone.Firebase.Collection.extend({
         this.fbUrl = app.fbUrl + '/shots/' + options.project;
     }
   });
-},{"./shotModel.js":21}],25:[function(require,module,exports){
+},{"./shotModel.js":20}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -971,7 +886,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"300\" class=\"input\" placeholder=\"Enter any additional info\" /><br />\n    <button id=\"createShot\">save</button>\n    <ul class=\"shots\">\n    </ul>";
   });
 
-},{"hbsfy/runtime":36}],26:[function(require,module,exports){
+},{"hbsfy/runtime":36}],25:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotView = require('./shotView.js');
@@ -1078,7 +993,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"./shotView.js":23,"./shotsTemplate.hbs":25}],27:[function(require,module,exports){
+},{"./shotView.js":22,"./shotsTemplate.hbs":24}],26:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name
@@ -1130,7 +1045,92 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
+/* Routes - Contains all routes for client-side app */
+
+// Top Navigation
+var NavView = require('./components/nav/navView.js');
+
+// Projects
+var ProjectsView = require('./components/projects/projectsView.js');
+var ProjectView = require('./components/projects/projectView.js');
+
+// Projects -> Nav
+var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
+
+// Shots
+var ShotView = require('./components/shots/shotView.js');
+
+
+module.exports = Backbone.Router.extend({
+    routes: {
+        '': 'home',
+        ':project/:shot(/)': 'shot',    // the (/) catches both :shot and :shot/
+        ':project(/)': 'project',
+    },
+    home: function(params) {
+        // Default Route (/) - Display a list of the most recently updated projects
+        console.log('Route: /');
+
+        app.views.forEach(app.utils.close);
+
+        // Display navigation
+        var navView = new NavView({model: app.user});
+        this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
+
+        // Display list of latest projects
+        var projectsView = new ProjectsView();
+        this.showView('content', projectsView);
+    },
+    project: function(project) {
+        // (/:projectName) - Loads a single project
+        console.log('[project]: /#' + project);
+
+        app.views.forEach(app.utils.close);
+        
+        // Display navigation
+        var navView = new NavView({model: app.user});
+        this.showView('nav', navView);
+
+        // Display a single project
+        var projectView = new ProjectView({id: project});
+
+        this.showView('content', projectView);
+    },
+    shot: function(project, shot) {
+        // (/:projectName/shotName) - Loads a single shot
+        console.log('[shot]: /#' + project + '/' + shot);
+
+        app.views.forEach(app.utils.close);
+
+        // Display navigation
+        var navView = new NavView({model: app.user});
+        this.showView('nav', navView);
+
+        // Display 'project' sub-navigation
+        var projectNav = new ProjectNavView({id: project});
+        this.appendView(navView, projectNav);
+
+        // Display a single shot
+        var shotView = new ShotView({id: shot, projectId: project });
+        this.showView('content', shotView);
+    },
+    showView: function(selector, view) {
+        // Utility function to show a specific view that overrides a DOM object
+        $(selector).html(view.render().el);
+        
+        app.views.push(view);   // Keep track of views so we can close them
+        return(view);
+    },
+    appendView: function(masterView, childView) {
+        // Utility function to show a specific view that is displayed after an existing view
+        masterView.$el.after(childView.render().el);
+        
+        app.views.push(childView);  // Keep track of views so we can close them
+        return(childView);
+    }
+});
+},{"./components/nav/navView.js":9,"./components/projects/projectNav/projectNavView.js":13,"./components/projects/projectView.js":15,"./components/projects/projectsView.js":18,"./components/shots/shotView.js":22}],28:[function(require,module,exports){
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js

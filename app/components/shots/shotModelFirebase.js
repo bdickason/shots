@@ -1,6 +1,6 @@
 /* Shot Model - Standalone model (do not use in collections) */
 
-var utils = require('../utils.js');
+var utils = require('../../utils.js');
 
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {

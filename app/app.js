@@ -1,6 +1,6 @@
 /* Main app js file */
 
-userModel = require('./users/userModel.js');
+userModel = require('./components/users/userModel.js');
 app = {};
 app.views = [];
 

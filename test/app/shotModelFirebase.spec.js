@@ -11,7 +11,7 @@ describe('shotModel', function() {
   beforeEach(function(done) {
     clientenv.setup(function() {
       app.fbUrl = 'http://blah.firebaseio.com';
-      ShotModelFirebase = require(appDir + 'shots/shotModelFirebase.js');
+      ShotModelFirebase = require(componentsDir + 'shots/shotModelFirebase.js');
       
       fbSpy = sinon.spy(global, 'Firebase');
 

@@ -1,7 +1,7 @@
 Architecture
 ============
 
-Shots is primarily a javascript app run in the browser. The server only exists to serve the required javascript files and the basic html container ([/server/views/client.handlebars]).
+Shots is primarily a javascript app run in the browser. The server only exists to serve the required javascript files and the basic html container [client.handlebars](/server/views/client.handlebars).
 
 # File Structure
 

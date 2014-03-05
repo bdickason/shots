@@ -34,7 +34,7 @@ describe('commentView', function() {
   });
 
   describe('render', function() {
-    it('creates an <li> with id and the proper class', function() {
+    it('creates a list of comments with id', function() {
       // Input
       var id = 'test';
 
@@ -47,6 +47,7 @@ describe('commentView', function() {
 
       commentList = commentView.$el.find('li');
       should.exist(commentList);
+      
       should.exist(commentList.attr('id'));
       commentList.attr('id').should.equal(id);
     });

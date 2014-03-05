@@ -11,6 +11,6 @@ module.exports = Backbone.Firebase.Collection.extend({
         return(new Firebase(this.fbUrl));
     },
     initialize: function(models, options) {
-        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.id;
+        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.shotId;
     }
   });

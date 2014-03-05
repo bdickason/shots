@@ -87,6 +87,7 @@ Fork the repository, follow the above steps for setting up a repo, and go!
 Fork the repository, follow the above steps for setting up a repo, and go!
 
 See also:
+* [Architecture](docs/architecture.md)
 * [Patterns](docs/patterns.md)
 * [Event Tracking](docs/tracking.md)
 * [Testing](docs/testing.md)

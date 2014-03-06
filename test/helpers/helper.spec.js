@@ -8,7 +8,8 @@
 
 var jsdom = require ('jsdom'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    sinon = require('sinon');
 
 module.exports.setup = setup = function(callback) {
   if(typeof window != 'undefined') return callback(window);
@@ -38,6 +39,17 @@ module.exports.setup = setup = function(callback) {
       global.app = {};
 
       global.app.Handlebars = require('handlebars');
+
+      // Fake mixpanel object
+      global.mixpanel = {
+        identify: sinon.stub().returns('123'),
+        people: {
+          set: function(data) {
+            return(data);
+          }
+        },
+        track: sinon.stub().returns('success')
+      };
       
       callback();
     }

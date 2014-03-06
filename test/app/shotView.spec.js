@@ -69,7 +69,6 @@ describe('shotView', function() {
       // console.log(app.Handlebars);
       shotModel.trigger('change'); // Grabbing data from firebase would trigger change event, forcing view to render()
 
-      
       shotView.$el.children.length.should.equal(2);
     });
   });

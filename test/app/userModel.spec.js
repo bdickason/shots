@@ -14,17 +14,7 @@ describe('userModel', function() {
 
       fbStub = sinon.stub(global, 'Firebase');
       loginStub = sinon.stub(global, 'FirebaseSimpleLogin');
-
-      // Fake mixpanel object
-      global.mixpanel = {
-        identify: sinon.stub().returns('123'),
-        people: {
-          set: function(data) {
-            return(data);
-          }
-        }
-      };
-
+      
       done();
     });
   });

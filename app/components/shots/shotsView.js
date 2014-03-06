@@ -33,10 +33,12 @@ module.exports = Backbone.View.extend({
     },
 
     createShot: function(shot) {
-      if($('#text').val() || $('#image').val()) {
+      var textField = this.$el.find('#text');
+      var imageField = this.$el.find('#image');
+      if(textField.val() || imageField.val()) {
         var input = {
-          text: $('#text').val(),
-          image: this.parseImageUrl($('#image').val()),
+          text: textField.val(),
+          image: this.parseImageUrl(imageField.val()),
           user: app.user.get('username'),
           timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
           projectId: this.project
@@ -45,8 +47,8 @@ module.exports = Backbone.View.extend({
         this.collection.create(input);
         mixpanel.track('Create Shot', input);
 
-        $('#text').val('');
-        $('#image').val('');
+        textField.val('');
+        imageField.val('');
       }
     },
 

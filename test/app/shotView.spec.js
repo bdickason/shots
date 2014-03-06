@@ -56,23 +56,21 @@ describe('shotView', function() {
   });
 
   describe('render', function() {
-    it('creates a shot with id', function() {
+    it('displays a shot with id', function() {
       // Input
-      var id = 'test';
+      var input = {
+        id: 'testShot',
+        projectId: 'testProject'
+      };
 
-      shotModel = new ShotModel({id: id});
+      shotModel = new ShotModel(input);
       shotView = new ShotView({model: shotModel});
 
       // console.log(app.Handlebars);
       shotModel.trigger('change'); // Grabbing data from firebase would trigger change event, forcing view to render()
 
-      // shotView.$el.children.length.should.equal(2);
-
-      // commentList = commentView.$el.find('li');
-      // should.exist(commentList);
       
-      // should.exist(commentList.attr('id'));
-      // commentList.attr('id').should.equal(id);
+      shotView.$el.children.length.should.equal(2);
     });
   });
 

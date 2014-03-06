@@ -136,12 +136,10 @@ describe('shotsView', function() {
       var imageField = shotsView.$el.find('input#image');
       imageField.length.should.equal(1);  // Make sure the dom element exists
       imageField.val(input.image);
-      imageField.val().should.equal(input.image);
 
       var textField = shotsView.$el.find('textarea#text');
       textField.length.should.equal(1);   // Make sure the dom element exists
       textField.val(input.text);
-      textField.val().should.equal(input.text);
 
       createShotButton = shotsView.$el.find('button#createShot');
       createShotButton.trigger('click');
@@ -158,6 +156,41 @@ describe('shotsView', function() {
     });
 
     it('A signed-out user can not create a shot', function() {
+      // Input
+      var input = {
+        image: 'http://blah.com/image.jpg',
+        text: 'testing a shot'
+      };
+
+      app.user = new Backbone.Model({});
+
+      var projectId = 'testProject';  // Usually passed to the view from the URL
+      
+      // Setup fake collection
+      shotsCollection = new ShotsCollection([]);
+
+      shotsView = new ShotsView({ collection: shotsCollection, project: projectId });
+
+      shotsCollection.trigger('sync');  // Sync event from collection causes view to render
+
+      var shots = shotsView.$el.find('ul.shots');
+
+      // Add image input to form
+      var imageField = shotsView.$el.find('input#image');
+      imageField.length.should.equal(1);  // Make sure the dom element exists
+      imageField.val(input.image);
+
+      var textField = shotsView.$el.find('textarea#text');
+      textField.length.should.equal(1);   // Make sure the dom element exists
+      textField.val(input.text);
+
+      createShotButton = shotsView.$el.find('button#createShot');
+      createShotButton.trigger('click');
+
+      // Collection should not have any objects
+      shotsCollection.length.should.equal(0);
+
+      // expect an error message to appear
 
     });
 

@@ -33,22 +33,24 @@ module.exports = Backbone.View.extend({
     },
 
     createShot: function(shot) {
-      var textField = this.$el.find('#text');
-      var imageField = this.$el.find('#image');
-      if(textField.val() || imageField.val()) {
-        var input = {
-          text: textField.val(),
-          image: this.parseImageUrl(imageField.val()),
-          user: app.user.get('username'),
-          timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
-          projectId: this.project
-        };
+      if(app.user.get('loggedIn')) {
+        var textField = this.$el.find('#text');
+        var imageField = this.$el.find('#image');
+        if(textField.val() || imageField.val()) {
+          var input = {
+            text: textField.val(),
+            image: this.parseImageUrl(imageField.val()),
+            user: app.user.get('username'),
+            timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
+            projectId: this.project
+          };
 
-        this.collection.create(input);
-        mixpanel.track('Create Shot', input);
+          this.collection.create(input);
+          mixpanel.track('Create Shot', input);
 
-        textField.val('');
-        imageField.val('');
+          textField.val('');
+          imageField.val('');
+        }
       }
     },
 

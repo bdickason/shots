@@ -1,4 +1,4 @@
-/* Tester for Comment Model */
+/* Tester for Comment View */
 
 var clientenv = require('../helpers/helper.spec.js'),
     should = require('should'),
@@ -13,8 +13,9 @@ describe('commentView', function() {
     clientenv.setup(function() {
       
       // Pre-compile Handlebars template
+      var Handlebars = require('handlebars');
       var templateFilename = path.resolve(__dirname, componentsDir + 'comments/commentTemplate.hbs');
-      var commentTemplate = require('handlebars').compile(templateFilename);
+      var commentTemplate = Handlebars.compile(templateFilename);
 
       // Setup objects
       CommentView = require(componentsDir + 'comments/commentView.js');

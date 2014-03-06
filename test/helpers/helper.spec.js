@@ -36,6 +36,8 @@ module.exports.setup = setup = function(callback) {
       global.componentsDir = global.appDir + 'components/';
 
       global.app = {};
+
+      global.app.Handlebars = require('handlebars');
       
       callback();
     }

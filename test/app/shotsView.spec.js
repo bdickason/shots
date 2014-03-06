@@ -87,6 +87,23 @@ describe('shotsView', function() {
   });
 
  describe('create', function() {
+
+    it('Should start with an empty list of shots', function() {
+      var projectId = 'testProject';  // Usually passed to the view from the URL
+      
+      // Setup fake collection
+      shotsCollection = new ShotsCollection([]);
+
+      shotsView = new ShotsView({ collection: shotsCollection, project: projectId });
+
+      shotsCollection.trigger('sync');  // Sync event from collection causes view to render
+      
+      shotsView.$el.html().length.should.be.greaterThan(0);
+
+      var shots = shotsView.$el.find('ul.shots');
+      shots.html().should.not.include('<li>'); // No shot items in the list    
+    });
+
     it('A signed-in user can create a shot', function() {
       // Input
       var input = {
@@ -108,17 +125,12 @@ describe('shotsView', function() {
       
       // Setup fake collection
       shotsCollection = new ShotsCollection([]);
-      
-
 
       shotsView = new ShotsView({ collection: shotsCollection, project: projectId });
 
       shotsCollection.trigger('sync');  // Sync event from collection causes view to render
-      
-      shotsView.$el.html().length.should.be.greaterThan(0);
 
       var shots = shotsView.$el.find('ul.shots');
-      shots.html().should.not.include('<li>'); // No shot items in the list    
 
       // Add image input to form
       var imageField = shotsView.$el.find('input#image');
@@ -143,10 +155,6 @@ describe('shotsView', function() {
       shot.get('user').should.equal(app.user.get('username'));
       should.exist(shot.get('timestamp'));
       shot.get('projectId').should.equal(projectId);
-
-            // TODO: Check that collection is updated
-
-
     });
 
     it('A signed-out user can not create a shot', function() {

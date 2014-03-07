@@ -1,0 +1,185 @@
+/* Tester for Projects View */
+
+var clientenv = require('../helpers/helper.spec.js'),
+    should = require('should'),
+    sinon = require('sinon'),
+    fs = require('fs'),
+    path = require('path');
+    
+describe('projectsView', function() {
+
+  var ProjectsCollection,
+      ProjectModel;
+
+  beforeEach(function(done) {
+    clientenv.setup(function() {
+      
+      // Pre-compile Handlebars template
+      var templateFilename = path.resolve(__dirname, componentsDir + 'projects/projectsTemplate.hbs');
+
+      var Handlebars = require('handlebars');
+
+      // Handlebars hack because app.utils uses a different version of handlebars
+      Handlebars.registerHelper('pluralize', function(number, singular, plural) {
+          // Handlebars helper for plural variables
+          // Use: {{pluralize object 'single_string' 'plural_string'}}
+          //
+          // Example: "0 projects" vs. "1 project" vs. "5 projects"
+          // {{pluralize this.length "project" "projects" }}
+          // Assumes the collection is being loaded as 'this'
+
+          switch(number) {
+              case 0:
+                  return(plural);
+              case 1:
+                  return(singular);
+              default:
+                  return(plural);
+          }
+      });
+
+      projectsTemplate = Handlebars.compile(templateFilename);
+
+      // Stubs
+      // Backbone will call 'sync' when adding a model to our collection if we don't override this
+      syncStub = sinon.stub(Backbone.Model.prototype, 'sync');
+
+      // Objects
+      ProjectsView = require(componentsDir + 'projects/projectsView.js');
+      ProjectsCollection = Backbone.Collection;  // Dummy collection to pass into view
+      ProjectModel = Backbone.Model;             // Dummy model to pass into view
+
+      done();
+    });
+  });
+
+  afterEach(function(done) {
+    // Restore our stub to its original
+    syncStub.restore();
+    done();
+  });
+
+  describe('initialize', function() {
+    it('loads without errors', function() {
+      should.exist(ProjectsView);
+      projectsCollection = new ProjectsCollection();
+      projectsView = new ProjectsView({ collection: projectsCollection });
+      should.exist(projectsView);
+    });
+  });
+
+  describe('render', function() {
+    it('displays a list of Projects', function() {
+      // Input
+      var input = {
+        id: 'testProject',
+        projectId: 'testProject'
+      };
+
+      projectsCollection = new ProjectsCollection();
+      projectsView = new ProjectsView({ collection: projectsCollection });
+
+      projectModel = new ProjectModel(input);
+      projectsCollection.push(projectModel);
+
+      should.exist(projectsView.$el);
+    });
+  });
+
+ describe('create', function() {
+
+    it('Should start with an empty list of projects', function() {
+      var projectId = 'testProject';  // Usually passed to the view from the URL
+      
+      // Setup fake collection
+      projectsCollection = new ProjectsCollection();
+
+      projectsView = new ProjectsView({ collection: projectsCollection, project: projectId });
+
+      projectsCollection.trigger('sync');  // Sync event from collection causes view to render
+      
+      projectsView.$el.html().length.should.be.greaterThan(0);
+
+      var projects = projectsView.$el.find('ul.projects');
+      projects.html().should.not.include('<li>'); // No project items in the list    
+    });
+
+    it('A signed-in user can create a project', function() {
+      // Input
+      var input = {
+        name: 'Test Project'
+      };
+
+      var userData = {
+        displayName: 'Test User',
+        profileImage: 'http://images.com/img.jpg',
+        lastLogin: new Date(),
+        username: 'testuser',
+        loggedIn: true
+      };
+
+      app.user = new Backbone.Model(userData);
+      
+      // Setup fake collection
+      projectsCollection = new ProjectsCollection();
+
+      projectsView = new ProjectsView({ collection: projectsCollection });
+
+      projectsCollection.trigger('sync');  // Sync event from collection causes view to render
+
+      var projects = projectsView.$el.find('ul.projects');
+
+      var textField = projectsView.$el.find('#name');
+      textField.length.should.equal(1);   // Make sure the dom element exists
+      textField.val(input.text);
+
+      createProjectButton = projectsView.$el.find('button#createProject');
+      createProjectButton.trigger('click');
+
+      console.log(projectsCollection.toJSON());
+      projectsCollection.length.should.be.greaterThan(0);
+      
+
+      var project = projectsCollection.first();
+      should.exist(project);
+      project.get('text').should.equal(input.text);
+      project.get('user').should.equal(app.user.get('username'));
+      should.exist(project.get('timestamp'));
+    });
+
+    it('A signed-out user can not create a project', function() {
+      // Input
+      var input = {
+        text: 'testing a project'
+      };
+
+      app.user = new Backbone.Model({});
+
+      var projectId = 'testProject';  // Usually passed to the view from the URL
+      
+      // Setup fake collection
+      projectsCollection = new ProjectsCollection([]);
+
+      projectsView = new ProjectsView({ collection: projectsCollection, project: projectId });
+
+      projectsCollection.trigger('sync');  // Sync event from collection causes view to render
+
+      var projects = projectsView.$el.find('ul.projects');
+
+      var textField = projectsView.$el.find('textarea#text');
+      textField.length.should.equal(1);   // Make sure the dom element exists
+      textField.val(input.text);
+
+      var createProjectButton = projectsView.$el.find('button#createProject');
+      createProjectButton.trigger('click');
+
+      // Collection should not have any objects
+      projectsCollection.length.should.equal(0);
+
+      var error = projectsView.$el.find('#projectsError');
+      should.exist(error);
+      error.text().length.should.be.greaterThan(0);
+      error.text().should.equal('Sorry, you must be logged in');
+    });
+  });
+});

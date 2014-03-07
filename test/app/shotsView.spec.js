@@ -184,13 +184,16 @@ describe('shotsView', function() {
       textField.length.should.equal(1);   // Make sure the dom element exists
       textField.val(input.text);
 
-      createShotButton = shotsView.$el.find('button#createShot');
+      var createShotButton = shotsView.$el.find('button#createShot');
       createShotButton.trigger('click');
 
       // Collection should not have any objects
       shotsCollection.length.should.equal(0);
 
-      // expect an error message to appear
+      var error = shotsView.$el.find('#shotsError');
+      should.exist(error);
+      error.text().length.should.be.greaterThan(0);
+      error.text().should.equal('Sorry, you must be logged in');
 
     });
 

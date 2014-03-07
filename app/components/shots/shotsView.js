@@ -21,7 +21,8 @@ module.exports = Backbone.View.extend({
       'keyup .input': 'pressEnter',
       'click #createShot': 'createShot',
       'click #deleteShot': 'deleteShot',
-      'click img': 'toggleSize'
+      'click img': 'toggleSize',
+      'error': 'showError'
     },
 
     pressEnter: function(e) {
@@ -51,6 +52,9 @@ module.exports = Backbone.View.extend({
           textField.val('');
           imageField.val('');
         }
+      }
+      else {
+        this.showError('Sorry, you must be logged in');
       }
     },
 
@@ -91,6 +95,12 @@ module.exports = Backbone.View.extend({
     toggleSize: function(e) {
       // Enlarge or shrink a shot image
       $(e.currentTarget).toggleClass('big');
+    },
+
+    showError: function(message) {
+      var error = this.$el.find('#shotsError');
+      error.text(message);
+      error.show();
     },
     
     render: function() {

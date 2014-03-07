@@ -5,6 +5,10 @@
 
 }
 
+#shotsError {
+  display: none;
+}
+
 .shot {
   & p #saveShot {
     /* Save button is hidden until editing is enabled */

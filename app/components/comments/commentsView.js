@@ -41,7 +41,7 @@ module.exports = Backbone.View.extend({
           var input = {
             text: textarea.val(),
             user: app.user.get('username'),
-            timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
+            timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
           };
 
           this.collection.create(input);
@@ -49,6 +49,8 @@ module.exports = Backbone.View.extend({
 
           textarea.val('');
         }
+      } else {
+        this.showError('Sorry, you must be logged in');
       }
     },
 
@@ -64,7 +66,13 @@ module.exports = Backbone.View.extend({
         this.collection.remove(comment);
       }
     },
-    
+
+    showError: function(message) {
+      var error = this.$el.find('#commentsError');
+      error.text(message);
+      error.show();
+    },
+
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
 

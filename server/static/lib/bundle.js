@@ -80,7 +80,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">Save</button> \n      <a href=\"#\" id=\"deleteComment\" data-id=\"";
+    + "\">Save</button>\n      <a href=\"#\" id=\"deleteComment\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -235,7 +235,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " "
     + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
-    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" /><br />\n    <button id=\"createComment\">save</button>\n    <ul class=\"comments\">\n    </ul>";
+    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" /><br />\n    <button id=\"createComment\">save</button>\n    <label id=\"commentsError\" class=\"error\"></label>\n    <ul class=\"comments\">\n    </ul>";
   return buffer;
   });
 
@@ -283,7 +283,7 @@ module.exports = Backbone.View.extend({
           var input = {
             text: textarea.val(),
             user: app.user.get('username'),
-            timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
+            timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
           };
 
           this.collection.create(input);
@@ -291,6 +291,8 @@ module.exports = Backbone.View.extend({
 
           textarea.val('');
         }
+      } else {
+        this.showError('Sorry, you must be logged in');
       }
     },
 
@@ -306,7 +308,13 @@ module.exports = Backbone.View.extend({
         this.collection.remove(comment);
       }
     },
-    
+
+    showError: function(message) {
+      var error = this.$el.find('#commentsError');
+      error.text(message);
+      error.show();
+    },
+
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
 
@@ -887,7 +895,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"300\" class=\"input\" placeholder=\"Enter any additional info\" /><br />\n    <div id=\"shotsError\" class=\"error\"></div>\n    <button id=\"createShot\">save</button>\n    <ul class=\"shots\">\n    </ul>";
+  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"300\" class=\"input\" placeholder=\"Enter any additional info\" /><br />\n    <button id=\"createShot\">save</button>\n    <label id=\"shotsError\" class=\"error\"></label>\n    <ul class=\"shots\">\n    </ul>";
   });
 
 },{"hbsfy/runtime":36}],25:[function(require,module,exports){

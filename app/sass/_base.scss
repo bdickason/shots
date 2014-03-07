@@ -18,3 +18,8 @@
 #logout {
 	float:right;
 }
+
+// Error messages should not be shown by default
+.error {
+  display: none;
+}

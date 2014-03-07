@@ -1,4 +1,4 @@
-/* Tester for Shot View */
+/* Tester for Shots View */
 
 var clientenv = require('../helpers/helper.spec.js'),
     should = require('should'),

@@ -38,16 +38,18 @@ module.exports = Backbone.View.extend({
   },
 
   createProject: function(project) {
-    if($('#name').val()) {
-      var input = {
-        id: $('#name').val()
-      };
+    if(app.user.get('loggedIn')) {
+      if($('#name').val()) {
+        var input = {
+          id: $('#name').val()
+        };
 
-      this.collection.add(input);
+        this.collection.add(input);
 
-      mixpanel.track('Create Project', input);
+        mixpanel.track('Create Project', input);
 
-      $('#name').val('');
+        $('#name').val('');
+      }
     }
   }
 });

@@ -35,18 +35,20 @@ module.exports = Backbone.View.extend({
     },
 
     createComment: function(comment) {
-      textarea = this.$el.find('#text.comment');
-      if(textarea.val()) {
-        var input = {
-          text: textarea.val(),
-          user: app.user.get('username'),
-          timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
-        };
+      if(app.user.get('loggedIn')) {
+        textarea = this.$el.find('#text.comment');
+        if(textarea.val()) {
+          var input = {
+            text: textarea.val(),
+            user: app.user.get('username'),
+            timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
+          };
 
-        this.collection.create(input);
-        mixpanel.track('Comment', input);
+          this.collection.create(input);
+          mixpanel.track('Comment', input);
 
-        textarea.val('');
+          textarea.val('');
+        }
       }
     },
 

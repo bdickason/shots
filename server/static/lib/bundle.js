@@ -277,18 +277,20 @@ module.exports = Backbone.View.extend({
     },
 
     createComment: function(comment) {
-      textarea = this.$el.find('#text.comment');
-      if(textarea.val()) {
-        var input = {
-          text: textarea.val(),
-          user: app.user.get('username'),
-          timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
-        };
+      if(app.user.get('loggedIn')) {
+        textarea = this.$el.find('#text.comment');
+        if(textarea.val()) {
+          var input = {
+            text: textarea.val(),
+            user: app.user.get('username'),
+            timestamp: Firebase.ServerValue.TIMESTAMP // Tells the server to set a createdAt timestamp
+          };
 
-        this.collection.create(input);
-        mixpanel.track('Comment', input);
+          this.collection.create(input);
+          mixpanel.track('Comment', input);
 
-        textarea.val('');
+          textarea.val('');
+        }
       }
     },
 
@@ -604,16 +606,18 @@ module.exports = Backbone.View.extend({
   },
 
   createProject: function(project) {
-    if($('#name').val()) {
-      var input = {
-        id: $('#name').val()
-      };
+    if(app.user.get('loggedIn')) {
+      if($('#name').val()) {
+        var input = {
+          id: $('#name').val()
+        };
 
-      this.collection.add(input);
+        this.collection.add(input);
 
-      mixpanel.track('Create Project', input);
+        mixpanel.track('Create Project', input);
 
-      $('#name').val('');
+        $('#name').val('');
+      }
     }
   }
 });

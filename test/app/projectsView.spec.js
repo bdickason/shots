@@ -129,20 +129,18 @@ describe('projectsView', function() {
 
       var projects = projectsView.$el.find('ul.projects');
 
-      var textField = projectsView.$el.find('#name');
-      textField.length.should.equal(1);   // Make sure the dom element exists
-      textField.val(input.text);
+      var nameField = projectsView.$el.find('#name');
+      nameField.length.should.equal(1);   // Make sure the dom element exists
+      nameField.val(input.name);
 
-      createProjectButton = projectsView.$el.find('button#createProject');
+      var createProjectButton = projectsView.$el.find('button#createProject');
       createProjectButton.trigger('click');
 
-      console.log(projectsCollection.toJSON());
       projectsCollection.length.should.be.greaterThan(0);
       
-
       var project = projectsCollection.first();
       should.exist(project);
-      project.get('text').should.equal(input.text);
+      project.get('id').should.equal(input.name);
       project.get('user').should.equal(app.user.get('username'));
       should.exist(project.get('timestamp'));
     });
@@ -150,25 +148,23 @@ describe('projectsView', function() {
     it('A signed-out user can not create a project', function() {
       // Input
       var input = {
-        text: 'testing a project'
+        text: 'Test Project'
       };
 
       app.user = new Backbone.Model({});
-
-      var projectId = 'testProject';  // Usually passed to the view from the URL
       
       // Setup fake collection
-      projectsCollection = new ProjectsCollection([]);
+      projectsCollection = new ProjectsCollection();
 
-      projectsView = new ProjectsView({ collection: projectsCollection, project: projectId });
+      projectsView = new ProjectsView({ collection: projectsCollection });
 
       projectsCollection.trigger('sync');  // Sync event from collection causes view to render
 
       var projects = projectsView.$el.find('ul.projects');
 
-      var textField = projectsView.$el.find('textarea#text');
-      textField.length.should.equal(1);   // Make sure the dom element exists
-      textField.val(input.text);
+      var nameField = projectsView.$el.find('#name');
+      nameField.length.should.equal(1);   // Make sure the dom element exists
+      nameField.val(input.name);
 
       var createProjectButton = projectsView.$el.find('button#createProject');
       createProjectButton.trigger('click');

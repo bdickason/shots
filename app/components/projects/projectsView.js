@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
 
   events: {
     'click .project a': 'gotoProject',
-    'click .save': 'createProject'
+    'click #createProject': 'createProject'
   },
 
   render: function() {
@@ -43,21 +43,26 @@ module.exports = Backbone.View.extend({
 
   createProject: function(project) {
     if(app.user.get('loggedIn')) {
-      if($('#name').val()) {
+      var name = this.$el.find('#name');
+      console.log(name.val());
+      if(name.val()) {
         var input = {
-          id: $('#name').val()
+          id: name.val(),
+          user: app.user.get('username'),
+          timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
         };
 
         this.collection.add(input);
 
         mixpanel.track('Create Project', input);
 
-        $('#name').val('');
+        name.val('');
       }
     } else {
       this.showError('Sorry, you must be logged in');
     }
   },
+
   showError: function(message) {
     var error = this.$el.find('#projectsError');
     error.text(message);

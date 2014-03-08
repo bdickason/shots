@@ -36,7 +36,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: [ 'app/*.js', 'app/**/*.js', 'app/**/*.hbs', 'app/**/*.scss'],
+      files: [ 'app/*.js', 'app/**/*.js', 'app/**/**/*.hbs', 'app/**/*.scss'],
       tasks: [ 'browserify', 'compass' ]
     }
   });

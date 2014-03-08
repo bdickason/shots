@@ -14,6 +14,8 @@ var ShotView = require('./components/shots/shotView.js');
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');
 
+// Help
+var HelpView = require('./components/help/helpView.js');
 
 module.exports = Backbone.Router.extend({
     routes: {
@@ -96,6 +98,10 @@ module.exports = Backbone.Router.extend({
         // Display navigation
         var navView = new NavView({model: app.user});
         this.showView('nav', navView);
+
+        // Display help content
+        var helpView = new HelpView();
+        this.showView('content', helpView);
     },
 
     showView: function(selector, view) {

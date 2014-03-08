@@ -3,10 +3,10 @@
     <p id="commentText">{{ text }}</p>
     {{#if owner}}
       <p class="commentSettings">
-        <a href="#" id="editComment" data-id="{{ id }}">edit</a> 
-        <a href="#" id="cancelCommentEdit" style="display: none" data-id="{{ id }}">cancel</a> 
+        <a href="#edit" id="editComment" data-id="{{ id }}">edit</a> 
+        <a href="#cancel" id="cancelCommentEdit" style="display: none" data-id="{{ id }}">cancel</a> 
         <button id="saveComment" data-id="{{ id }}">Save</button>
-        <a href="#" id="deleteComment" data-id="{{ id }}">delete</a>
+        <a href="#delete" id="deleteComment" data-id="{{ id }}">delete</a>
       </p>
     {{/if}}
 </li>

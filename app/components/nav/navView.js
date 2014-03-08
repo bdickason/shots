@@ -13,6 +13,7 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
+    'click #home': 'home',
     'click #login': 'login',
     'click #logout': 'logout',
     'click #contribute': 'contribute',
@@ -22,6 +23,12 @@ module.exports = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
     return this;
+  },
+
+  home: function(e) {
+    // Send user home
+    e.preventDefault();
+    app.router.navigate('', {trigger: true });
   },
 
   login: function(e) {

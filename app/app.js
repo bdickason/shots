@@ -22,6 +22,6 @@ window.onload = function(){
     
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
-    Backbone.history.start();
+    Backbone.history.start({pushState: true});
 };
 

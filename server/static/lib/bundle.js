@@ -345,7 +345,7 @@ function program1(depth0,data) {
   if (helper = helpers.username) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.username); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</a> | \n    <a href=\"#\" id=\"logout\">Logout</a>\n  ";
+    + "</a>\n    <a href=\"#\" id=\"logout\">Logout</a>\n  ";
   return buffer;
   }
 
@@ -355,7 +355,7 @@ function program3(depth0,data) {
   return "\n    <a href=\"#\" id=\"login\">Login</a>\n  ";
   }
 
-  buffer += "  <a href=\"/#\" id=\"home\">Home</a> | \n  ";
+  buffer += "  <a href=\"/#\" id=\"home\">Home</a> | \n  <a href=\"http://discuss.braddickason.com\" id=\"discuss\">Discuss</a> | \n  <a href=\"#\" id=\"contribute\">Contribute</a> | \n  <a href=\"#\" id=\"help\">Help Me!</a>\n\n  ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n";

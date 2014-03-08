@@ -14,7 +14,9 @@ module.exports = Backbone.View.extend({
 
   events: {
     'click #login': 'login',
-    'click #logout': 'logout'
+    'click #logout': 'logout',
+    'click #contribute': 'contribute',
+    'click #help': 'help'
   },
 
   render: function() {
@@ -29,5 +31,15 @@ module.exports = Backbone.View.extend({
 
   logout: function(e) {
     this.model.logout();
+  },
+
+  contribute: function(e) {
+    e.preventDefault();
+    app.router.navigate('contribute', {trigger: true});
+  },
+
+  help: function(e) {
+    e.preventDefault();
+    app.router.navigate('help', {trigger: true});
   }
 });

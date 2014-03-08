@@ -59,3 +59,55 @@ project: function(project) {
       return(this);
     }
 ````
+
+# Links and URL's within the navigation
+
+The current URL represents a state within the application.
+
+When creating a new URL or linking somowhere, you need to do two things:
+
+1. In the **View**: Use app.router to navigate the user to their destination
+
+Backbone uses a simple Javascript routing system to send users around the app. The routes are defined in [routes.js](/app/routes.js).
+
+To create a link, you should create a click handler with an associated functionin your View.
+
+````javascript
+  events: {
+    'click #shotlink': 'gotoShot'
+  },
+
+  gotoShot: function(e) {
+    // Navigate to a shot
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    var shotId = this.model.get('projectId') + '/' + this.model.get('id');
+    route = shotId;
+
+    app.router.navigate(route, {trigger: true});
+  }
+````
+
+The event calls the function `gotoShot` when `.shotlink` is clicked.
+
+`gotoShot` navigates to the shot by constructing the proper route and sending the user there.
+
+*Note: we use `e.preventDefault()` to stop the link from clicking through.
+
+In your associated template file (.hbs), you would also want to make sure you have an `<a class="shotlink">` for the user to click on.
+
+example: [nav/navView.js](/app/components/nav/navView.js)
+
+2. In the **Template**: Construct the proper URL in case they want to copy it to the clipboard.
+
+If you've read through Step 1, you've got a working link and probably think you're done. Wrong! :D
+
+The link by default will not have a valid href parameter. This doesn't matter for passing users around our app, but if they want to share the link anywhere, it matters!
+
+A simplified version of the same logic you use in your `gotoShot` function above should also be present in the template (.hbs).
+
+````
+<a href="/{{ projectId }}/{{ id }}" id="shotlink">Shot Link</a>
+````
+
+example: [nav/navTemplate.hbs](/app/components/nav/navTemplate.hbs)

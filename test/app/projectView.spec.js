@@ -69,7 +69,7 @@ describe('projectView', function() {
       var projectView = new ProjectView({model: projectModel});
       projectModel.trigger('sync'); // Render the view
 
-      var project = projectView.$el.children('p.projectSettings');
+      var project = projectView.$el.find('p.projectSettings');
       project.html().should.containEql('editProject');
       project.html().should.containEql('cancelProjectEdit');
       project.html().should.containEql('cancelProjectEdit');

@@ -13,6 +13,13 @@ module.exports = Backbone.Firebase.Model.extend({
       text: ''
     },
     toJSON: function() {
-        return(utils.formatTime(this));         // Generate human-readable timestamp
+      var output = utils.formatTime(this);  // Generate human-readable timestamp
+      
+      if(this.get('user') === app.user.get('username')) {
+        // User owns this comment
+        output.owner = true;
+      }
+      
+      return(output);         // Generate human-readable timestamp
     }
 });

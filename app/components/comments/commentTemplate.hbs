@@ -1,12 +1,12 @@
 <li id="{{ id }}" class="comment">
     Posted {{ time }} by {{ user }}<br />
     <p id="commentText">{{ text }}</p>
-    <p>
-      {{#if owner}}
-      <a href="#" id="editComment" data-id="{{ id }}">edit</a> 
-      <a href="#" id="cancelCommentEdit" style="display: none" data-id="{{ id }}">cancel</a> 
-      <button id="saveComment" data-id="{{ id }}">Save</button>
-      <a href="#" id="deleteComment" data-id="{{ id }}">delete</a>
-      {{/if}}
-    </p>
+    {{#if owner}}
+      <p class="commentSettings">
+        <a href="#" id="editComment" data-id="{{ id }}">edit</a> 
+        <a href="#" id="cancelCommentEdit" style="display: none" data-id="{{ id }}">cancel</a> 
+        <button id="saveComment" data-id="{{ id }}">Save</button>
+        <a href="#" id="deleteComment" data-id="{{ id }}">delete</a>
+      </p>
+    {{/if}}
 </li>

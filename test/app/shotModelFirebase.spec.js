@@ -51,6 +51,59 @@ describe('shotModel', function() {
   });
 
   describe('toJSON', function() {
+    it('Sets the owner flag to true if the current user is the owner', function() {
+      // Input
+      var input = {
+        text: 'My fancy shot',
+        user: 'bob'
+      };
+
+      // 'Log in' the current user
+      app.user = new Backbone.Model({});
+      app.user.set('username', input.user);
+
+      var shotModel = new ShotModelFirebase(input);
+
+      var output = shotModel.toJSON();
+
+      should.exist(output.owner);
+      output.owner.should.be.true;
+    });
+
+    it('Does not set the owner flag if the current user is not the owner', function() {
+      // Input
+      var input = {
+        text: 'My fancy comment',
+        user: 'bob'
+      };
+
+      // 'Log in' another user
+      app.user = new Backbone.Model({});
+      app.user.set('username', 'bilbo baggins');
+
+      var shotModel = new ShotModelFirebase(input);
+
+      var output = shotModel.toJSON();
+
+      should.not.exist(output.owner);
+    });
+
+    it('Does not set the owner flag if the current user is signed out', function() {
+      // Input
+      var input = {
+        text: 'My fancy comment',
+        user: 'bob'
+      };
+
+      app.user = new Backbone.Model({});
+
+      var shotModel = new ShotModelFirebase(input);
+
+      var output = shotModel.toJSON();
+
+      should.not.exist(output.owner);
+    });
+
     it('renders a proper timestamp', function() {
       // input
       var input = {

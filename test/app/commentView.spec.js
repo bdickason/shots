@@ -3,7 +3,8 @@
 var clientenv = require('../helpers/helper.spec.js'),
     should = require('should'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    sinon = require('sinon');
     
 describe('commentView', function() {
 
@@ -29,7 +30,7 @@ describe('commentView', function() {
     it('loads without errors', function() {
       should.exist(CommentView);
       commentModel = new CommentModel({});
-      commentView = new CommentView({model: commentModel});
+      var commentView = new CommentView({model: commentModel});
       should.exist(commentView);
     });
   });
@@ -40,7 +41,7 @@ describe('commentView', function() {
       var id = 'test';
 
       commentModel = new CommentModel({id: id});
-      commentView = new CommentView({model: commentModel});
+      var commentView = new CommentView({model: commentModel});
 
       commentModel.trigger('change'); // Grabbing data from firebase would trigger change event, forcing view to render()
 
@@ -53,5 +54,52 @@ describe('commentView', function() {
       commentList.attr('id').should.equal(id);
     });
   });
+
+  describe('edit comments', function() {
+    it('non-owner should not see edit/delete', function() {
+      // Fake JSON output for model stub
+      var fakeOutput = {};
+      var commentModel = new CommentModel({});
+      var commentStub = sinon.stub(commentModel, 'toJSON').returns(fakeOutput);
+
+      commentModel.toJSON().should.equal(fakeOutput);
+
+      var commentView = new CommentView({model: commentModel});
+      commentModel.trigger('change'); // Render the view
+
+      var comment = commentView.$el.find('li');
+      comment.html().should.not.containEql('editComment');
+      comment.html().should.not.containEql('cancelCommentEdit');
+      comment.html().should.not.containEql('cancelCommentEdit');
+      comment.html().should.not.containEql('saveComment');
+      comment.html().should.not.containEql('deleteComment');
+
+      commentStub.restore();
+    });
+
+    it('owner should see edit/delete for their own comments', function() {
+      // Fake JSON output for model stub
+      var fakeOutput = {
+        owner: true
+      };
+      var commentModel = new CommentModel({});
+      var commentStub = sinon.stub(commentModel, 'toJSON').returns(fakeOutput);
+
+      commentModel.toJSON().should.equal(fakeOutput);
+
+      var commentView = new CommentView({model: commentModel});
+      commentModel.trigger('change'); // Render the view
+
+      var comment = commentView.$el.find('li');
+      comment.html().should.containEql('editComment');
+      comment.html().should.containEql('cancelCommentEdit');
+      comment.html().should.containEql('cancelCommentEdit');
+      comment.html().should.containEql('saveComment');
+      comment.html().should.containEql('deleteComment');
+
+      commentStub.restore();
+    });
+  });
+
 
 });

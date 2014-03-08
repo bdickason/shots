@@ -49,7 +49,7 @@ module.exports = Backbone.View.extend({
   createProject: function(project) {
     if(app.user.get('loggedIn')) {
       var name = this.$el.find('#name');
-      console.log(name.val());
+      
       if(name.val()) {
         var input = {
           id: name.val(),

@@ -883,8 +883,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   });
 
 },{"hbsfy/runtime":42}],28:[function(require,module,exports){
-/* Shot View - displays a shot module embedded inside another page */
+(function (__dirname){/* Shot View - displays a shot module embedded inside another page */
 
+console.log(__dirname);
 var ShotModelFirebase = require('./ShotModelFirebase.js');
 
 var shotTemplate = require('./shotTemplate.hbs');
@@ -1019,7 +1020,7 @@ module.exports = Backbone.View.extend({
     }
   }
 });
-
+}).call(this,"/components/shots")
 },{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./ShotModelFirebase.js":25,"./shotTemplate.hbs":27}],29:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('./shotModel.js');

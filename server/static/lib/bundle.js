@@ -1287,7 +1287,7 @@ module.exports = Backbone.Router.extend({
 
     contribute: function() {
         // (/contribute) - Contribute to this project
-        console.log('Route: contribute!');
+        console.log('Route: contribute');
         app.views.forEach(app.utils.close);
 
         // Display navigation
@@ -1301,7 +1301,7 @@ module.exports = Backbone.Router.extend({
 
     help: function() {
         // (/help) - Getting Started, Documentation, etc.
-        console.log('Route: help!');
+        console.log('Route: help');
         app.views.forEach(app.utils.close);
 
         // Display navigation

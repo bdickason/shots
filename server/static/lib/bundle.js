@@ -581,13 +581,11 @@ module.exports = Backbone.Model.extend({
   },
   toJSON: function() {
     var output = utils.formatTime(this);  // Generate human-readable timestamp
-    var currentUser = app.user.get('usernane');
+    var currentUser = app.user.get('username');
 
-    output.owner = false;
-    
     if(currentUser) {
-      if(this.get('user') === currentUser) {
-      // User owns this comment
+      if(this.isOwner(currentUser)) {
+      // User owns this project
       output.owner = true;
       }
     }
@@ -618,9 +616,11 @@ module.exports = Backbone.Firebase.Model.extend({
   toJSON: function() {
     var output = utils.formatTime(this);  // Generate human-readable timestamp
     
-    if(this.get('user') === app.user.get('username')) {
-      // User owns this comment
-      output.owner = true;
+    if(currentUser) {
+      if(this.isOwner(currentUser)) {
+        // User owns this project
+        output.owner = true;
+      }
     }
     
     return(output);
@@ -898,7 +898,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    console.log(this.collection.toJSON());
     this.$el.html(this.template(this.collection.toJSON()));
 
     // Iterate through each project model and add it to our list of comments

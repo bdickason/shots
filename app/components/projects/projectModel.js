@@ -14,13 +14,11 @@ module.exports = Backbone.Model.extend({
   },
   toJSON: function() {
     var output = utils.formatTime(this);  // Generate human-readable timestamp
-    var currentUser = app.user.get('usernane');
+    var currentUser = app.user.get('username');
 
-    output.owner = false;
-    
     if(currentUser) {
-      if(this.get('user') === currentUser) {
-      // User owns this comment
+      if(this.isOwner(currentUser)) {
+      // User owns this project
       output.owner = true;
       }
     }

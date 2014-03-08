@@ -27,7 +27,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    console.log(this.collection.toJSON());
     this.$el.html(this.template(this.collection.toJSON()));
 
     // Iterate through each project model and add it to our list of comments

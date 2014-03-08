@@ -39,7 +39,7 @@ describe('shotView', function() {
       shotTemplate = Handlebars.compile(templateFilename);
 
       // Setup objects
-      ShotView = require(componentsDir + 'shots/shotView.js');
+      ShotView = require(path.resolve(__dirname, componentsDir + 'shots/shotView.js'));
       ShotModel = Backbone.Model;  // Dummy model to pass into view
 
       done();

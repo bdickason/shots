@@ -14,6 +14,7 @@ module.exports = Backbone.Model.extend({
   },
   toJSON: function() {
     var output = utils.formatTime(this);  // Generate human-readable timestamp
+    
     var currentUser = app.user.get('username');
 
     if(currentUser) {

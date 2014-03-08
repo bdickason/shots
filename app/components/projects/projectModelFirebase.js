@@ -19,6 +19,8 @@ module.exports = Backbone.Firebase.Model.extend({
   toJSON: function() {
     var output = utils.formatTime(this);  // Generate human-readable timestamp
     
+    var currentUser = app.user.get('username');
+
     if(currentUser) {
       if(this.isOwner(currentUser)) {
         // User owns this project

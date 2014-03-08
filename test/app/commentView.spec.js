@@ -8,7 +8,7 @@ var clientenv = require('../helpers/helper.spec.js'),
     
 describe('commentView', function() {
 
-  var CommentModel;
+  var CommentModel, CommentView;
 
   beforeEach(function(done) {
     clientenv.setup(function() {

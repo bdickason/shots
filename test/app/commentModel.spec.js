@@ -18,7 +18,7 @@ describe('commentModel', function() {
   describe('initialize', function() {
     it('loads without errors', function() {
       should.exist(CommentModel);
-      commentModel = new CommentModel();
+      var commentModel = new CommentModel();
       should.exist(commentModel);
     });
   });
@@ -35,9 +35,9 @@ describe('commentModel', function() {
       app.user = new Backbone.Model({});
       app.user.set('username', input.user);
 
-      commentModel = new CommentModel(input);
+      var commentModel = new CommentModel(input);
 
-      output = commentModel.toJSON();
+      var output = commentModel.toJSON();
 
       should.exist(output.owner);
       output.owner.should.be.true;
@@ -54,9 +54,9 @@ describe('commentModel', function() {
       app.user = new Backbone.Model({});
       app.user.set('username', 'bilbo baggins');
 
-      commentModel = new CommentModel(input);
+      var commentModel = new CommentModel(input);
 
-      output = commentModel.toJSON();
+      var output = commentModel.toJSON();
 
       should.not.exist(output.owner);
     });
@@ -70,9 +70,9 @@ describe('commentModel', function() {
 
       app.user = new Backbone.Model({});
 
-      commentModel = new CommentModel(input);
+      var commentModel = new CommentModel(input);
 
-      output = commentModel.toJSON();
+      var output = commentModel.toJSON();
 
       should.not.exist(output.owner);
     });
@@ -87,9 +87,9 @@ describe('commentModel', function() {
 
       app.user = new Backbone.Model({});
 
-      commentModel = new CommentModel(input);
+      var commentModel = new CommentModel(input);
 
-      output = commentModel.toJSON();
+      var output = commentModel.toJSON();
 
 
       should.exist(output.timestamp);

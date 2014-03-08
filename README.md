@@ -3,6 +3,8 @@ shots
 
 Capture shots of your product as you build it and share them with your team.
 
+[![Build Status](https://secure.travis-ci.org/bdickason/shots.png)](http://travis-ci.org/bdickason/shots)
+
 # Installation
 1. Install Node >= 10.0: http://nodejs.org/download/
 2. Clone the repository: https://github.com/bdickason/shots

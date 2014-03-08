@@ -782,16 +782,12 @@ module.exports = Backbone.View.extend({
 });
 
 },{"./projectCardView.js":15,"./projectsCollectionFirebase.js":22,"./projectsTemplate.hbs":23}],25:[function(require,module,exports){
-/* Shot Model - Standalone model (do not use in collections) */
+/* Shot Model - data layer for a single Shot */
 
 var utils = require('../../utils.js');
 
-module.exports = Backbone.Firebase.Model.extend({
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
+module.exports = Backbone.Model.extend({
     initialize: function() {
-        this.fbUrl = app.fbUrl + '/shots/' + this.get('projectId') + '/' + this.get('id');
     },
     defaults: {
       text: ''
@@ -802,12 +798,16 @@ module.exports = Backbone.Firebase.Model.extend({
 });
 
 },{"../../utils.js":34}],26:[function(require,module,exports){
-/* Shot Model - data layer for a single Shot */
+/* Shot Model - Standalone model (do not use in collections) */
 
 var utils = require('../../utils.js');
 
-module.exports = Backbone.Model.extend({
+module.exports = Backbone.Firebase.Model.extend({
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
     initialize: function() {
+        this.fbUrl = app.fbUrl + '/shots/' + this.get('projectId') + '/' + this.get('id');
     },
     defaults: {
       text: ''
@@ -885,7 +885,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":42}],28:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('./ShotModelFirebase.js');
+var ShotModelFirebase = require('./shotModelFirebase.js');
 
 var shotTemplate = require('./shotTemplate.hbs');
 
@@ -1020,7 +1020,7 @@ module.exports = Backbone.View.extend({
   }
 });
 
-},{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./ShotModelFirebase.js":25,"./shotTemplate.hbs":27}],29:[function(require,module,exports){
+},{"../comments/commentsCollectionFirebase":5,"../comments/commentsView.js":7,"./shotModelFirebase.js":26,"./shotTemplate.hbs":27}],29:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('./shotModel.js');
 
@@ -1037,7 +1037,7 @@ module.exports = Backbone.Firebase.Collection.extend({
         this.fbUrl = app.fbUrl + '/shots/' + options.project;
     }
   });
-},{"./shotModel.js":26}],30:[function(require,module,exports){
+},{"./shotModel.js":25}],30:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

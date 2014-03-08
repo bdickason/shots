@@ -591,6 +591,8 @@ module.exports = Backbone.Model.extend({
       output.owner = true;
       }
     }
+
+    return(output);
   }
 });
 
@@ -616,14 +618,12 @@ module.exports = Backbone.Firebase.Model.extend({
   toJSON: function() {
     var output = utils.formatTime(this);  // Generate human-readable timestamp
     
-    console.log(this.get('user'));
-    console.log(app.user.get('username'));
     if(this.get('user') === app.user.get('username')) {
       // User owns this comment
       output.owner = true;
     }
     
-    return(output);         // Generate human-readable timestamp
+    return(output);
   }
 });
 
@@ -694,34 +694,34 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n    <p class=\"projectSettings\">\n      <a href=\"#edit\" id=\"editProject\" data-id=\"";
+  buffer += "\n  <p class=\"projectSettings\">\n    <a href=\"#edit\" id=\"editProject\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">edit</a> \n      <a href=\"#cancel\" id=\"cancelProjectEdit\" style=\"display: none\" data-id=\"";
+    + "\">edit</a> \n    <a href=\"#cancel\" id=\"cancelProjectEdit\" style=\"display: none\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">cancel</a> \n      <button id=\"saveProject\" data-id=\"";
+    + "\">cancel</a> \n    <button id=\"saveProject\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">Save</button> \n      <a href=\"#delete\" id=\"deleteProject\" data-id=\"";
+    + "\">Save</button> \n    <a href=\"#delete\" id=\"deleteProject\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">delete</a>\n    </p>\n  ";
+    + "\">delete</a>\n  </p>\n";
   return buffer;
   }
 
-  buffer += "<div class=\"view\">\n  <h1>";
+  buffer += "<h1>";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</h1>\n  ";
+    + "</h1>\n";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.owner), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  <div class=\"shots\">\n  </div>\n</div>";
+  buffer += "\n<div class=\"shots\">\n</div>\n";
   return buffer;
   });
 
@@ -760,7 +760,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    console.log(this.model.toJSON());
     this.$el.html(this.template(this.model.toJSON()));
 
     shotDiv = this.$el.find('div.shots');
@@ -779,14 +778,13 @@ module.exports = Backbone.View.extend({
       // Replace current edit button with cancel link
       $(e.currentTarget).hide();  // Hide edit button
 
-      var settings = this.$el.children('p .projectSettings');
-      console.log(settings);
+      var settings = this.$el.children('p.projectSettings');
 
       settings.children('#cancelProjectEdit').show();
 
       saveButton = settings.children('#saveProject').show();
 
-      // Turn name into textarea
+      // Turn name into editable field
       projectName = this.$el.children('h1');
       projectName.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
       projectName.focus();
@@ -801,19 +799,18 @@ module.exports = Backbone.View.extend({
     if(this.model.isOwner(currentUser)) {
       // Replace cancel link with edit button
       $(e.currentTarget).hide();
-      saveButton = this.$el.children('p').children('#saveProject').hide();
-      editButton = this.$el.children('p').children('#editProject').show();
 
-      // reset image to normal
-      projectImage = this.$el.children('#projectImage');
-      projectImage.attr('contentEditable', 'false');
+      var settings = this.$el.children('p.projectSettings');
 
-      // reset text to normal
-      projectText = this.$el.children('#projectText');
-      projectText.attr('contenEditable', 'false');
-      projectText.blur();
+      saveButton = settings.children('#saveProject').hide();
+      editButton = settings.children('#editProject').show();
 
-      this.render();  // commentText does not update unless we re-render
+      // reset name to normal
+      projectName = this.$el.children('h1');
+      projectName.attr('contenEditable', 'false');
+      projectName.blur();
+
+      this.render();  // projectName does not update unless we re-render
     }
   },
 
@@ -826,22 +823,25 @@ module.exports = Backbone.View.extend({
 
       // Return interface to normal
       $(e.currentTarget).hide();  // Hide save button
-      cancelButton = this.$el.children('p').children('#cancelProjectEdit').hide();
-      editButton = this.$el.children('p').children('#editProject').show();
 
-      // image is no longer editable
-      projectImage = this.$el.children('#projectImage');
-      projectImage.attr('contentEditable', 'false');
-      projectImage.blur();
-      
-      // text is no longer editable
-      projectText = this.$el.children('#projectText');
-      projectText.attr('contentEditable', 'false');
-      projectText.blur();
+      var settings = this.$el.children('p.projectSettings');
 
-      // Save next text value
-      this.model.set('image', projectImage.attr('src'));
-      this.model.set('text', projectText.text());
+      cancelButton = settings.children('#cancelProjectEdit').hide();
+      editButton = settings.children('#editProject').show();
+
+      // name is no longer editable
+      projectName = this.$el.children('h1');
+      projectName.attr('contentEditable', 'false');
+      projectName.blur();
+
+      // Save new name
+      this.model.set('id', projectName.text());
+
+      var modelId = this.model.get('id');
+      route = '/' + modelId;
+
+      // Redirect user to new url
+      app.router.navigate(route, { trigger: true });
     }
   }
 });
@@ -886,6 +886,7 @@ module.exports = Backbone.View.extend({
     if(!this.collection) {
       this.collection = new ProjectsCollectionFirebase();
     }
+
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
     this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
@@ -897,6 +898,7 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
+    console.log(this.collection.toJSON());
     this.$el.html(this.template(this.collection.toJSON()));
 
     // Iterate through each project model and add it to our list of comments

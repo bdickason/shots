@@ -32,7 +32,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    console.log(this.model.toJSON());
     this.$el.html(this.template(this.model.toJSON()));
 
     shotDiv = this.$el.find('div.shots');
@@ -51,14 +50,13 @@ module.exports = Backbone.View.extend({
       // Replace current edit button with cancel link
       $(e.currentTarget).hide();  // Hide edit button
 
-      var settings = this.$el.children('p .projectSettings');
-      console.log(settings);
+      var settings = this.$el.children('p.projectSettings');
 
       settings.children('#cancelProjectEdit').show();
 
       saveButton = settings.children('#saveProject').show();
 
-      // Turn name into textarea
+      // Turn name into editable field
       projectName = this.$el.children('h1');
       projectName.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
       projectName.focus();
@@ -73,19 +71,18 @@ module.exports = Backbone.View.extend({
     if(this.model.isOwner(currentUser)) {
       // Replace cancel link with edit button
       $(e.currentTarget).hide();
-      saveButton = this.$el.children('p').children('#saveProject').hide();
-      editButton = this.$el.children('p').children('#editProject').show();
 
-      // reset image to normal
-      projectImage = this.$el.children('#projectImage');
-      projectImage.attr('contentEditable', 'false');
+      var settings = this.$el.children('p.projectSettings');
 
-      // reset text to normal
-      projectText = this.$el.children('#projectText');
-      projectText.attr('contenEditable', 'false');
-      projectText.blur();
+      saveButton = settings.children('#saveProject').hide();
+      editButton = settings.children('#editProject').show();
 
-      this.render();  // commentText does not update unless we re-render
+      // reset name to normal
+      projectName = this.$el.children('h1');
+      projectName.attr('contenEditable', 'false');
+      projectName.blur();
+
+      this.render();  // projectName does not update unless we re-render
     }
   },
 
@@ -98,22 +95,25 @@ module.exports = Backbone.View.extend({
 
       // Return interface to normal
       $(e.currentTarget).hide();  // Hide save button
-      cancelButton = this.$el.children('p').children('#cancelProjectEdit').hide();
-      editButton = this.$el.children('p').children('#editProject').show();
 
-      // image is no longer editable
-      projectImage = this.$el.children('#projectImage');
-      projectImage.attr('contentEditable', 'false');
-      projectImage.blur();
-      
-      // text is no longer editable
-      projectText = this.$el.children('#projectText');
-      projectText.attr('contentEditable', 'false');
-      projectText.blur();
+      var settings = this.$el.children('p.projectSettings');
 
-      // Save next text value
-      this.model.set('image', projectImage.attr('src'));
-      this.model.set('text', projectText.text());
+      cancelButton = settings.children('#cancelProjectEdit').hide();
+      editButton = settings.children('#editProject').show();
+
+      // name is no longer editable
+      projectName = this.$el.children('h1');
+      projectName.attr('contentEditable', 'false');
+      projectName.blur();
+
+      // Save new name
+      this.model.set('id', projectName.text());
+
+      var modelId = this.model.get('id');
+      route = '/' + modelId;
+
+      // Redirect user to new url
+      app.router.navigate(route, { trigger: true });
     }
   }
 });

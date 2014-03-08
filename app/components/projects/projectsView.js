@@ -15,6 +15,7 @@ module.exports = Backbone.View.extend({
     if(!this.collection) {
       this.collection = new ProjectsCollectionFirebase();
     }
+
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
     this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
@@ -26,6 +27,7 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
+    console.log(this.collection.toJSON());
     this.$el.html(this.template(this.collection.toJSON()));
 
     // Iterate through each project model and add it to our list of comments

@@ -24,5 +24,7 @@ module.exports = Backbone.Model.extend({
       output.owner = true;
       }
     }
+
+    return(output);
   }
 });

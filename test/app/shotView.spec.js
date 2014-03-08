@@ -3,7 +3,8 @@
 var clientenv = require('../helpers/helper.spec.js'),
     should = require('should'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    sinon = require('sinon');
     
 describe('shotView', function() {
 
@@ -70,6 +71,54 @@ describe('shotView', function() {
       shotModel.trigger('change'); // Grabbing data from firebase would trigger change event, forcing view to render()
 
       shotView.$el.children.length.should.equal(2);
+    });
+  });
+
+  describe('edit shots', function() {
+    it('non-owner should not see edit/delete', function() {
+      // Fake JSON output for model stub
+      var fakeOutput = {};
+      var shotModel = new ShotModel({});
+      var shotStub = sinon.stub(shotModel, 'toJSON').returns(fakeOutput);
+
+      shotModel.toJSON().should.equal(fakeOutput);
+
+      var shotView = new ShotView({model: shotModel});
+      shotModel.trigger('change'); // Render the view
+
+      var shot = shotView.$el;
+
+      shot.html().should.not.containEql('shotSettings');
+      shot.html().should.not.containEql('editShot');
+      shot.html().should.not.containEql('cancelShotEdit');
+      shot.html().should.not.containEql('cancelShotEdit');
+      shot.html().should.not.containEql('saveShot');
+      shot.html().should.not.containEql('deleteShot');
+
+      shotStub.restore();
+    });
+
+    it('owner should see edit/delete for their own shots', function() {
+      // Fake JSON output for model stub
+      var fakeOutput = {
+        owner: true
+      };
+      var shotModel = new ShotModel({});
+      var shotStub = sinon.stub(shotModel, 'toJSON').returns(fakeOutput);
+
+      shotModel.toJSON().should.equal(fakeOutput);
+
+      var shotView = new ShotView({model: shotModel});
+      shotModel.trigger('change'); // Render the view
+
+      var shot = shotView.$el.find('.shotSettings');
+      shot.html().should.containEql('editShot');
+      shot.html().should.containEql('cancelShotEdit');
+      shot.html().should.containEql('cancelShotEdit');
+      shot.html().should.containEql('saveShot');
+      shot.html().should.containEql('deleteShot');
+
+      shotStub.restore();
     });
   });
 

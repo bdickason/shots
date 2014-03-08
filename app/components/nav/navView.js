@@ -25,11 +25,13 @@ module.exports = Backbone.View.extend({
   },
 
   login: function(e) {
+    e.preventDefault();
     // Relies on Firebase Simple Login
     this.model.login('twitter');
   },
 
   logout: function(e) {
+    e.preventDefault();
     this.model.logout();
   },
 

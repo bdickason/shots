@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /* Main app js file */
 
-userModel = require('./components/users/userModel.js');
+var userModel = require('./components/users/userModel.js');
 app = {};
 app.views = [];
 
@@ -23,7 +23,7 @@ window.onload = function(){
     
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
-    Backbone.history.start();
+    Backbone.history.start({pushState: true});
 };
 
 
@@ -441,7 +441,7 @@ function program3(depth0,data) {
   return "\n    <a href=\"#\" id=\"login\">Login</a>\n  ";
   }
 
-  buffer += "  <a href=\"/#\" id=\"home\">Home</a> |  \n  <a href=\"http://discuss.braddickason.com\" id=\"discuss\">Discuss</a> | \n  <a href=\"#contribute\" id=\"contribute\">Contribute</a> | \n  <a href=\"#help\" id=\"help\">Help Me!</a>\n\n  ";
+  buffer += "  <a href=\"/\" id=\"home\">Home</a> |  \n  <a href=\"http://discuss.braddickason.com\" id=\"discuss\">Discuss</a> | \n  <a href=\"#contribute\" id=\"contribute\">Contribute</a> | \n  <a href=\"#help\" id=\"help\">Help Me!</a>\n\n  ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n";
@@ -464,6 +464,7 @@ module.exports = Backbone.View.extend({
   },
 
   events: {
+    'click #home': 'home',
     'click #login': 'login',
     'click #logout': 'logout',
     'click #contribute': 'contribute',
@@ -473,6 +474,12 @@ module.exports = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
     return this;
+  },
+
+  home: function(e) {
+    // Send user home
+    e.preventDefault();
+    app.router.navigate('', {trigger: true });
   },
 
   login: function(e) {
@@ -504,7 +511,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<li class=\"project\">\n  <a href=\"#\" id=\"";
+  buffer += "<li class=\"project\">\n  <a href=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

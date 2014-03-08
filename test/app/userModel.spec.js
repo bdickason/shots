@@ -6,7 +6,7 @@ var clientenv = require('../helpers/helper.spec.js'),
 
 describe('userModel', function() {
 
-  var User;
+  var User, UserModel, fbStub, loginStub;
 
   beforeEach(function(done) {
     clientenv.setup(function() {

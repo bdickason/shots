@@ -117,6 +117,8 @@ module.exports = Backbone.View.extend({
       this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
       this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
 
+      this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
+
       this.setElement(this.$el);
     },
     
@@ -565,13 +567,37 @@ module.exports = Backbone.View.extend({
 },{"./projectCardTemplate.hbs":14,"./projectModelFirebase.js":17}],16:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
+var utils = require('../../utils.js');
+
 module.exports = Backbone.Model.extend({
   initialize: function() {
+  },
+  isOwner: function(user) {
+    if(this.get('user') == user) {
+      return(true);
+    } else {
+      return(false);
+    }
+  },
+  toJSON: function() {
+    var output = utils.formatTime(this);  // Generate human-readable timestamp
+    var currentUser = app.user.get('usernane');
+
+    output.owner = false;
+    
+    if(currentUser) {
+      if(this.get('user') === currentUser) {
+      // User owns this comment
+      output.owner = true;
+      }
+    }
   }
 });
 
-},{}],17:[function(require,module,exports){
+},{"../../utils.js":34}],17:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
+
+var utils = require('../../utils.js');
 
 module.exports = Backbone.Firebase.Model.extend({
   firebase: function() {
@@ -579,10 +605,29 @@ module.exports = Backbone.Firebase.Model.extend({
   },
   initialize: function() {
     this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
+  },
+  isOwner: function(user) {
+    if(this.get('user') == user) {
+      return(true);
+    } else {
+      return(false);
+    }
+  },
+  toJSON: function() {
+    var output = utils.formatTime(this);  // Generate human-readable timestamp
+    
+    console.log(this.get('user'));
+    console.log(app.user.get('username'));
+    if(this.get('user') === app.user.get('username')) {
+      // User owns this comment
+      output.owner = true;
+    }
+    
+    return(output);         // Generate human-readable timestamp
   }
 });
 
-},{}],18:[function(require,module,exports){
+},{"../../utils.js":34}],18:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -644,14 +689,39 @@ var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n    <p class=\"projectSettings\">\n      <a href=\"#edit\" id=\"editProject\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">edit</a> \n      <a href=\"#cancel\" id=\"cancelProjectEdit\" style=\"display: none\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">cancel</a> \n      <button id=\"saveProject\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">Save</button> \n      <a href=\"#delete\" id=\"deleteProject\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">delete</a>\n    </p>\n  ";
+  return buffer;
+  }
 
   buffer += "<div class=\"view\">\n  <h1>";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</h1>\n  <div class=\"shots\">\n  </div>\n</div>";
+    + "</h1>\n  ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.owner), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n  <div class=\"shots\">\n  </div>\n</div>";
   return buffer;
   });
 
@@ -677,13 +747,20 @@ module.exports = Backbone.View.extend({
     }
   
     this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
     this.shotsView = new ShotsView({ collection: this.shotsCollectionFirebase, project: this.model.get('id')});
   },
 
-  render: function() {
+  events: {
+    'click #editProject': 'editProject',
+    'click #cancelProjectEdit': 'cancelEdit',
+    'click #saveProject': 'saveProject'
+  },
 
+  render: function() {
+    console.log(this.model.toJSON());
     this.$el.html(this.template(this.model.toJSON()));
 
     shotDiv = this.$el.find('div.shots');
@@ -691,6 +768,81 @@ module.exports = Backbone.View.extend({
 
     this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js    
     return this;
+  },
+
+ editProject: function(e) {
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    var currentUser = app.user.get('username');
+
+    if(this.model.isOwner(currentUser)) {
+      // Replace current edit button with cancel link
+      $(e.currentTarget).hide();  // Hide edit button
+
+      var settings = this.$el.children('p .projectSettings');
+      console.log(settings);
+
+      settings.children('#cancelProjectEdit').show();
+
+      saveButton = settings.children('#saveProject').show();
+
+      // Turn name into textarea
+      projectName = this.$el.children('h1');
+      projectName.attr('contentEditable', 'true');  // Built in html5 tag to make field editable
+      projectName.focus();
+    }
+  },
+
+  cancelEdit: function(e) {
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+    
+    var currentUser = app.user.get('username');
+
+    if(this.model.isOwner(currentUser)) {
+      // Replace cancel link with edit button
+      $(e.currentTarget).hide();
+      saveButton = this.$el.children('p').children('#saveProject').hide();
+      editButton = this.$el.children('p').children('#editProject').show();
+
+      // reset image to normal
+      projectImage = this.$el.children('#projectImage');
+      projectImage.attr('contentEditable', 'false');
+
+      // reset text to normal
+      projectText = this.$el.children('#projectText');
+      projectText.attr('contenEditable', 'false');
+      projectText.blur();
+
+      this.render();  // commentText does not update unless we re-render
+    }
+  },
+
+  saveProject: function(e) {
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    var currentUser = app.user.get('username');
+
+    if(this.model.isOwner(currentUser)) {
+
+      // Return interface to normal
+      $(e.currentTarget).hide();  // Hide save button
+      cancelButton = this.$el.children('p').children('#cancelProjectEdit').hide();
+      editButton = this.$el.children('p').children('#editProject').show();
+
+      // image is no longer editable
+      projectImage = this.$el.children('#projectImage');
+      projectImage.attr('contentEditable', 'false');
+      projectImage.blur();
+      
+      // text is no longer editable
+      projectText = this.$el.children('#projectText');
+      projectText.attr('contentEditable', 'false');
+      projectText.blur();
+
+      // Save next text value
+      this.model.set('image', projectImage.attr('src'));
+      this.model.set('text', projectText.text());
+    }
   }
 });
 
@@ -806,7 +958,14 @@ module.exports = Backbone.Model.extend({
       text: ''
     },
     toJSON: function() {
-        return(utils.formatTime(this));         // Generate human-readable timestamp
+      var output = utils.formatTime(this);  // Generate human-readable timestamp
+      
+      if(this.get('user') === app.user.get('username')) {
+        // User owns this comment
+        output.owner = true;
+      }
+      
+      return(output);         // Generate human-readable timestamp
     }
 });
 
@@ -933,6 +1092,7 @@ module.exports = Backbone.View.extend({
     
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
+    this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
     this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});

@@ -93,6 +93,7 @@ See also:
 * [Patterns](docs/patterns.md)
 * [Event Tracking](docs/tracking.md)
 * [Testing](docs/testing.md)
+* [Committing](docs/committing.md)
 
 # License
 

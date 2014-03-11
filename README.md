@@ -9,8 +9,8 @@ Capture shots of your product as you build it and share them with your team.
 1. Install Node >= 10.0: http://nodejs.org/download/
 2. Clone the repository: https://github.com/bdickason/shots
 3. Instal dependencies: `cd shots; npm install`
-4. Install Grunt: `sudo npm install -g grunt-cli`
-5. Build .js and run tests: `grunt`
+4. Install gulp: `sudo npm install -g gulp`
+5. Build .js and run tests: `gulp`
 6. Load the server: `node index.js`
 7. Visit the site in your browser: http://localhost:3000/
 
@@ -63,7 +63,7 @@ Browserify compiles all .js into `app/lib/bundle.js`.
 
 All modules are included via the `require` command and app.js is the entry point.
 
-While working, I suggest using `grunt watch` to re-build any js files that change while you're working.
+While working, I suggest using `gulp watch` to re-build any js files that change while you're working.
 
 
 # Running Tests
@@ -71,7 +71,7 @@ While working, I suggest using `grunt watch` to re-build any js files that chang
 We deleted the server, so I need to figure out how tests will work.
 
 To run the test suite type:
-`grunt tests` from the base project directory
+`gulp tests` from the base project directory
 
 Do not push to `master` with failing tests. `master` must always be deployable (but not deplorable).
 

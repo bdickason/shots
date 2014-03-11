@@ -1,6 +1,14 @@
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var watchify = require('watchify');
+var mocha = require('gulp-mocha');
+
+
+var path = {
+    scripts: ['./app/*.js', './app/components/*/*.js'],
+    sass: './app/sass/*.scss',
+    tests: './test/**/*.spec.js'
+};
 
 gulp.task('default', function() {
     // Default task
@@ -10,7 +18,15 @@ gulp.task('default', function() {
 
 gulp.task('tests', function() {
     // Execute tests
-    // Mocha
+
+    var options = {
+        reporter: 'nyan',
+        ignoreLeaks: true
+    };
+
+    return(gulp.src(path.tests)
+        .pipe(mocha(options)));
+    
 });
 
 gulp.task('watch', function() {

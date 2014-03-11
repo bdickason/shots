@@ -38,7 +38,8 @@
     "jsdom": "git://github.com/bdickason/jsdom.git#master",
     "gulp": "^3.5.5",
     "watchify": "^0.6.1",
-    "vinyl-source-stream": "^0.1.1"
+    "vinyl-source-stream": "^0.1.1",
+    "gulp-mocha": "^0.4.1"
   },
   "main": "index",
   "engines": {

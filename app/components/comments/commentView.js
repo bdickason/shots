@@ -2,7 +2,7 @@
 
 var commentTemplate = require('./commentTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
     template: commentTemplate,
 
@@ -19,7 +19,7 @@ module.exports = Backbone.View.extend({
       'keyup #commentText': 'pressEnter',
       // 'click #deleteComment': 'deleteComment',
       'click #editComment': 'editComment',
-      'click #cancelEdit': 'cancelEdit',
+      'click #cancelCommentEdit': 'cancelEdit',
       'click #saveComment': 'saveComment'
     },
 
@@ -55,7 +55,7 @@ module.exports = Backbone.View.extend({
         // Replace current edit button with cancel link
         $(e.currentTarget).hide();  // Hide edit button      
 
-        cancelButton = this.$el.find('#cancelEdit').show();
+        cancelButton = this.$el.find('#cancelCommentEdit').show();
         // cancelButton.on('click', _.bind(this.cancelEdit, this));
 
         saveButton = this.$el.find('#saveComment').show();
@@ -72,6 +72,7 @@ module.exports = Backbone.View.extend({
       
       var owner = this.model.get('user');
 
+      console.log('got here');
       if(app.user.get('username') == owner) {
         // Replace cancel link with edit button
         $(e.currentTarget).hide();
@@ -94,7 +95,7 @@ module.exports = Backbone.View.extend({
       if(app.user.get('username') == owner) {
         // Replace cancel link with edit button
         $(e.currentTarget).hide();  // Hide save button
-        cancelButton = this.$el.find('#cancelEdit').hide();
+        cancelButton = this.$el.find('#cancelCommentEdit').hide();
         editButton = this.$el.find('#editComment').show();
 
 

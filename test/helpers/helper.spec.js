@@ -22,6 +22,7 @@ module.exports.setup = setup = function(callback) {
     scripts: [scriptDir + 'jquery-2.1.0.min.js',
               scriptDir + 'underscore.js',
               scriptDir + 'backbone.js',
+              scriptDir + 'backbone.marionette.js',
               scriptDir + 'firebase.js',
               scriptDir + 'backbone-firebase.js',
               scriptDir + 'firebase-simple-login.js'

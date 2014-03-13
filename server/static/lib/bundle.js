@@ -214,13 +214,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
         // Save next text value
         this.model.set('text', commentText.text());
       }
-    },
-    
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
     }
   });
 

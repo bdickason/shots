@@ -14,15 +14,17 @@ var jsdom = require ('jsdom'),
 module.exports.setup = setup = function(callback) {
   if(typeof window != 'undefined') return callback(window);
 
+  var scriptDir = '../../server/static/lib/';
+
   // Setup a jsdom env and globally expose window along with other libraries
   jsdom.env({
     html: "<html><body></body></html>",
-    scripts: ['../../server/static/lib/jquery-2.1.0.min.js',
-              '../../server/static/lib/underscore.js',
-              '../../server/static/lib/backbone.js',
-              '../../server/static/lib/firebase.js',
-              '../../server/static/lib/backbone-firebase.js',
-              '../../server/static/lib/firebase-simple-login.js'
+    scripts: [scriptDir + 'jquery-2.1.0.min.js',
+              scriptDir + 'underscore.js',
+              scriptDir + 'backbone.js',
+              scriptDir + 'firebase.js',
+              scriptDir + 'backbone-firebase.js',
+              scriptDir + 'firebase-simple-login.js'
               ],
     done: function(errs, window) {
       global.window = window;

@@ -7,12 +7,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     template: commentTemplate,
 
     initialize: function() {
-      this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
-      this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
-
       this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
-
-      this.setElement(this.$el);
     },
     
     events: {
@@ -72,7 +67,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
       
       var owner = this.model.get('user');
 
-      console.log('got here');
       if(app.user.get('username') == owner) {
         // Replace cancel link with edit button
         $(e.currentTarget).hide();

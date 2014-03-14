@@ -1072,7 +1072,7 @@ var shotTemplate = require('./shotTemplate.hbs');
 var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
 var CommentsView = require('../comments/commentsView.js');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotTemplate,
 
@@ -1082,8 +1082,6 @@ module.exports = Backbone.View.extend({
       this.model = new ShotModelFirebase({id: options.id, projectId: options.projectId});
     }
     
-    this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
-    this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
@@ -1091,8 +1089,6 @@ module.exports = Backbone.View.extend({
 
     this.$el.attr('id', this.model.get('id'));
     this.$el.addClass('shot');
-
-    this.setElement(this.$el);
   },
 
   events: {

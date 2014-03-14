@@ -70,6 +70,7 @@ describe('projectView', function() {
       projectModel.trigger('sync'); // Render the view
 
       var project = projectView.$el.find('p.projectSettings');
+      
       project.html().should.containEql('editProject');
       project.html().should.containEql('cancelProjectEdit');
       project.html().should.containEql('cancelProjectEdit');

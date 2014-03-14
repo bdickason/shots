@@ -530,7 +530,7 @@ var ProjectModelFirebase = require('./projectModelFirebase.js');
 
 var projectCardTemplate = require('./projectCardTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: projectCardTemplate,
@@ -539,16 +539,6 @@ module.exports = Backbone.View.extend({
     if(!this.model) {
       this.model = new ProjectModelFirebase({id: this.id});
     }
-  
-    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-  },
-
-  render: function() {
-
-    this.$el.html(this.template(this.model.toJSON()));
-
-    this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js    
-    return this;
   }
 });
 

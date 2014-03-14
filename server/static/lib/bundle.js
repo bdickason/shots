@@ -2,11 +2,13 @@
 /* Main app js file */
 
 var userModel = require('./components/users/userModel.js');
-app = {};
+app = new Backbone.Marionette.Application();
 app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;
+
+    app.start();
 
     // Generic utility functions used throughout the app
     app.utils = require('./utils.js');
@@ -24,6 +26,7 @@ window.onload = function(){
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
     Backbone.history.start({pushState: true});
+
 };
 
 

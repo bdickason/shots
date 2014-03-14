@@ -109,7 +109,7 @@ function program1(depth0,data) {
 
 var commentTemplate = require('./commentTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
     template: commentTemplate,
 
@@ -126,7 +126,7 @@ module.exports = Backbone.View.extend({
       'keyup #commentText': 'pressEnter',
       // 'click #deleteComment': 'deleteComment',
       'click #editComment': 'editComment',
-      'click #cancelEdit': 'cancelEdit',
+      'click #cancelCommentEdit': 'cancelEdit',
       'click #saveComment': 'saveComment'
     },
 
@@ -162,7 +162,7 @@ module.exports = Backbone.View.extend({
         // Replace current edit button with cancel link
         $(e.currentTarget).hide();  // Hide edit button      
 
-        cancelButton = this.$el.find('#cancelEdit').show();
+        cancelButton = this.$el.find('#cancelCommentEdit').show();
         // cancelButton.on('click', _.bind(this.cancelEdit, this));
 
         saveButton = this.$el.find('#saveComment').show();
@@ -201,7 +201,7 @@ module.exports = Backbone.View.extend({
       if(app.user.get('username') == owner) {
         // Replace cancel link with edit button
         $(e.currentTarget).hide();  // Hide save button
-        cancelButton = this.$el.find('#cancelEdit').hide();
+        cancelButton = this.$el.find('#cancelCommentEdit').hide();
         editButton = this.$el.find('#editComment').show();
 
 
@@ -213,13 +213,6 @@ module.exports = Backbone.View.extend({
         // Save next text value
         this.model.set('text', commentText.text());
       }
-    },
-    
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
     }
   });
 
@@ -455,14 +448,13 @@ function program3(depth0,data) {
 
 var navTemplate = require('./navTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: navTemplate,
 
   initialize: function() {
     this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
-    this.render();
   },
 
   events: {
@@ -471,11 +463,6 @@ module.exports = Backbone.View.extend({
     'click #logout': 'logout',
     'click #contribute': 'contribute',
     'click #help': 'help'
-  },
-
-  render: function() {
-    this.$el.html(this.template(this.model.toJSON())); // Nav has no collection associated with it, so just render the tepmlate
-    return this;
   },
 
   home: function(e) {
@@ -542,7 +529,7 @@ var ProjectModelFirebase = require('./projectModelFirebase.js');
 
 var projectCardTemplate = require('./projectCardTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: projectCardTemplate,
@@ -551,16 +538,6 @@ module.exports = Backbone.View.extend({
     if(!this.model) {
       this.model = new ProjectModelFirebase({id: this.id});
     }
-  
-    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
-  },
-
-  render: function() {
-
-    this.$el.html(this.template(this.model.toJSON()));
-
-    this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js    
-    return this;
   }
 });
 
@@ -739,7 +716,7 @@ var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
 
 var ShotsView = require('../shots/shotsView.js');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: projectTemplate,
@@ -748,8 +725,9 @@ module.exports = Backbone.View.extend({
     if(!this.model) {
       this.model = new ProjectModelFirebase({id: this.id});
     }
-  
-    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+
+    this.listenTo(this.model, 'sync', this.render); // Without this, the model doesn't render after it completes loading
+
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});
@@ -1084,7 +1062,7 @@ var shotTemplate = require('./shotTemplate.hbs');
 var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
 var CommentsView = require('../comments/commentsView.js');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotTemplate,
 
@@ -1093,9 +1071,10 @@ module.exports = Backbone.View.extend({
       // Model is not passed in by parent View
       this.model = new ShotModelFirebase({id: options.id, projectId: options.projectId});
     }
-    
+   
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
+   
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
@@ -1103,8 +1082,6 @@ module.exports = Backbone.View.extend({
 
     this.$el.attr('id', this.model.get('id'));
     this.$el.addClass('shot');
-
-    this.setElement(this.$el);
   },
 
   events: {

@@ -8,7 +8,7 @@ var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
 
 var ShotsView = require('../shots/shotsView.js');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: projectTemplate,
@@ -17,8 +17,9 @@ module.exports = Backbone.View.extend({
     if(!this.model) {
       this.model = new ProjectModelFirebase({id: this.id});
     }
-  
-    this.listenTo(this.model, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
+
+    this.listenTo(this.model, 'sync', this.render); // Without this, the model doesn't render after it completes loading
+
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
     this.shotsCollectionFirebase = new ShotsCollectionFirebase([], {project: this.model.get('id')});

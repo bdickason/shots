@@ -67,7 +67,6 @@ describe('shotView', function() {
       shotModel = new ShotModel(input);
       shotView = new ShotView({model: shotModel});
 
-      // console.log(app.Handlebars);
       shotModel.trigger('change'); // Grabbing data from firebase would trigger change event, forcing view to render()
 
       shotView.$el.children.length.should.equal(2);

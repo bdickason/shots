@@ -6,14 +6,13 @@ var clientenv = require('../helpers/helper.spec.js'),
     fs = require('fs'),
     path = require('path');
     
-describe('commentsView', function() {
+describe('commentListView', function() {
 
   var CommentsCollection,
       CommentModel;
 
   beforeEach(function(done) {
     clientenv.setup(function() {
-      
       // Pre-compile Handlebars template
       var templateFilename = path.resolve(__dirname, componentsDir + 'comments/list/commentListTemplate.hbs');
 

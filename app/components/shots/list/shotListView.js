@@ -1,6 +1,6 @@
 /* Shots View - displays a list of shots */
 
-var ShotView = require('../show/shotView.js');
+var ShotCardView = require('../show/shotCardView.js');
 var shotListTemplate = require('./shotListTemplate.hbs');
 
 module.exports = Backbone.View.extend({
@@ -109,8 +109,8 @@ module.exports = Backbone.View.extend({
       // Iterate through each shot model and add it to our list of shots
       var self = this;
       this.collection.each(function(shot) {
-        var shotView = new ShotView({model: shot, projectId: self.project});
-        this.$el.find('ul.shots').append(shotView.render().el);
+        var shotCardView = new ShotCardView({model: shot, projectId: self.project});
+        this.$el.find('ul.shots').append(shotCardView.render().el);
       }, this);
 
       this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js

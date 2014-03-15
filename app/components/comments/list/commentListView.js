@@ -1,6 +1,6 @@
 /* Comments View - displays a list of comments */
 
-var CommentView = require('../commentView.js');
+var CommentView = require('../show/commentView.js');
 var commentListTemplate = require('./commentListTemplate.hbs');
 
 

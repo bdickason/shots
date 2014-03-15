@@ -54,6 +54,131 @@ module.exports = Backbone.Model.extend({
 });
 
 },{"../../utils.js":34}],3:[function(require,module,exports){
+/* Comments Collection - An ordered list of Comments */
+var CommentModel = require('./commentModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: CommentModel,
+    comparator: function(model) {
+      // Sorts model by timestamp, newest first
+      return(-model.get('timestamp'));
+    },
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, options) {
+        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.shotId;
+    }
+  });
+},{"./commentModel.js":2}],4:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
+
+
+  buffer += "    <label><h3>"
+    + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
+    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" /><br />\n    <button id=\"createComment\">save</button>\n    <label id=\"commentsError\" class=\"error\"></label>\n    <ul class=\"comments\">\n    </ul>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":42}],5:[function(require,module,exports){
+/* Comments View - displays a list of comments */
+
+var CommentView = require('../show/commentView.js');
+var commentListTemplate = require('./commentListTemplate.hbs');
+
+
+module.exports = Backbone.View.extend({
+    tagName: 'div',
+    template: commentListTemplate,
+
+    initialize: function() {
+      this.id = this.collection.id;  // Shot ID
+      this.projectId = this.collection.projectId;
+
+      this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
+      this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
+      this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
+  
+      this.setElement(this.$el);
+
+    },
+    
+    events: {
+      'keyup .input': 'pressEnter',
+      'click #createComment': 'createComment',
+      'click #deleteComment': 'deleteComment'
+    },
+
+    pressEnter: function(e) {
+      // Submit form when user presses enter
+      if(e.which == 13 && $('#text').val()) {
+        this.createComment();
+      }
+      return(false);
+    },
+
+    createComment: function(comment) {
+      if(app.user.get('loggedIn')) {
+        textarea = this.$el.find('#text.comment');
+        if(textarea.val()) {
+          var input = {
+            text: textarea.val(),
+            user: app.user.get('username'),
+            timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
+          };
+
+          this.collection.create(input);
+          mixpanel.track('Comment', input);
+
+          textarea.val('');
+        }
+      } else {
+        this.showError('Sorry, you must be logged in');
+      }
+    },
+
+    // Temporary fix, this should be moved back to commentView.js
+    deleteComment: function(e) {
+      e.preventDefault(); // Have to disable the default behavior of the anchor
+
+      var commentId = $(e.currentTarget).data('id');
+      var comment = this.collection.get(commentId);
+      var owner = comment.get('user');
+
+      if(app.user.get('username') == owner) {
+        this.collection.remove(comment);
+      }
+    },
+
+    showError: function(message) {
+      var error = this.$el.find('#commentsError');
+      error.text(message);
+      error.show();
+    },
+
+    render: function() {
+      this.$el.html(this.template(this.collection.toJSON()));
+
+      // Iterate through each comment model and add it to our list of comments
+      var self = this;
+      this.collection.each(function(comment) {
+        var commentView = new CommentView({model: comment, projectId: self.projectId });
+        this.$el.find('ul.comments').append(commentView.render().el);
+      }, this);
+
+      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
+      return(this);
+    }
+  });
+
+},{"../show/commentView.js":7,"./commentListTemplate.hbs":4}],6:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -107,7 +232,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":42}],4:[function(require,module,exports){
+},{"hbsfy/runtime":42}],7:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
 var commentTemplate = require('./commentTemplate.hbs');
@@ -219,132 +344,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
   });
 
-},{"./commentTemplate.hbs":3}],5:[function(require,module,exports){
-/* Comments Collection - An ordered list of Comments */
-var CommentModel = require('./commentModel.js');
-
-module.exports = Backbone.Firebase.Collection.extend({
-    model: CommentModel,
-    comparator: function(model) {
-      // Sorts model by timestamp, newest first
-      return(-model.get('timestamp'));
-    },
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
-    initialize: function(models, options) {
-        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.shotId;
-    }
-  });
-},{"./commentModel.js":2}],6:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
-
-
-  buffer += "    <label><h3>"
-    + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
-    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" /><br />\n    <button id=\"createComment\">save</button>\n    <label id=\"commentsError\" class=\"error\"></label>\n    <ul class=\"comments\">\n    </ul>";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":42}],7:[function(require,module,exports){
-/* Comments View - displays a list of comments */
-
-var CommentView = require('../commentView.js');
-var commentListTemplate = require('./commentListTemplate.hbs');
-
-
-module.exports = Backbone.View.extend({
-    tagName: 'div',
-    template: commentListTemplate,
-
-    initialize: function() {
-      this.id = this.collection.id;  // Shot ID
-      this.projectId = this.collection.projectId;
-
-      this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
-      this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
-      this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
-  
-      this.setElement(this.$el);
-
-    },
-    
-    events: {
-      'keyup .input': 'pressEnter',
-      'click #createComment': 'createComment',
-      'click #deleteComment': 'deleteComment'
-    },
-
-    pressEnter: function(e) {
-      // Submit form when user presses enter
-      if(e.which == 13 && $('#text').val()) {
-        this.createComment();
-      }
-      return(false);
-    },
-
-    createComment: function(comment) {
-      if(app.user.get('loggedIn')) {
-        textarea = this.$el.find('#text.comment');
-        if(textarea.val()) {
-          var input = {
-            text: textarea.val(),
-            user: app.user.get('username'),
-            timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
-          };
-
-          this.collection.create(input);
-          mixpanel.track('Comment', input);
-
-          textarea.val('');
-        }
-      } else {
-        this.showError('Sorry, you must be logged in');
-      }
-    },
-
-    // Temporary fix, this should be moved back to commentView.js
-    deleteComment: function(e) {
-      e.preventDefault(); // Have to disable the default behavior of the anchor
-
-      var commentId = $(e.currentTarget).data('id');
-      var comment = this.collection.get(commentId);
-      var owner = comment.get('user');
-
-      if(app.user.get('username') == owner) {
-        this.collection.remove(comment);
-      }
-    },
-
-    showError: function(message) {
-      var error = this.$el.find('#commentsError');
-      error.text(message);
-      error.show();
-    },
-
-    render: function() {
-      this.$el.html(this.template(this.collection.toJSON()));
-
-      // Iterate through each comment model and add it to our list of comments
-      var self = this;
-      this.collection.each(function(comment) {
-        var commentView = new CommentView({model: comment, projectId: self.projectId });
-        this.$el.find('ul.comments').append(commentView.render().el);
-      }, this);
-
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
-    }
-  });
-
-},{"../commentView.js":4,"./commentListTemplate.hbs":6}],8:[function(require,module,exports){
+},{"./commentTemplate.hbs":6}],8:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1343,7 +1343,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase":5,"../../comments/list/commentListView.js":7,"../shotModelFirebase.js":28,"./shotTemplate.hbs":30}],32:[function(require,module,exports){
+},{"../../comments/commentsCollectionFirebase":3,"../../comments/list/commentListView.js":5,"../shotModelFirebase.js":28,"./shotTemplate.hbs":30}],32:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name

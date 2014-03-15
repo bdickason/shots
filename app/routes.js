@@ -9,7 +9,7 @@ var ProjectView = require('./components/projects/projectView.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
-var ShotView = require('./components/shots/shotView.js');
+var ShotView = require('./components/shots/show/shotView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');

@@ -24,10 +24,9 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          reporter: 'nyan',
-          timeout: '25000ms'
+          reporter: 'nyan'
         },
-        src: ['server/test/*.js']
+        src: ['test/**/*.spec.js']
       }
     },
     browserify: {
@@ -37,7 +36,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: [ 'app/*.js', 'app/**/*.js', 'app/**/*.hbs', 'app/**/*.scss'],
+      files: [ 'app/*.js', 'app/**/*.js', 'app/**/**/*.hbs', 'app/**/*.scss'],
       tasks: [ 'browserify', 'compass' ]
     }
   });

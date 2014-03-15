@@ -125,3 +125,35 @@ img.shot.big {
 [contenteditable="true"] {
   background: yellow;
 }
+
+/* Base UI styling */
+/* line 3, ../../../app/sass/_base.scss */
+#nav {
+  display: block;
+  padding: 0;
+  margin: 0;
+  min-width: 964px;
+  overflow: visible;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* line 11, ../../../app/sass/_base.scss */
+#main {
+  padding: 25px;
+}
+
+/* line 14, ../../../app/sass/_base.scss */
+#username {
+  float: right;
+  padding-right: 15px;
+}
+
+/* line 18, ../../../app/sass/_base.scss */
+#logout {
+  float: right;
+}
+
+/* line 23, ../../../app/sass/_base.scss */
+.error {
+  display: none;
+}

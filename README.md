@@ -3,6 +3,8 @@ shots
 
 Capture shots of your product as you build it and share them with your team.
 
+[![Build Status](https://secure.travis-ci.org/bdickason/shots.png)](http://travis-ci.org/bdickason/shots)
+
 # Installation
 1. Install Node >= 10.0: http://nodejs.org/download/
 2. Clone the repository: https://github.com/bdickason/shots
@@ -87,8 +89,11 @@ Fork the repository, follow the above steps for setting up a repo, and go!
 Fork the repository, follow the above steps for setting up a repo, and go!
 
 See also:
+* [Architecture](docs/architecture.md)
 * [Patterns](docs/patterns.md)
 * [Event Tracking](docs/tracking.md)
+* [Testing](docs/testing.md)
+* [Committing](docs/committing.md)
 
 # License
 

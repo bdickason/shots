@@ -16,15 +16,16 @@ module.exports.startServer = function() {
   app.set('view engine', 'handlebars');
 
   /* Client-side Routes */
-  app.get('/', function(req, res) {
-    // Default Route - serves the Backbone app
+  app.get('*', function(req, res) {
+    // Route all requests to Backbone for pushState to work properly
     res.render('client', { cfg: cfg } );
   });
 
+  /*
   app.get('*', function(req, res) {
     res.send('Sorry, there was a problem with your request');
     console.log('--- UNKNOWN REQUEST ---');
-  });
+  }); */
 
   app.listen(cfg.PORT); // Start the server
 };

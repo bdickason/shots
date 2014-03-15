@@ -1,12 +1,13 @@
 /* Main app js file */
 
-userModel = require('./users/userModel.js');
-app = {};
+var userModel = require('./components/users/userModel.js');
+app = new Backbone.Marionette.Application();
 app.views = [];
 
 window.onload = function(){
     Backbone.$ = window.$;
-    app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
+
+    app.start();
 
     // Generic utility functions used throughout the app
     app.utils = require('./utils.js');
@@ -23,6 +24,7 @@ window.onload = function(){
     
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
-    Backbone.history.start();
+    Backbone.history.start({pushState: true});
+
 };
 

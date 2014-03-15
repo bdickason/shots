@@ -1,10 +1,10 @@
 /* Projects View - displays all projects active within the system */
 
-var projectsTemplate = require('./projectsTemplate.hbs');
+var projectsTemplate = require('./projectListTemplate.hbs');
 
-var ProjectsCollectionFirebase = require('./projectsCollectionFirebase.js');
+var ProjectsCollectionFirebase = require('../projectsCollectionFirebase.js');
 
-var ProjectCardView = require('./projectCardView.js');
+var ProjectCardView = require('../show/projectCardView.js');
 
 module.exports = Backbone.View.extend({
   tagName: 'div',

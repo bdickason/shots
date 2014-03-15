@@ -1,11 +1,11 @@
 /* Shots View - displays a list of shots */
 
-var ShotView = require('./shotView.js');
-var shotsTemplate = require('./shotsTemplate.hbs');
+var ShotView = require('../show/shotView.js');
+var shotListTemplate = require('./shotListTemplate.hbs');
 
 module.exports = Backbone.View.extend({
     tagName: 'div',
-    template: shotsTemplate,
+    template: shotListTemplate,
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add

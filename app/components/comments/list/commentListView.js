@@ -1,12 +1,12 @@
 /* Comments View - displays a list of comments */
 
-var CommentView = require('./commentView.js');
-var commentsTemplate = require('./commentsTemplate.hbs');
+var CommentView = require('../show/commentView.js');
+var commentListTemplate = require('./commentListTemplate.hbs');
 
 
 module.exports = Backbone.View.extend({
     tagName: 'div',
-    template: commentsTemplate,
+    template: commentListTemplate,
 
     initialize: function() {
       this.id = this.collection.id;  // Shot ID

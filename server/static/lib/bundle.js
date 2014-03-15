@@ -100,8 +100,6 @@ module.exports = Backbone.View.extend({
       this.id = this.collection.id;  // Shot ID
       this.projectId = this.collection.projectId;
 
-      console.log(this.collection.toJSON());
-
       this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a comment is deleted, server does not send a sync event
       this.listenTo(this.collection, 'add', this.render);     // When a comment is added, the collection doesn't sync

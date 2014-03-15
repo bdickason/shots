@@ -1,7 +1,7 @@
 /* Comments View - displays a list of comments */
 
-var CommentView = require('./commentView.js');
-var commentsTemplate = require('./commentsTemplate.hbs');
+var CommentView = require('../commentView.js');
+var commentsTemplate = require('./commentListTemplate.hbs');
 
 
 module.exports = Backbone.View.extend({

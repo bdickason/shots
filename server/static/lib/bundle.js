@@ -256,8 +256,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":42}],7:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
-var CommentView = require('./commentView.js');
-var commentsTemplate = require('./commentsTemplate.hbs');
+var CommentView = require('../commentView.js');
+var commentsTemplate = require('./commentListTemplate.hbs');
 
 
 module.exports = Backbone.View.extend({
@@ -344,7 +344,7 @@ module.exports = Backbone.View.extend({
     }
   });
 
-},{"./commentView.js":4,"./commentsTemplate.hbs":6}],8:[function(require,module,exports){
+},{"../commentView.js":4,"./commentListTemplate.hbs":6}],8:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1213,7 +1213,7 @@ var ShotModelFirebase = require('../shotModelFirebase.js');
 var shotTemplate = require('./shotTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase');
-var CommentsView = require('../../comments/commentsView.js');
+var CommentsView = require('../../comments/list/commentListView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
@@ -1343,7 +1343,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase":5,"../../comments/commentsView.js":7,"../shotModelFirebase.js":28,"./shotTemplate.hbs":30}],32:[function(require,module,exports){
+},{"../../comments/commentsCollectionFirebase":5,"../../comments/list/commentListView.js":7,"../shotModelFirebase.js":28,"./shotTemplate.hbs":30}],32:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name

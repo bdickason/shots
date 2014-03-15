@@ -257,12 +257,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 /* Comments View - displays a list of comments */
 
 var CommentView = require('../commentView.js');
-var commentsTemplate = require('./commentListTemplate.hbs');
+var commentListTemplate = require('./commentListTemplate.hbs');
 
 
 module.exports = Backbone.View.extend({
     tagName: 'div',
-    template: commentsTemplate,
+    template: commentListTemplate,
 
     initialize: function() {
       this.id = this.collection.id;  // Shot ID

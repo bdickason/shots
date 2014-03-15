@@ -1,11 +1,14 @@
 /* Shots Styles */
 
 .comments {
-  width: 50%;
+  width: 100%;
 
 }
 
 .shot {
+  width: 50%;
+  padding-top: 40px;
+
   & p #saveShot {
     /* Save button is hidden until editing is enabled */
     display: none;
@@ -14,6 +17,14 @@
   & p #cancelShotEdit {
     /* Cancel button is hidden until editing is enabled */
     display: none;
+  }
+
+  & p .shotCreator {
+    float: left;
+  }
+
+  & .shotComments {
+    float: right;
   }
 }
 

@@ -73,12 +73,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* All Image-related styles */
 /* line 4, ../../../app/sass/_images.scss */
 img.shot {
-  width: 40%;
+  width: 50%;
   cursor: -webkit-zoom-in;
 }
 /* line 8, ../../../app/sass/_images.scss */
 img.shot.big {
-  width: 80%;
+  width: 100%;
   cursor: -webkit-zoom-out;
 }
 
@@ -107,25 +107,40 @@ img.shot.big {
 /* Shots Styles */
 /* line 3, ../../../app/sass/_shots.scss */
 .comments {
-  width: 50%;
+  width: 100%;
 }
 
-/* line 9, ../../../app/sass/_shots.scss */
+/* line 8, ../../../app/sass/_shots.scss */
+.shot {
+  width: 50%;
+  padding-top: 40px;
+}
+/* line 12, ../../../app/sass/_shots.scss */
 .shot p #saveShot {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
-/* line 14, ../../../app/sass/_shots.scss */
+/* line 17, ../../../app/sass/_shots.scss */
 .shot p #cancelShotEdit {
   /* Cancel button is hidden until editing is enabled */
   display: none;
 }
+/* line 22, ../../../app/sass/_shots.scss */
+.shot p .shotCreator {
+  float: left;
+}
+/* line 26, ../../../app/sass/_shots.scss */
+.shot .shotComments {
+  float: right;
+}
 
-/* line 20, ../../../app/sass/_shots.scss */
+/* line 31, ../../../app/sass/_shots.scss */
 [contenteditable="true"] {
   background: yellow;
 }
 
+/* Projects Styles */
+/* Single Project View */
 /* Base UI styling */
 /* line 3, ../../../app/sass/_base.scss */
 #nav {

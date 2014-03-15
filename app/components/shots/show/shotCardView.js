@@ -22,6 +22,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
+    // Setup comment card to show # of comments
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
     this.commentsCardView = new CommentsCardView({ collection: this.commentsCollectionFirebase});
 

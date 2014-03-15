@@ -846,7 +846,7 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "<container class=\"projectDetails\">\n  <h1>";
+  buffer += "<div class=\"projectDetails\">\n  <h1>";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -1290,6 +1290,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
+    // Setup comment card to show # of comments
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
     this.commentsCardView = new CommentsCardView({ collection: this.commentsCollectionFirebase});
 

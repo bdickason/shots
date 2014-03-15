@@ -6,7 +6,7 @@ var clientenv = require('../helpers/helper.spec.js'),
     fs = require('fs'),
     path = require('path');
     
-describe('shotsView', function() {
+describe('shotListView', function() {
 
   var ShotsCollection,
       ShotModel;

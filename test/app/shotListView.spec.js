@@ -6,7 +6,7 @@ var clientenv = require('../helpers/helper.spec.js'),
     fs = require('fs'),
     path = require('path');
     
-describe('shotsView', function() {
+describe('shotListView', function() {
 
   var ShotsCollection,
       ShotModel;
@@ -15,7 +15,7 @@ describe('shotsView', function() {
     clientenv.setup(function() {
       
       // Pre-compile Handlebars template
-      var templateFilename = path.resolve(__dirname, componentsDir + 'shots/shotsTemplate.hbs');
+      var templateFilename = path.resolve(__dirname, componentsDir + 'shots/list/shotListTemplate.hbs');
 
       var Handlebars = require('handlebars');
 
@@ -45,7 +45,7 @@ describe('shotsView', function() {
       syncStub = sinon.stub(Backbone.Model.prototype, 'sync');
 
       // Objects
-      ShotsView = require(componentsDir + 'shots/shotsView.js');
+      ShotsView = require(componentsDir + 'shots/list/shotListView.js');
       ShotsCollection = Backbone.Collection;  // Dummy collection to pass into view
       ShotModel = Backbone.Model;             // Dummy model to pass into view
 

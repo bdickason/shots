@@ -15,11 +15,11 @@ describe('projectView', function() {
       
       // Pre-compile Handlebars template
       var Handlebars = require('handlebars');
-      var templateFilename = path.resolve(__dirname, componentsDir + 'projects/projectTemplate.hbs');
+      var templateFilename = path.resolve(__dirname, componentsDir + 'projects/show/projectTemplate.hbs');
       var projectTemplate = Handlebars.compile(templateFilename);
 
       // Setup objects
-      ProjectView = require(componentsDir + 'projects/projectView.js');
+      ProjectView = require(componentsDir + 'projects/show/projectView.js');
       ProjectModel = Backbone.Model;  // Dummy model to pass into view
 
       done();

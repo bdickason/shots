@@ -1,4 +1,4 @@
-/* Tester for Projects View */
+/* Tester for Project List View */
 
 var clientenv = require('../helpers/helper.spec.js'),
     should = require('should'),
@@ -6,7 +6,7 @@ var clientenv = require('../helpers/helper.spec.js'),
     fs = require('fs'),
     path = require('path');
     
-describe('projectsView', function() {
+describe('projectListView', function() {
 
   var ProjectsCollection,
       ProjectModel;
@@ -15,7 +15,7 @@ describe('projectsView', function() {
     clientenv.setup(function() {
       
       // Pre-compile Handlebars template
-      var templateFilename = path.resolve(__dirname, componentsDir + 'projects/projectsTemplate.hbs');
+      var templateFilename = path.resolve(__dirname, componentsDir + 'projects/list/projectListTemplate.hbs');
 
       var Handlebars = require('handlebars');
 
@@ -45,7 +45,7 @@ describe('projectsView', function() {
       syncStub = sinon.stub(Backbone.Model.prototype, 'sync');
 
       // Objects
-      ProjectsView = require(componentsDir + 'projects/projectsView.js');
+      ProjectListView = require(componentsDir + 'projects/list/projectListView.js');
       ProjectsCollection = Backbone.Collection;  // Dummy collection to pass into view
       ProjectModel = Backbone.Model;             // Dummy model to pass into view
 
@@ -61,10 +61,10 @@ describe('projectsView', function() {
 
   describe('initialize', function() {
     it('loads without errors', function() {
-      should.exist(ProjectsView);
+      should.exist(ProjectListView);
       projectsCollection = new ProjectsCollection();
-      projectsView = new ProjectsView({ collection: projectsCollection });
-      should.exist(projectsView);
+      projectListView = new ProjectListView({ collection: projectsCollection });
+      should.exist(projectListView);
     });
   });
 
@@ -77,12 +77,12 @@ describe('projectsView', function() {
       };
 
       projectsCollection = new ProjectsCollection();
-      projectsView = new ProjectsView({ collection: projectsCollection });
+      projectListView = new ProjectListView({ collection: projectsCollection });
 
       projectModel = new ProjectModel(input);
       projectsCollection.push(projectModel);
 
-      should.exist(projectsView.$el);
+      should.exist(projectListView.$el);
     });
   });
 
@@ -94,13 +94,13 @@ describe('projectsView', function() {
       // Setup fake collection
       projectsCollection = new ProjectsCollection();
 
-      projectsView = new ProjectsView({ collection: projectsCollection, project: projectId });
+      projectListView = new ProjectListView({ collection: projectsCollection, project: projectId });
 
       projectsCollection.trigger('sync');  // Sync event from collection causes view to render
       
-      projectsView.$el.html().length.should.be.greaterThan(0);
+      projectListView.$el.html().length.should.be.greaterThan(0);
 
-      var projects = projectsView.$el.find('ul.projects');
+      var projects = projectListView.$el.find('ul.projects');
       projects.html().should.not.include('<li>'); // No project items in the list    
     });
 
@@ -123,17 +123,17 @@ describe('projectsView', function() {
       // Setup fake collection
       projectsCollection = new ProjectsCollection();
 
-      projectsView = new ProjectsView({ collection: projectsCollection });
+      projectListView = new ProjectListView({ collection: projectsCollection });
 
       projectsCollection.trigger('sync');  // Sync event from collection causes view to render
 
-      var projects = projectsView.$el.find('ul.projects');
+      var projects = projectListView.$el.find('ul.projects');
 
-      var nameField = projectsView.$el.find('#name');
+      var nameField = projectListView.$el.find('#name');
       nameField.length.should.equal(1);   // Make sure the dom element exists
       nameField.val(input.name);
 
-      var createProjectButton = projectsView.$el.find('button#createProject');
+      var createProjectButton = projectListView.$el.find('button#createProject');
       createProjectButton.trigger('click');
 
       projectsCollection.length.should.be.greaterThan(0);
@@ -156,23 +156,23 @@ describe('projectsView', function() {
       // Setup fake collection
       projectsCollection = new ProjectsCollection();
 
-      projectsView = new ProjectsView({ collection: projectsCollection });
+      projectListView = new ProjectListView({ collection: projectsCollection });
 
       projectsCollection.trigger('sync');  // Sync event from collection causes view to render
 
-      var projects = projectsView.$el.find('ul.projects');
+      var projects = projectListView.$el.find('ul.projects');
 
-      var nameField = projectsView.$el.find('#name');
+      var nameField = projectListView.$el.find('#name');
       nameField.length.should.equal(1);   // Make sure the dom element exists
       nameField.val(input.name);
 
-      var createProjectButton = projectsView.$el.find('button#createProject');
+      var createProjectButton = projectListView.$el.find('button#createProject');
       createProjectButton.trigger('click');
 
       // Collection should not have any objects
       projectsCollection.length.should.equal(0);
 
-      var error = projectsView.$el.find('#projectsError');
+      var error = projectListView.$el.find('#projectsError');
       should.exist(error);
       error.text().length.should.be.greaterThan(0);
       error.text().should.equal('Sorry, you must be logged in');

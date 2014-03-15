@@ -1,11 +1,11 @@
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('./shotModelFirebase.js');
+var ShotModelFirebase = require('../shotModelFirebase.js');
 
 var shotTemplate = require('./shotTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../comments/commentsCollectionFirebase');
-var CommentsView = require('../comments/commentsView.js');
+var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase');
+var CommentsView = require('../../comments/list/commentListView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',

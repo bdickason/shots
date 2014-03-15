@@ -1,12 +1,12 @@
 /* Project View - displays a single projects */
 
-var ProjectModelFirebase = require('./projectModelFirebase.js');
+var ProjectModelFirebase = require('../projectModelFirebase.js');
 
 var projectTemplate = require('./projectTemplate.hbs');
 
-var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
+var ShotsCollectionFirebase = require('../../shots/shotsCollectionFirebase.js');
 
-var ShotListView = require('../shots/list/shotListView.js');
+var ShotListView = require('../../shots/list/shotListView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',

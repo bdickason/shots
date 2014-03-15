@@ -4,8 +4,8 @@
 var NavView = require('./components/nav/navView.js');
 
 // Projects
-var ProjectsView = require('./components/projects/projectsView.js');
-var ProjectView = require('./components/projects/projectView.js');
+var ProjectListView = require('./components/projects/list/projectListView.js');
+var ProjectView = require('./components/projects/show/projectView.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
@@ -37,8 +37,8 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        var projectsView = new ProjectsView();
-        this.showView('content', projectsView);
+        var projectListView = new ProjectListView();
+        this.showView('content', projectListView);
     },
 
     project: function(project) {

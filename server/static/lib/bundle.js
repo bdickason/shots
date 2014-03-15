@@ -502,49 +502,92 @@ var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+  
 
 
-  buffer += "<li class=\"project\">\n  <a href=\"/";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" data-event=\"Show Project\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</a>\n</li>";
-  return buffer;
+  return "  <div class=\"view\">\n    <label><h3>Create a Project</h3></label>\n    <input id=\"name\" type=\"textarea\" class\"input\" placeholder=\"\" autofocus>\n    <button id=\"createProject\" class=\"save\">save</button>\n    <label id=\"projectsError\" class=\"error\"></label>\n    <ul class=\"projects\">\n    </ul>\n  </div> ";
   });
 
 },{"hbsfy/runtime":42}],15:[function(require,module,exports){
-/* Project Card View - displays a snapshot of a single projects */
+/* Projects View - displays all projects active within the system */
 
-var ProjectModelFirebase = require('./projectModelFirebase.js');
+var projectsTemplate = require('./projectListTemplate.hbs');
 
-var projectCardTemplate = require('./projectCardTemplate.hbs');
+var ProjectsCollectionFirebase = require('../projectsCollectionFirebase.js');
 
-module.exports = Backbone.Marionette.ItemView.extend({
+var ProjectCardView = require('../show/projectCardView.js');
+
+module.exports = Backbone.View.extend({
   tagName: 'div',
 
-  template: projectCardTemplate,
+  template: projectsTemplate,
 
   initialize: function() {
-    if(!this.model) {
-      this.model = new ProjectModelFirebase({id: this.id});
+    if(!this.collection) {
+      this.collection = new ProjectsCollectionFirebase();
     }
-  }
+
+    this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
+    this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
+    this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
+  },
+
+  events: {
+    'click .project a': 'gotoProject',
+    'click #createProject': 'createProject'
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.collection.toJSON()));
+
+    // Iterate through each project model and add it to our list of comments
+      var self = this;
+      this.collection.each(function(project) {
+        var projectCardView = new ProjectCardView({model: project });
+        this.$el.find('ul.projects').append(projectCardView.render().el);
+      }, this);
+    return this;
+  },
+
+  gotoProject: function(e) {
+    // Navigate to a specific project
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    projectId = e.target.id;
+    route = projectId;
+    app.router.navigate(route, {trigger: true});
+  },
+
+  createProject: function(project) {
+    if(app.user.get('loggedIn')) {
+      var name = this.$el.find('#name');
+      
+      if(name.val()) {
+        var input = {
+          id: name.val(),
+          user: app.user.get('username'),
+          timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
+        };
+
+        this.collection.add(input);
+
+        mixpanel.track('Create Project', input);
+
+        name.val('');
+      }
+    } else {
+      this.showError('Sorry, you must be logged in');
+    }
+  },
+
+  showError: function(message) {
+    var error = this.$el.find('#projectsError');
+    error.text(message);
+    error.show();
+  },
 });
 
-},{"./projectCardTemplate.hbs":14,"./projectModelFirebase.js":17}],16:[function(require,module,exports){
+},{"../projectsCollectionFirebase.js":20,"../show/projectCardView.js":22,"./projectListTemplate.hbs":14}],16:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 var utils = require('../../utils.js');
@@ -667,6 +710,64 @@ module.exports = Backbone.View.extend({
 });
 
 },{"./projectNavTemplate.hbs":18}],20:[function(require,module,exports){
+/* Projects Collection - An ordered list of Projects */
+var ProjectModel = require('./projectModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: ProjectModel,
+    firebase: new Firebase(app.fbUrl + '/projects/'),
+    initialize: function() {
+    }
+  });
+},{"./projectModel.js":16}],21:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<li class=\"project\">\n  <a href=\"/";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-event=\"Show Project\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</a>\n</li>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":42}],22:[function(require,module,exports){
+/* Project Card View - displays a snapshot of a single projects */
+
+var ProjectModelFirebase = require('../projectModelFirebase.js');
+
+var projectCardTemplate = require('./projectCardTemplate.hbs');
+
+module.exports = Backbone.Marionette.ItemView.extend({
+  tagName: 'div',
+
+  template: projectCardTemplate,
+
+  initialize: function() {
+    if(!this.model) {
+      this.model = new ProjectModelFirebase({id: this.id});
+    }
+  }
+});
+
+},{"../projectModelFirebase.js":17,"./projectCardTemplate.hbs":21}],23:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -708,16 +809,16 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":42}],21:[function(require,module,exports){
+},{"hbsfy/runtime":42}],24:[function(require,module,exports){
 /* Project View - displays a single projects */
 
-var ProjectModelFirebase = require('./projectModelFirebase.js');
+var ProjectModelFirebase = require('../projectModelFirebase.js');
 
 var projectTemplate = require('./projectTemplate.hbs');
 
-var ShotsCollectionFirebase = require('../shots/shotsCollectionFirebase.js');
+var ShotsCollectionFirebase = require('../../shots/shotsCollectionFirebase.js');
 
-var ShotListView = require('../shots/list/shotListView.js');
+var ShotListView = require('../../shots/list/shotListView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
@@ -830,108 +931,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../shots/list/shotListView.js":26,"../shots/shotsCollectionFirebase.js":29,"./projectModelFirebase.js":17,"./projectTemplate.hbs":20}],22:[function(require,module,exports){
-/* Projects Collection - An ordered list of Projects */
-var ProjectModel = require('./projectModel.js');
-
-module.exports = Backbone.Firebase.Collection.extend({
-    model: ProjectModel,
-    firebase: new Firebase(app.fbUrl + '/projects/'),
-    initialize: function() {
-    }
-  });
-},{"./projectModel.js":16}],23:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
-
-
-  return "  <div class=\"view\">\n    <label><h3>Create a Project</h3></label>\n    <input id=\"name\" type=\"textarea\" class\"input\" placeholder=\"\" autofocus>\n    <button id=\"createProject\" class=\"save\">save</button>\n    <label id=\"projectsError\" class=\"error\"></label>\n    <ul class=\"projects\">\n    </ul>\n  </div> ";
-  });
-
-},{"hbsfy/runtime":42}],24:[function(require,module,exports){
-/* Projects View - displays all projects active within the system */
-
-var projectsTemplate = require('./projectsTemplate.hbs');
-
-var ProjectsCollectionFirebase = require('./projectsCollectionFirebase.js');
-
-var ProjectCardView = require('./projectCardView.js');
-
-module.exports = Backbone.View.extend({
-  tagName: 'div',
-
-  template: projectsTemplate,
-
-  initialize: function() {
-    if(!this.collection) {
-      this.collection = new ProjectsCollectionFirebase();
-    }
-
-    this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
-    this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
-    this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
-  },
-
-  events: {
-    'click .project a': 'gotoProject',
-    'click #createProject': 'createProject'
-  },
-
-  render: function() {
-    this.$el.html(this.template(this.collection.toJSON()));
-
-    // Iterate through each project model and add it to our list of comments
-      var self = this;
-      this.collection.each(function(project) {
-        var projectCardView = new ProjectCardView({model: project });
-        this.$el.find('ul.projects').append(projectCardView.render().el);
-      }, this);
-    return this;
-  },
-
-  gotoProject: function(e) {
-    // Navigate to a specific project
-    e.preventDefault(); // Have to disable the default behavior of the anchor
-
-    projectId = e.target.id;
-    route = projectId;
-    app.router.navigate(route, {trigger: true});
-  },
-
-  createProject: function(project) {
-    if(app.user.get('loggedIn')) {
-      var name = this.$el.find('#name');
-      
-      if(name.val()) {
-        var input = {
-          id: name.val(),
-          user: app.user.get('username'),
-          timestamp: Firebase.ServerValue.TIMESTAMP, // Tells the server to set a createdAt timestamp
-        };
-
-        this.collection.add(input);
-
-        mixpanel.track('Create Project', input);
-
-        name.val('');
-      }
-    } else {
-      this.showError('Sorry, you must be logged in');
-    }
-  },
-
-  showError: function(message) {
-    var error = this.$el.find('#projectsError');
-    error.text(message);
-    error.show();
-  },
-});
-
-},{"./projectCardView.js":15,"./projectsCollectionFirebase.js":22,"./projectsTemplate.hbs":23}],25:[function(require,module,exports){
+},{"../../shots/list/shotListView.js":26,"../../shots/shotsCollectionFirebase.js":29,"../projectModelFirebase.js":17,"./projectTemplate.hbs":23}],25:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1402,8 +1402,8 @@ module.exports = Backbone.Model.extend({
 var NavView = require('./components/nav/navView.js');
 
 // Projects
-var ProjectsView = require('./components/projects/projectsView.js');
-var ProjectView = require('./components/projects/projectView.js');
+var ProjectListView = require('./components/projects/list/projectListView.js');
+var ProjectView = require('./components/projects/show/projectView.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
@@ -1435,8 +1435,8 @@ module.exports = Backbone.Router.extend({
         this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
 
         // Display list of latest projects
-        var projectsView = new ProjectsView();
-        this.showView('content', projectsView);
+        var projectListView = new ProjectListView();
+        this.showView('content', projectListView);
     },
 
     project: function(project) {
@@ -1517,7 +1517,7 @@ module.exports = Backbone.Router.extend({
         return(childView);
     }
 });
-},{"./components/contribute/contributeView.js":9,"./components/help/helpView.js":11,"./components/nav/navView.js":13,"./components/projects/projectNav/projectNavView.js":19,"./components/projects/projectView.js":21,"./components/projects/projectsView.js":24,"./components/shots/show/shotView.js":31}],34:[function(require,module,exports){
+},{"./components/contribute/contributeView.js":9,"./components/help/helpView.js":11,"./components/nav/navView.js":13,"./components/projects/list/projectListView.js":15,"./components/projects/projectNav/projectNavView.js":19,"./components/projects/show/projectView.js":24,"./components/shots/show/shotView.js":31}],34:[function(require,module,exports){
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js

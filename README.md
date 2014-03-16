@@ -128,4 +128,7 @@ A: `npm` may have installed grunt to a folder that is not in your path, so your 
 
 You should now be able to run `grunt` without any problems.
 
+**Q: When I run grunt watch, it returns >>Local Npm module "grunt-contrib-compass" not found. Is it installed?**
+A: Simply run `npm install grunt-contrib-compass` and `grunt` should run without problems. 
+
 For more information, see [this stack overflow thread](http://stackoverflow.com/questions/16868924/grunt-command-not-found-when-running-from-terminal).

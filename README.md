@@ -10,7 +10,7 @@ Capture shots of your product as you build it and share them with your team.
 2. Clone the repository: https://github.com/bdickason/shots
 3. Instal dependencies: `cd shots; npm install`
 4. Install Grunt: `sudo npm install -g grunt-cli`
-5. Build .js and run tests: `grunt`
+5. Build .js and compile css: `grunt`
 6. Load the server: `node index.js`
 7. Visit the site in your browser: http://localhost:3000/
 
@@ -110,3 +110,18 @@ Shots is governed by the MIT License. For more information see the LICENSE file.
 A: Your operating system has a limit on the number of files that can be open at any time. To resolve this, you can use the command: `ulimit -n 10480`
 
 For more information: http://superuser.com/questions/261023/how-to-change-default-ulimit-values-in-mac-os-x-10-6
+
+**Q: I can't install grunt, it says: 'bash: grunt: command not found'**
+
+A: `npm` may have installed grunt to a folder that is not in your path, so your OS is having trouble finding it.
+
+1. Type `npm ls -g` and observe the path to your npm files (e.g. `/usr/local/share/npm/bin`)
+2. Open the file ~/.profile in your favorite text editor (e.g. `subl ~/.profile`)
+3. Add the line: `export PATH="/usr/local/share/npm/bin:$PATH"`
+4. This will make sure anything installed with npm -g will show up in your path and be immediately accessible.
+5. Save the file
+6. Run this command in the same terminal window: `source ~/.profile` to reload your config and use the new PATH
+
+You should now be able to run `grunt` without any problems.
+
+For more information, see [this stack overflow thread](http://stackoverflow.com/questions/16868924/grunt-command-not-found-when-running-from-terminal).

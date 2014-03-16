@@ -1,14 +1,14 @@
-/* Base CSS file  - compiles all imports below into screen.css */
+// ------- Base CSS file  - compiles all imports below into screen.css ---------//
 
 @import "compass/reset";	// CSS Style Reset
-@import "compass/css3";   // CSS3 Optimizers for things like declaring border-radius
+@import "compass/css3";   	// CSS3 Optimizers for things like declaring border-radius
 @import "compass/typography/vertical_rhythm";
 @import "compass/utilities/general";
 
 /* Custom Partials */
-@import "_variables.scss";	// Variables: Color, size, etc. 
-@import "_app.scss";        // Base app styles (body, etc)
-@import "_images.scss";     // Anything related to images
-@import "_comments.scss";   // Comments
-@import "_shots.scss";      // Shots
-@import "_base.scss";		// Base Styling
+@import "partials/_variables.scss";		// Variables: Color, size, etc. 
+@import "partials/_app.scss";        		// Base app styles (body, etc)
+@import "partials/_images.scss";     		// Anything related to images
+@import "partials/_comments.scss";   		// Comments
+@import "partials/_shots.scss";      		// Shots
+@import "partials/_base.scss";			// Base Styling

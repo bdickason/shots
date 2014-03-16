@@ -1,4 +1,4 @@
-//-------  Base UI styling ---------//
+/* Base UI styling */
 body {
 }
 #container {
@@ -22,6 +22,12 @@ body {
 }
 #logout {
 	float: right;
+}
+
+.shot {
+  max-width:  60%;
+  margin: 0 20%;
+  float: left;
 }
 
 

@@ -1190,7 +1190,7 @@ function program1(depth0,data) {
   if (helper = helpers.image) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.image); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" id=\"shotImage\" class=\"shot\">\n<p id=\"shotText\">";
+    + "\" id=\"shotImage\">\n<p id=\"shotText\">";
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

@@ -1,5 +1,4 @@
-/* Base CSS file  - compiles all imports below into screen.css */
-/* line 17, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,45 +20,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../../.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
   display: block;
 }
@@ -71,64 +70,76 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* Background Colors */
 /* Core App styles */
 /* All Image-related styles */
-/* line 4, ../../../app/sass/_images.scss */
-img.shot {
-  width: 40%;
+/* line 4, ../../../app/sass/partials/_images.scss */
+img#shotImage {
+  width: 100%;
+  padding: 20px 0;
   cursor: -webkit-zoom-in;
 }
-/* line 8, ../../../app/sass/_images.scss */
-img.shot.big {
+/* line 9, ../../../app/sass/partials/_images.scss */
+img#shotImage.big {
   width: 80%;
   cursor: -webkit-zoom-out;
 }
 
 /* Comment Styles */
-/* line 3, ../../../app/sass/_comments.scss */
+/* line 3, ../../../app/sass/partials/_comments.scss */
 .comments {
   width: 50%;
 }
 
-/* line 9, ../../../app/sass/_comments.scss */
+/* line 9, ../../../app/sass/partials/_comments.scss */
 .comment p #saveComment {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
-/* line 14, ../../../app/sass/_comments.scss */
+/* line 14, ../../../app/sass/partials/_comments.scss */
 .comment p #cancelCommentEdit {
   /* Cancel button is hidden until editing is enabled */
   display: none;
 }
 
-/* line 20, ../../../app/sass/_comments.scss */
+/* line 20, ../../../app/sass/partials/_comments.scss */
 [contenteditable="true"] {
   background: yellow;
 }
 
-/* Shots Styles */
-/* line 3, ../../../app/sass/_shots.scss */
-.comments {
-  width: 50%;
+/* line 5, ../../../app/sass/partials/_shots.scss */
+.shot {
+  max-width: 60%;
+  margin: 0 20%;
+  float: left;
 }
-
-/* line 9, ../../../app/sass/_shots.scss */
+/* line 9, ../../../app/sass/partials/_shots.scss */
 .shot p #saveShot {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
-/* line 14, ../../../app/sass/_shots.scss */
+/* line 14, ../../../app/sass/partials/_shots.scss */
 .shot p #cancelShotEdit {
   /* Cancel button is hidden until editing is enabled */
   display: none;
 }
 
-/* line 20, ../../../app/sass/_shots.scss */
+/* line 20, ../../../app/sass/partials/_shots.scss */
+.comments {
+  width: 100%;
+}
+
+/* line 26, ../../../app/sass/partials/_shots.scss */
 [contenteditable="true"] {
   background: yellow;
 }
 
 /* Base UI styling */
-/* line 3, ../../../app/sass/_base.scss */
-#nav {
+/* line 4, ../../../app/sass/partials/_base.scss */
+#container {
+  float: left;
+  width: 100%;
+}
+
+/* line 8, ../../../app/sass/partials/_base.scss */
+#main {
   display: block;
   padding: 0;
   margin: 0;
@@ -137,23 +148,30 @@ img.shot.big {
   -webkit-font-smoothing: antialiased;
 }
 
-/* line 11, ../../../app/sass/_base.scss */
+/* line 16, ../../../app/sass/partials/_base.scss */
 #main {
   padding: 25px;
 }
 
-/* line 14, ../../../app/sass/_base.scss */
+/* line 19, ../../../app/sass/partials/_base.scss */
 #username {
   float: right;
   padding-right: 15px;
 }
 
-/* line 18, ../../../app/sass/_base.scss */
+/* line 23, ../../../app/sass/partials/_base.scss */
 #logout {
   float: right;
 }
 
-/* line 23, ../../../app/sass/_base.scss */
+/* line 27, ../../../app/sass/partials/_base.scss */
+.shot {
+  max-width: 60%;
+  margin: 0 20%;
+  float: left;
+}
+
+/* line 35, ../../../app/sass/partials/_base.scss */
 .error {
   display: none;
 }

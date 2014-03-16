@@ -1,5 +1,7 @@
 /* Base UI styling */
-
+body {
+  background-color: #ccc;
+}
 #main {
   display: block;
   padding: 0;
@@ -23,8 +25,8 @@
   max-width:  60%;
   margin: 0 20%;
   float: left;
-
 }
+
 
 // Error messages should not be shown by default
 .error {

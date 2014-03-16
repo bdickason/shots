@@ -84,6 +84,9 @@ Do not push to `master` with failing tests. `master` must always be deployable (
 
 Fork the repository, follow the above steps for setting up a repo, and go!
 
+CSS files lives in [/app/sass](app/sass) and are compiled via the command `grunt`. I suggest running `grunt watch` while working, which will rebuild the css files any time you make a change. (Behind the scenes it's running `compass watch`)
+
+
 ## As a Developer
 
 Fork the repository, follow the above steps for setting up a repo, and go!

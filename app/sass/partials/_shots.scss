@@ -1,7 +1,11 @@
 // ---------- Shots Styles ------------//
 
+.shots {
+  float: left;
+}
 
-// ------ Single-shot view -------//
+///////     SINGLE-SHOT
+
 .shot {
   max-width:  60%;
   margin: 0 20%;
@@ -16,13 +20,6 @@
     display: none;
   }
 }
-
-.comments {
-  width: 100%;
-
-}
-
-
 [contenteditable="true"] {
   background: yellow;
 }

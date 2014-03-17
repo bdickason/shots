@@ -1,6 +1,5 @@
-/* Base UI styling */
-body {
-}
+// ------------ Base UI Style Definitions  -------------- //
+
 #container {
   float:left;
   width: 100%;
@@ -16,6 +15,15 @@ body {
 #main {
 	padding: 25px;
 }
+
+
+
+///////   HEADER
+
+header {
+  background-color: $light-gray;
+  border-bottom: 1px solid $rule-color;
+}
 #username {
 	float:right;
 	padding-right: 15px;
@@ -24,14 +32,69 @@ body {
 	float: right;
 }
 
-.shot {
-  max-width:  60%;
-  margin: 0 20%;
+label {
   float: left;
 }
-
 
 // Error messages should not be shown by default
 .error {
   display: none;
 }
+
+
+
+
+///////    MIXINS 
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+
+
+
+///////    Button Styles
+
+button {
+margin: 0;
+padding: 12px 24px;
+@include border-radius(3px);
+display: inline-block;
+outline: none;
+background-color: $cta-color;
+border: none;
+color: white;
+text-align: center;
+font-weight: bold;
+font-size: 0.9em; 
+}
+
+
+
+///////     CLEARFIX   ( for floated elements)
+
+.clearfix:after, .container:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+  overflow: hidden;
+}
+.clearfix, .container { display: block; }
+
+/* Regular clearing
+   apply to column that should drop below previous ones. */
+
+.clear { clear: both; height: 1px; }

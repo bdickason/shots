@@ -1,7 +1,7 @@
 /* Comment Styles */
 
 .comments {
-  width: 50%;
+  width: 100%;
 
 }
 
@@ -19,4 +19,16 @@
 
 [contenteditable="true"] {
   background: yellow;
+}
+
+.comment {
+  padding: 20px 0;
+  border-top: 1px solid $rule-color;
+}
+.comment-input {
+  width: 99%;
+  margin: 0;
+  min-height: 60px;
+  padding: 5px 0 5px 5px;
+  border: 1px solid $rule-color-dark;
 }

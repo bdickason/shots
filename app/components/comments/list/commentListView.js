@@ -36,7 +36,7 @@ module.exports = Backbone.View.extend({
 
     createComment: function(comment) {
       if(app.user.get('loggedIn')) {
-        textarea = this.$el.find('#text.comment');
+        textarea = this.$el.find('#text.comment-input');
         if(textarea.val()) {
           var input = {
             text: textarea.val(),

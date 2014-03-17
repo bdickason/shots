@@ -8,7 +8,8 @@
 /* Custom Partials */
 @import "partials/_variables.scss";		// Variables: Color, size, etc. 
 @import "partials/_app.scss";        		// Base app styles (body, etc)
-@import "partials/_images.scss";     		// Anything related to images
+@import "partials/_images.scss";     		// Images
 @import "partials/_comments.scss";   		// Comments
 @import "partials/_shots.scss";      		// Shots
-@import "partials/_base.scss";			// Base Styling
+@import "partials/_base.scss";			// Base UI Styling
+@import "partials/_typography.scss";			// Base UI Styling

@@ -83,7 +83,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = (depth0 && depth0.length)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " "
     + escapeExpression((helper = helpers.pluralize || (depth0 && depth0.pluralize),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.length), "Comment", "Comments", options) : helperMissing.call(depth0, "pluralize", (depth0 && depth0.length), "Comment", "Comments", options)))
-    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment\" placeholder=\"Enter your comment\" /><br />\n    <button id=\"createComment\">save</button>\n    <label id=\"commentsError\" class=\"error\"></label>\n    <ul class=\"comments\">\n    </ul>";
+    + "</h3></label>\n    <textarea id=\"text\" type=\"text\" class=\"comment-input\" placeholder=\"Enter your comment\" /><br />\n    <button id=\"createComment\">Post Comment</button>\n    <label id=\"commentsError\" class=\"error\"></label>\n    <ul class=\"comments\">\n    </ul>";
   return buffer;
   });
 
@@ -126,7 +126,7 @@ module.exports = Backbone.View.extend({
 
     createComment: function(comment) {
       if(app.user.get('loggedIn')) {
-        textarea = this.$el.find('#text.comment');
+        textarea = this.$el.find('#text.comment-input');
         if(textarea.val()) {
           var input = {
             text: textarea.val(),
@@ -201,7 +201,7 @@ function program1(depth0,data) {
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">Save</button>\n        <a href=\"#delete\" id=\"deleteComment\" data-id=\"";
+    + "\">Post Comment</button>\n        <a href=\"#delete\" id=\"deleteComment\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

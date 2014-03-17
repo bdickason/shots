@@ -1,25 +1,33 @@
-/* Variables Partial  - contains colors, fonts, etc. */
+// -------------- VARIABLES (color) --------------/
 
-/* Text Colors */
-$text-light:     #FFF;  // Light text for use on dark backgrounds
-$text-dark:      #404040;   // Dark text for use on light backgrounds
-$text-cta:       #808080;     // Text for call to action/buttons
-$text-hover:     black;
+//////   TEXT COLORS
+$text-light:     		#FFF;  		// Light text for use on dark backgrounds
+$text-dark:      	#404040;   	// Dark text for use on light backgrounds
+$text-cta:       		#808080;     	// Text for call to action/buttons
+$text-hover:     	black;
 
-/* Link Colors */
-$primary:        #AAA;
-$secondary:      #BBB;
-$button:         white;
-$button-hover:   #f8edd1;
+//////   LINKS
+$primary:       		 #AAA;
+$secondary:     		 #BBB;
+$button:         		 white;
+$button-hover: 	 #f8edd1;
 
-/* Background Colors */
-$bg:             #5F4F5A;	// Main site BG
+
+//////   BACKGROUNDS
+$bg:             		#5F4F5A;	// Main site BG
+$cta-color:  		#328CAF;	// Call-to-Action button bg color
+$light-gray:  		#f5f6f7;    	// lightest gray (hint of blue)
 
 // Variations for each content area 
-$bg-cleanse:     #FFF;		// Cleanse Product
-$bg-moisturize:  #CCC;		// moisturize Product
-$bg-leavein:     #AAA;		// Leave-In Product
+$bg-cleanse:     	#FFF;		// Cleanse Product
+$bg-moisturize:  	#CCC;		// moisturize Product
+$bg-leavein:     	#AAA;		// Leave-In Product
 
-$bg-promo:       #FFF;	// Promo Box
+$bg-promo:       	#FFF;		// Promo Box
 
-$bg-about:       #CCC;		// About Us
+$bg-about:       	#CCC;		// About Us
+
+///////   UI Elements 
+
+$rule-color:  		#e0e3e5;	// Horizontal or vertical rule color
+$rule-color-dark: 	#BDC3C7;	// Darker rule color (for things like inputs)

@@ -64,10 +64,6 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 /* Custom Partials */
-/* Variables Partial  - contains colors, fonts, etc. */
-/* Text Colors */
-/* Link Colors */
-/* Background Colors */
 /* Core App styles */
 /* All Image-related styles */
 /* line 4, ../../../app/sass/partials/_images.scss */
@@ -85,7 +81,7 @@ img#shotImage.big {
 /* Comment Styles */
 /* line 3, ../../../app/sass/partials/_comments.scss */
 .comments {
-  width: 50%;
+  width: 100%;
 }
 
 /* line 9, ../../../app/sass/partials/_comments.scss */
@@ -104,41 +100,55 @@ img#shotImage.big {
   background: yellow;
 }
 
-/* line 5, ../../../app/sass/partials/_shots.scss */
+/* line 24, ../../../app/sass/partials/_comments.scss */
+.comment {
+  padding: 20px 0;
+  border-top: 1px solid #e0e3e5;
+}
+
+/* line 28, ../../../app/sass/partials/_comments.scss */
+.comment-input {
+  width: 99%;
+  margin: 0;
+  min-height: 60px;
+  padding: 5px 0 5px 5px;
+  border: 1px solid #bdc3c7;
+}
+
+/* line 3, ../../../app/sass/partials/_shots.scss */
+.shots {
+  float: left;
+}
+
+/* line 9, ../../../app/sass/partials/_shots.scss */
 .shot {
   max-width: 60%;
   margin: 0 20%;
   float: left;
 }
-/* line 9, ../../../app/sass/partials/_shots.scss */
+/* line 13, ../../../app/sass/partials/_shots.scss */
 .shot p #saveShot {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
-/* line 14, ../../../app/sass/partials/_shots.scss */
+/* line 18, ../../../app/sass/partials/_shots.scss */
 .shot p #cancelShotEdit {
   /* Cancel button is hidden until editing is enabled */
   display: none;
 }
 
-/* line 20, ../../../app/sass/partials/_shots.scss */
-.comments {
-  width: 100%;
-}
-
-/* line 26, ../../../app/sass/partials/_shots.scss */
+/* line 23, ../../../app/sass/partials/_shots.scss */
 [contenteditable="true"] {
   background: yellow;
 }
 
-/* Base UI styling */
-/* line 4, ../../../app/sass/partials/_base.scss */
+/* line 3, ../../../app/sass/partials/_base.scss */
 #container {
   float: left;
   width: 100%;
 }
 
-/* line 8, ../../../app/sass/partials/_base.scss */
+/* line 7, ../../../app/sass/partials/_base.scss */
 #main {
   display: block;
   padding: 0;
@@ -148,30 +158,120 @@ img#shotImage.big {
   -webkit-font-smoothing: antialiased;
 }
 
-/* line 16, ../../../app/sass/partials/_base.scss */
+/* line 15, ../../../app/sass/partials/_base.scss */
 #main {
   padding: 25px;
 }
 
-/* line 19, ../../../app/sass/partials/_base.scss */
+/* line 23, ../../../app/sass/partials/_base.scss */
+header {
+  background-color: #f5f6f7;
+  border-bottom: 1px solid #e0e3e5;
+}
+
+/* line 27, ../../../app/sass/partials/_base.scss */
 #username {
   float: right;
   padding-right: 15px;
 }
 
-/* line 23, ../../../app/sass/partials/_base.scss */
+/* line 31, ../../../app/sass/partials/_base.scss */
 #logout {
   float: right;
 }
 
-/* line 27, ../../../app/sass/partials/_base.scss */
-.shot {
-  max-width: 60%;
-  margin: 0 20%;
+/* line 35, ../../../app/sass/partials/_base.scss */
+label {
   float: left;
 }
 
-/* line 35, ../../../app/sass/partials/_base.scss */
+/* line 40, ../../../app/sass/partials/_base.scss */
 .error {
   display: none;
+}
+
+/* line 69, ../../../app/sass/partials/_base.scss */
+button {
+  margin: 0;
+  padding: 12px 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  border-radius: 3px;
+  display: inline-block;
+  outline: none;
+  background-color: #328caf;
+  border: none;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* line 87, ../../../app/sass/partials/_base.scss */
+.clearfix:after, .container:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+  overflow: hidden;
+}
+
+/* line 95, ../../../app/sass/partials/_base.scss */
+.clearfix, .container {
+  display: block;
+}
+
+/* Regular clearing
+   apply to column that should drop below previous ones. */
+/* line 100, ../../../app/sass/partials/_base.scss */
+.clear {
+  clear: both;
+  height: 1px;
+}
+
+/* line 3, ../../../app/sass/partials/_typography.scss */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  line-height: 1.2em;
+  color: #404040;
+  -webkit-font-smoothing: subpixel-antialiased;
+  letter-spacing: 0;
+  zoom: 1;
+}
+
+/* line 12, ../../../app/sass/partials/_typography.scss */
+h1, h2, h3, h4, h5 {
+  margin: 0;
+}
+
+/* line 14, ../../../app/sass/partials/_typography.scss */
+h1 {
+  font-size: 2.2em;
+}
+
+/* line 16, ../../../app/sass/partials/_typography.scss */
+h2 {
+  font-size: 1.8em;
+}
+
+/* line 18, ../../../app/sass/partials/_typography.scss */
+h3 {
+  font-size: 1.5em;
+}
+
+/* line 20, ../../../app/sass/partials/_typography.scss */
+h4 {
+  font-size: 1.4em;
+}
+
+/* line 22, ../../../app/sass/partials/_typography.scss */
+h5 {
+  font-size: 1em;
+}
+
+/* line 24, ../../../app/sass/partials/_typography.scss */
+h6 {
+  font-size: 0.9em;
 }

@@ -10,6 +10,7 @@ describe('loginModel', function() {
 
   beforeEach(function(done) {
     clientenv.setup(function() {
+      app.fbUrl = 'http://blah.firebaseio.com';
       UserModel = require(componentsDir + 'users/loginModel.js');
 
       fbStub = sinon.stub(global, 'Firebase');

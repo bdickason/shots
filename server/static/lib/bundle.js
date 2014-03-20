@@ -1,14 +1,22 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /* Main app js file */
 
+Backbone.$ = window.$;
+
 var userModel = require('./components/users/loginModel.js');
+
 app = new Backbone.Marionette.Application();
-app.views = [];
 
-window.onload = function(){
-    Backbone.$ = window.$;
 
-    app.start();
+app.on('initialize:after', function() {
+    // Configure the app
+    
+    // Regions define areas in the template (/server/views/client.handlebars) that we'll insert content into
+    app.addRegions({
+        header: '#header',
+        subhead: "#subhead",
+        content: '#content'
+    });
 
     // Generic utility functions used throughout the app
     app.utils = require('./utils.js');
@@ -19,14 +27,17 @@ window.onload = function(){
     // User authentication (via Firebase)
     app.user = new userModel(); // Attempts to authenticate the current user
 
-
-
+    // Setup router
     var Routes = require('./routes.js');
-    
+
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
+    // Starting the router allows us to accept url's (defined below in app.router)
     Backbone.history.start({pushState: true});
+});
 
+window.onload = function(){
+    app.start();    // Starts the app
 };
 
 
@@ -1619,93 +1630,70 @@ module.exports = Backbone.Router.extend({
         // Default Route (/) - Display a list of the most recently updated projects
         console.log('Route: /');
 
-        app.views.forEach(app.utils.close);
-
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
+        app.header.show(navView);
 
         // Display list of latest projects
         var projectListView = new ProjectListView();
-        this.showView('content', projectListView);
+        app.content.show(projectListView);
     },
 
     project: function(project) {
         // (/:projectName) - Loads a single project
         console.log('[project]: /#' + project);
-
-        app.views.forEach(app.utils.close);
         
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
 
         // Display a single project
         var projectView = new ProjectView({id: project});
 
-        this.showView('content', projectView);
+        app.content.show(projectView);
     },
 
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
         console.log('[shot]: /#' + project + '/' + shot);
 
-        app.views.forEach(app.utils.close);
-
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
 
         // Display 'project' sub-navigation
         var projectNav = new ProjectNavView({id: project});
-        this.appendView(navView, projectNav);
+        app.subhead.show(projectNav);
 
         // Display a single shot
         var shotView = new ShotView({id: shot, projectId: project });
-        this.showView('content', shotView);
+        app.content.show(shotView);
     },
 
     contribute: function() {
         // (/contribute) - Contribute to this project
         console.log('Route: contribute');
-        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
 
         // Display contribute page
         var contributeView = new ContributeView();
-        this.showView('content', contributeView);
+        app.content.show(contributeView);
     },
 
     help: function() {
         // (/help) - Getting Started, Documentation, etc.
         console.log('Route: help');
-        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
 
         // Display help content
         var helpView = new HelpView();
-        this.showView('content', helpView);
-    },
-
-    showView: function(selector, view) {
-        // Utility function to show a specific view that overrides a DOM object
-        $(selector).html(view.render().el);
-        
-        app.views.push(view);   // Keep track of views so we can close them
-        return(view);
-    },
-    appendView: function(masterView, childView) {
-        // Utility function to show a specific view that is displayed after an existing view
-        masterView.$el.after(childView.render().el);
-        
-        app.views.push(childView);  // Keep track of views so we can close them
-        return(childView);
+        app.content.show(helpView);
     }
 });
 },{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/list/projectListView.js":17,"./components/projects/projectNav/projectNavView.js":21,"./components/projects/show/projectView.js":26,"./components/shots/show/shotView.js":35}],38:[function(require,module,exports){
@@ -1713,17 +1701,6 @@ module.exports = Backbone.Router.extend({
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 var moment = require('moment');
-
-module.exports.close = function(view) {
-    // Removes all reference to a view (avoids memory leaks)
-    if(view.model) {
-        // View has a model, unbind change events
-        view.model.unbind("change", view.modelChanged);
-    }
-
-    view.remove();
-    view.unbind();
-};
 
 module.exports.debug = function(e, results) {
     // spits out whatever event is fired

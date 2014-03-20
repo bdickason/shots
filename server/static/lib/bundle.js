@@ -13,9 +13,10 @@ app.on('initialize:after', function() {
     
     // Regions define areas in the template (/server/views/client.handlebars) that we'll insert content into
     app.addRegions({
-        header: '#header',
-        subhead: "#subhead",
-        content: '#content'
+        header: 'nav#primary',      // Used for main nav
+        subhead: "nav#secondary",    // Used for secondary nav
+        content: 'section#content',    // Used for main content
+        footer: 'footer'       // Stuff everything else here?
     });
 
     // Generic utility functions used throughout the app
@@ -1630,9 +1631,12 @@ module.exports = Backbone.Router.extend({
         // Default Route (/) - Display a list of the most recently updated projects
         console.log('Route: /');
 
-        // Display navigation
+        // Sub-nav Hack for Marionette Layouts
         var navView = new NavView({model: app.user});
         app.header.show(navView);
+
+        // Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display list of latest projects
         var projectListView = new ProjectListView();
@@ -1642,10 +1646,13 @@ module.exports = Backbone.Router.extend({
     project: function(project) {
         // (/:projectName) - Loads a single project
         console.log('[project]: /#' + project);
-        
+
         // Display navigation
         var navView = new NavView({model: app.user});
         app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display a single project
         var projectView = new ProjectView({id: project});
@@ -1678,6 +1685,9 @@ module.exports = Backbone.Router.extend({
         var navView = new NavView({model: app.user});
         app.header.show(navView);
 
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
+
         // Display contribute page
         var contributeView = new ContributeView();
         app.content.show(contributeView);
@@ -1690,6 +1700,9 @@ module.exports = Backbone.Router.extend({
         // Display navigation
         var navView = new NavView({model: app.user});
         app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display help content
         var helpView = new HelpView();

@@ -12,9 +12,10 @@ app.on('initialize:after', function() {
     
     // Regions define areas in the template (/server/views/client.handlebars) that we'll insert content into
     app.addRegions({
-        header: '#header',
-        subhead: "#subhead",
-        content: '#content'
+        header: 'nav#primary',      // Used for main nav
+        subhead: "nav#secondary",    // Used for secondary nav
+        content: 'section#content',    // Used for main content
+        footer: 'footer'       // Stuff everything else here?
     });
 
     // Generic utility functions used throughout the app

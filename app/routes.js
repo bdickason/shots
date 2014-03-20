@@ -30,92 +30,81 @@ module.exports = Backbone.Router.extend({
         // Default Route (/) - Display a list of the most recently updated projects
         console.log('Route: /');
 
-        app.views.forEach(app.utils.close);
-
-        // Display navigation
+        // Sub-nav Hack for Marionette Layouts
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
+        app.header.show(navView);
+
+        // Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display list of latest projects
         var projectListView = new ProjectListView();
-        this.showView('content', projectListView);
+        app.content.show(projectListView);
     },
 
     project: function(project) {
         // (/:projectName) - Loads a single project
         console.log('[project]: /#' + project);
 
-        app.views.forEach(app.utils.close);
-        
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display a single project
         var projectView = new ProjectView({id: project});
 
-        this.showView('content', projectView);
+        app.content.show(projectView);
     },
 
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
         console.log('[shot]: /#' + project + '/' + shot);
 
-        app.views.forEach(app.utils.close);
-
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
 
         // Display 'project' sub-navigation
         var projectNav = new ProjectNavView({id: project});
-        this.appendView(navView, projectNav);
+        app.subhead.show(projectNav);
 
         // Display a single shot
         var shotView = new ShotView({id: shot, projectId: project });
-        this.showView('content', shotView);
+        app.content.show(shotView);
     },
 
     contribute: function() {
         // (/contribute) - Contribute to this project
         console.log('Route: contribute');
-        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display contribute page
         var contributeView = new ContributeView();
-        this.showView('content', contributeView);
+        app.content.show(contributeView);
     },
 
     help: function() {
         // (/help) - Getting Started, Documentation, etc.
         console.log('Route: help');
-        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display help content
         var helpView = new HelpView();
-        this.showView('content', helpView);
-    },
-
-    showView: function(selector, view) {
-        // Utility function to show a specific view that overrides a DOM object
-        $(selector).html(view.render().el);
-        
-        app.views.push(view);   // Keep track of views so we can close them
-        return(view);
-    },
-    appendView: function(masterView, childView) {
-        // Utility function to show a specific view that is displayed after an existing view
-        masterView.$el.after(childView.render().el);
-        
-        app.views.push(childView);  // Keep track of views so we can close them
-        return(childView);
+        app.content.show(helpView);
     }
 });

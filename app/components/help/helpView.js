@@ -2,20 +2,8 @@
 
 var helpTemplate = require('./helpTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: helpTemplate,
-
-  initialize: function() {
-    this.render();
-  },
-
-  events: {
-  },
-
-  render: function() {
-    this.$el.html(this.template()); // No models or collections here ^__^
-    return this;
-  },
 });

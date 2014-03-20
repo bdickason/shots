@@ -1,14 +1,23 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /* Main app js file */
 
-var userModel = require('./components/users/userModel.js');
+Backbone.$ = window.$;
+
+var userModel = require('./components/users/loginModel.js');
+
 app = new Backbone.Marionette.Application();
-app.views = [];
 
-window.onload = function(){
-    Backbone.$ = window.$;
 
-    app.start();
+app.on('initialize:after', function() {
+    // Configure the app
+    
+    // Regions define areas in the template (/server/views/client.handlebars) that we'll insert content into
+    app.addRegions({
+        header: 'nav#primary',      // Used for main nav
+        subhead: "nav#secondary",    // Used for secondary nav
+        content: 'section#content',    // Used for main content
+        footer: 'footer'       // Stuff everything else here?
+    });
 
     // Generic utility functions used throughout the app
     app.utils = require('./utils.js');
@@ -19,18 +28,21 @@ window.onload = function(){
     // User authentication (via Firebase)
     app.user = new userModel(); // Attempts to authenticate the current user
 
-
-
+    // Setup router
     var Routes = require('./routes.js');
-    
+
     app.router = new Routes(); // Routes control the app and start everything up, depending on location
 
+    // Starting the router allows us to accept url's (defined below in app.router)
     Backbone.history.start({pushState: true});
+});
 
+window.onload = function(){
+    app.start();    // Starts the app
 };
 
 
-},{"./components/users/userModel.js":36,"./routes.js":37,"./utils.js":38}],2:[function(require,module,exports){
+},{"./components/users/loginModel.js":36,"./routes.js":37,"./utils.js":38}],2:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
 var utils = require('../../utils.js');
@@ -92,7 +104,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var commentListCardTemplate = require('./commentListCardTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
     template: commentListCardTemplate,
 
@@ -103,15 +115,11 @@ module.exports = Backbone.View.extend({
       this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a comment is deleted, server does not send a sync event
       this.listenTo(this.collection, 'add', this.render);     // When a comment is added, the collection doesn't sync
-  
-      this.setElement(this.$el);
-
     },
 
     render: function() {
       this.$el.html(this.template(this.collection.toJSON()));
 
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
       return(this);
     }
   });
@@ -140,9 +148,12 @@ var CommentView = require('../show/commentView.js');
 var commentListTemplate = require('./commentListTemplate.hbs');
 
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: commentListTemplate,
+
+    itemView: CommentView,
+    itemViewContainer: '.comments', // Automatically inserts comments here
 
     initialize: function() {
       this.id = this.collection.id;  // Shot ID
@@ -150,12 +161,8 @@ module.exports = Backbone.View.extend({
 
       this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
-      this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
-  
-      this.setElement(this.$el);
-
     },
-    
+
     events: {
       'keyup .input': 'pressEnter',
       'click #createComment': 'createComment',
@@ -190,7 +197,7 @@ module.exports = Backbone.View.extend({
       }
     },
 
-    // Temporary fix, this should be moved back to commentView.js
+    // Hack - this should be moved back to commentView.js
     deleteComment: function(e) {
       e.preventDefault(); // Have to disable the default behavior of the anchor
 
@@ -209,18 +216,9 @@ module.exports = Backbone.View.extend({
       error.show();
     },
 
-    render: function() {
-      this.$el.html(this.template(this.collection.toJSON()));
-
-      // Iterate through each comment model and add it to our list of comments
-      var self = this;
-      this.collection.each(function(comment) {
-        var commentView = new CommentView({model: comment, projectId: self.projectId });
-        this.$el.find('ul.comments').append(commentView.render().el);
-      }, this);
-
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
+    onRender: function() {
+      // Hack - events will not fire unless we delegateEvente()
+      this.delegateEvents();
     }
   });
 
@@ -407,22 +405,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var contributeTemplate = require('./contributeTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: contributeTemplate,
-
-  initialize: function() {
-    this.render();
-  },
-
-  events: {
-  },
-
-  render: function() {
-    this.$el.html(this.template()); // No models or collections here ^__^
-    return this;
-  },
 });
 
 },{"./contributeTemplate.hbs":10}],12:[function(require,module,exports){
@@ -442,22 +428,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var helpTemplate = require('./helpTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: helpTemplate,
-
-  initialize: function() {
-    this.render();
-  },
-
-  events: {
-  },
-
-  render: function() {
-    this.$el.html(this.template()); // No models or collections here ^__^
-    return this;
-  },
 });
 
 },{"./helpTemplate.hbs":12}],14:[function(require,module,exports){
@@ -563,10 +537,11 @@ var ProjectsCollectionFirebase = require('../projectsCollectionFirebase.js');
 
 var ProjectCardView = require('../show/projectCardView.js');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.CompositeView.extend({
   tagName: 'div',
-
   template: projectsTemplate,
+  itemView: ProjectCardView,
+  itemViewContainer: 'ul.projects',
 
   initialize: function() {
     if(!this.collection) {
@@ -574,25 +549,12 @@ module.exports = Backbone.View.extend({
     }
 
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
-    this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
   },
 
   events: {
     'click .project a': 'gotoProject',
     'click #createProject': 'createProject'
-  },
-
-  render: function() {
-    this.$el.html(this.template(this.collection.toJSON()));
-
-    // Iterate through each project model and add it to our list of comments
-      var self = this;
-      this.collection.each(function(project) {
-        var projectCardView = new ProjectCardView({model: project });
-        this.$el.find('ul.projects').append(projectCardView.render().el);
-      }, this);
-    return this;
   },
 
   gotoProject: function(e) {
@@ -725,14 +687,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var projectNavTemplate = require('./projectNavTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: projectNavTemplate,
-
-  initialize: function() {
-    this.render();  // Data will not change so we only need to render once
-  },
 
   events: {
     'click #project': 'gotoProject'
@@ -750,8 +708,6 @@ module.exports = Backbone.View.extend({
 
     route = this.id;
     app.router.navigate(route, {trigger: true});
-
-    app.utils.close(this);
   }
 });
 
@@ -1007,18 +963,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 var ShotCardView = require('../show/shotCardView.js');
 var shotListTemplate = require('./shotListTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: shotListTemplate,
+
+    itemView: ShotCardView,
+    itemViewContainer: 'ul.shots',
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
       
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
-      this.listenTo(this.collection, 'add', this.render);
-      
-      this.setElement(this.$el);
     },
     
     events: {
@@ -1106,19 +1062,9 @@ module.exports = Backbone.View.extend({
       error.text(message);
       error.show();
     },
-    
-    render: function() {
-      this.$el.html(this.template(this.collection.toJSON()));
 
-      // Iterate through each shot model and add it to our list of shots
-      var self = this;
-      this.collection.each(function(shot) {
-        var shotCardView = new ShotCardView({model: shot, projectId: self.project});
-        this.$el.find('ul.shots').append(shotCardView.render().el);
-      }, this);
-
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
+    onRender: function() {
+      this.delegateEvents();
     }
   });
 
@@ -1195,30 +1141,8 @@ var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\n  <p class=\"shotSettings\">\n    <a href=\"#edit\" id=\"editShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">edit</a> \n    <a href=\"#cancel\" id=\"cancelShotEdit\" style=\"display: none\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">cancel</a> \n    <button id=\"saveShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">Save</button> \n    <a href=\"#delete\" id=\"deleteShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">delete</a>\n  </p>\n";
-  return buffer;
-  }
 
   buffer += "<a href=\"/";
   if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -1252,10 +1176,7 @@ function program1(depth0,data) {
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</p>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.owner), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n<p class=\"shotCreator\">";
+    + "</p>\n<p class=\"shotCreator\">";
   if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -1409,6 +1330,10 @@ var CommentsView = require('../../comments/list/commentListView.js');
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotTemplate,
+  className: 'shot',
+  id: function() {
+    return(this.model.get('id'));
+  },
 
   initialize: function(options) {
     if(!this.model) {
@@ -1423,9 +1348,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
     this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});
-
-    this.$el.attr('id', this.model.get('id'));
-    this.$el.addClass('shot');
   },
 
   events: {
@@ -1619,93 +1541,82 @@ module.exports = Backbone.Router.extend({
         // Default Route (/) - Display a list of the most recently updated projects
         console.log('Route: /');
 
-        app.views.forEach(app.utils.close);
-
-        // Display navigation
+        // Sub-nav Hack for Marionette Layouts
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView); // Currently necessary because views persist after a new route is visited
+        app.header.show(navView);
+
+        // Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display list of latest projects
         var projectListView = new ProjectListView();
-        this.showView('content', projectListView);
+        app.content.show(projectListView);
     },
 
     project: function(project) {
         // (/:projectName) - Loads a single project
         console.log('[project]: /#' + project);
 
-        app.views.forEach(app.utils.close);
-        
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display a single project
         var projectView = new ProjectView({id: project});
 
-        this.showView('content', projectView);
+        app.content.show(projectView);
     },
 
     shot: function(project, shot) {
         // (/:projectName/shotName) - Loads a single shot
         console.log('[shot]: /#' + project + '/' + shot);
 
-        app.views.forEach(app.utils.close);
-
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
 
         // Display 'project' sub-navigation
         var projectNav = new ProjectNavView({id: project});
-        this.appendView(navView, projectNav);
+        app.subhead.show(projectNav);
 
         // Display a single shot
         var shotView = new ShotView({id: shot, projectId: project });
-        this.showView('content', shotView);
+        app.content.show(shotView);
     },
 
     contribute: function() {
         // (/contribute) - Contribute to this project
         console.log('Route: contribute');
-        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display contribute page
         var contributeView = new ContributeView();
-        this.showView('content', contributeView);
+        app.content.show(contributeView);
     },
 
     help: function() {
         // (/help) - Getting Started, Documentation, etc.
         console.log('Route: help');
-        app.views.forEach(app.utils.close);
 
         // Display navigation
         var navView = new NavView({model: app.user});
-        this.showView('nav', navView);
+        app.header.show(navView);
+
+        // Sub-nav Hack for Marionette Layouts
+        app.subhead.close();
 
         // Display help content
         var helpView = new HelpView();
-        this.showView('content', helpView);
-    },
-
-    showView: function(selector, view) {
-        // Utility function to show a specific view that overrides a DOM object
-        $(selector).html(view.render().el);
-        
-        app.views.push(view);   // Keep track of views so we can close them
-        return(view);
-    },
-    appendView: function(masterView, childView) {
-        // Utility function to show a specific view that is displayed after an existing view
-        masterView.$el.after(childView.render().el);
-        
-        app.views.push(childView);  // Keep track of views so we can close them
-        return(childView);
+        app.content.show(helpView);
     }
 });
 },{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/list/projectListView.js":17,"./components/projects/projectNav/projectNavView.js":21,"./components/projects/show/projectView.js":26,"./components/shots/show/shotView.js":35}],38:[function(require,module,exports){
@@ -1713,17 +1624,6 @@ module.exports = Backbone.Router.extend({
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
 var moment = require('moment');
-
-module.exports.close = function(view) {
-    // Removes all reference to a view (avoids memory leaks)
-    if(view.model) {
-        // View has a model, unbind change events
-        view.model.unbind("change", view.modelChanged);
-    }
-
-    view.remove();
-    view.unbind();
-};
 
 module.exports.debug = function(e, results) {
     // spits out whatever event is fired

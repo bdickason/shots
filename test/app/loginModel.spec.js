@@ -4,13 +4,14 @@ var clientenv = require('../helpers/helper.spec.js'),
     should = require('should'),
     sinon = require('sinon');
 
-describe('userModel', function() {
+describe('loginModel', function() {
 
   var User, UserModel, fbStub, loginStub;
 
   beforeEach(function(done) {
     clientenv.setup(function() {
-      UserModel = require(componentsDir + 'users/userModel.js');
+      app.fbUrl = 'http://blah.firebaseio.com';
+      UserModel = require(componentsDir + 'users/loginModel.js');
 
       fbStub = sinon.stub(global, 'Firebase');
       loginStub = sinon.stub(global, 'FirebaseSimpleLogin');

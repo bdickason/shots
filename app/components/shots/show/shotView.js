@@ -10,6 +10,10 @@ var CommentsView = require('../../comments/list/commentListView.js');
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotTemplate,
+  className: 'shot',
+  id: function() {
+    return(this.model.get('id'));
+  },
 
   initialize: function(options) {
     if(!this.model) {
@@ -24,9 +28,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
     this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});
-
-    this.$el.attr('id', this.model.get('id'));
-    this.$el.addClass('shot');
   },
 
   events: {

@@ -94,6 +94,7 @@ See also:
 * [Event Tracking](docs/tracking.md)
 * [Testing](docs/testing.md)
 * [Committing](docs/committing.md)
+* [Views](docs/views.md)
 
 # License
 

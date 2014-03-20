@@ -9,6 +9,10 @@ Shots is primarily a javascript app run in the browser. The server only exists t
 /app
  |_ /components - Re-usable pieces of the app, categorized by function
     |_ /component1
+      |_ /show - Displays a single object
+      |_ /list - Displays a list of many objects
+      |_ /create - Creates a new object
+      |_ /edit - Edits the current object
     |_ /component2
  |_ /sass - css files
  |_ app.js - The main app loaderresides here

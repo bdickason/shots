@@ -9,7 +9,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     template: commentListTemplate,
 
     itemView: CommentView,
-    itemViewContainer: '.comments',
+    itemViewContainer: '.comments', // Automatically inserts comments here
 
     initialize: function() {
       this.id = this.collection.id;  // Shot ID

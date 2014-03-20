@@ -15,9 +15,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
       
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
-      this.listenTo(this.collection, 'add', this.render);
-      
-      // this.setElement(this.$el);
     },
     
     events: {

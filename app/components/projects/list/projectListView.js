@@ -6,10 +6,11 @@ var ProjectsCollectionFirebase = require('../projectsCollectionFirebase.js');
 
 var ProjectCardView = require('../show/projectCardView.js');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.CompositeView.extend({
   tagName: 'div',
-
   template: projectsTemplate,
+  itemView: ProjectCardView,
+  itemViewContainer: 'ul.projects',
 
   initialize: function() {
     if(!this.collection) {
@@ -17,25 +18,12 @@ module.exports = Backbone.View.extend({
     }
 
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
-    this.listenTo(this.collection, 'add', this.render);   // Collection doesn't call sync when we add a new model.
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
   },
 
   events: {
     'click .project a': 'gotoProject',
     'click #createProject': 'createProject'
-  },
-
-  render: function() {
-    this.$el.html(this.template(this.collection.toJSON()));
-
-    // Iterate through each project model and add it to our list of comments
-      var self = this;
-      this.collection.each(function(project) {
-        var projectCardView = new ProjectCardView({model: project });
-        this.$el.find('ul.projects').append(projectCardView.render().el);
-      }, this);
-    return this;
   },
 
   gotoProject: function(e) {

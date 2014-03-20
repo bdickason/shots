@@ -2,14 +2,10 @@
 
 var projectNavTemplate = require('./projectNavTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: projectNavTemplate,
-
-  initialize: function() {
-    this.render();  // Data will not change so we only need to render once
-  },
 
   events: {
     'click #project': 'gotoProject'
@@ -27,7 +23,5 @@ module.exports = Backbone.View.extend({
 
     route = this.id;
     app.router.navigate(route, {trigger: true});
-
-    app.utils.close(this);
   }
 });

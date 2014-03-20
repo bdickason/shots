@@ -429,22 +429,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var helpTemplate = require('./helpTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
   template: helpTemplate,
-
-  initialize: function() {
-    this.render();
-  },
-
-  events: {
-  },
-
-  render: function() {
-    this.$el.html(this.template()); // No models or collections here ^__^
-    return this;
-  },
 });
 
 },{"./helpTemplate.hbs":12}],14:[function(require,module,exports){

@@ -19,7 +19,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
    
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
-    this.listenTo(this, 'all', app.utils.debug);
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     

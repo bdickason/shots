@@ -3,9 +3,12 @@
 var ShotCardView = require('../show/shotCardView.js');
 var shotListTemplate = require('./shotListTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: shotListTemplate,
+
+    itemView: ShotCardView,
+    itemViewContainer: 'ul.shots',
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
@@ -14,7 +17,7 @@ module.exports = Backbone.View.extend({
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
       this.listenTo(this.collection, 'add', this.render);
       
-      this.setElement(this.$el);
+      // this.setElement(this.$el);
     },
     
     events: {
@@ -102,18 +105,8 @@ module.exports = Backbone.View.extend({
       error.text(message);
       error.show();
     },
-    
-    render: function() {
-      this.$el.html(this.template(this.collection.toJSON()));
 
-      // Iterate through each shot model and add it to our list of shots
-      var self = this;
-      this.collection.each(function(shot) {
-        var shotCardView = new ShotCardView({model: shot, projectId: self.project});
-        this.$el.find('ul.shots').append(shotCardView.render().el);
-      }, this);
-
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
+    onRender: function() {
+      this.delegateEvents();
     }
   });

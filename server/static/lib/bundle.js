@@ -161,7 +161,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
       this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
-      this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
+      // this.listenTo(this.collection, 'add', this.render);     // When a shot is added, the collection doesn't sync
     },
 
     events: {
@@ -1006,9 +1006,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 var ShotCardView = require('../show/shotCardView.js');
 var shotListTemplate = require('./shotListTemplate.hbs');
 
-module.exports = Backbone.View.extend({
+module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: shotListTemplate,
+
+    itemView: ShotCardView,
+    itemViewContainer: 'ul.shots',
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
@@ -1017,7 +1020,7 @@ module.exports = Backbone.View.extend({
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
       this.listenTo(this.collection, 'add', this.render);
       
-      this.setElement(this.$el);
+      // this.setElement(this.$el);
     },
     
     events: {
@@ -1105,19 +1108,9 @@ module.exports = Backbone.View.extend({
       error.text(message);
       error.show();
     },
-    
-    render: function() {
-      this.$el.html(this.template(this.collection.toJSON()));
 
-      // Iterate through each shot model and add it to our list of shots
-      var self = this;
-      this.collection.each(function(shot) {
-        var shotCardView = new ShotCardView({model: shot, projectId: self.project});
-        this.$el.find('ul.shots').append(shotCardView.render().el);
-      }, this);
-
-      this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-      return(this);
+    onRender: function() {
+      this.delegateEvents();
     }
   });
 
@@ -1194,30 +1187,8 @@ var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\n  <p class=\"shotSettings\">\n    <a href=\"#edit\" id=\"editShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">edit</a> \n    <a href=\"#cancel\" id=\"cancelShotEdit\" style=\"display: none\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">cancel</a> \n    <button id=\"saveShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">Save</button> \n    <a href=\"#delete\" id=\"deleteShot\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">delete</a>\n  </p>\n";
-  return buffer;
-  }
 
   buffer += "<a href=\"/";
   if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -1251,10 +1222,7 @@ function program1(depth0,data) {
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</p>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.owner), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n<p class=\"shotCreator\">";
+    + "</p>\n<p class=\"shotCreator\">";
   if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)

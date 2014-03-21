@@ -172,3 +172,16 @@ img.shot.big {
 .error {
   display: none;
 }
+
+/* Page Layouts - Two Column, Full-Width, etc */
+/* line 3, ../../../app/sass/_layouts.scss */
+section#left {
+  float: left;
+  width: 30%;
+}
+
+/* line 8, ../../../app/sass/_layouts.scss */
+section#right {
+  float: right;
+  width: 70%;
+}

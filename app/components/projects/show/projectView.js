@@ -29,13 +29,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     'click #saveProject': 'saveProject'
   },
 
-  render: function() {
-    this.$el.html(this.template(this.model.toJSON()));
-
-    this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js    
-    return this;
-  },
-
  editProject: function(e) {
     e.preventDefault(); // Have to disable the default behavior of the anchor
 

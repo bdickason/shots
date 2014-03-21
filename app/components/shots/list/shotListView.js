@@ -1,7 +1,10 @@
 /* Shots View - displays a list of shots */
 
-var ShotCardView = require('../show/shotCardView.js');
 var shotListTemplate = require('./shotListTemplate.hbs');
+
+var ShotCardView = require('../show/shotCardView.js');
+
+var ShotsCollectionFirebase = require('../ShotsCollectionFirebase.js');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
@@ -12,6 +15,10 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
+      
+      if(!this.collection) {
+        this.collection = new ShotsCollectionFirebase([], {project: this.project});
+      }
       
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event

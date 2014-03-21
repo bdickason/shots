@@ -14,6 +14,7 @@ var ProjectNavView = require('./components/projects/projectNav/projectNavView.js
 
 // Shots
 var ShotView = require('./components/shots/show/shotView.js');
+var ShotListView = require('./components/shots/list/shotListView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');
@@ -57,8 +58,9 @@ module.exports = Backbone.Router.extend({
         // Sub-nav Hack for Marionette Layouts
         app.subhead.close();
 
-        // Display a single project
+        // Details for a single project
         var projectView = new ProjectView({id: project});
+        var shotListView = new ShotListView({project: project});
 
         // Use a two column layout to display the project
         var twoColumn = new TwoColumnLayout();
@@ -67,6 +69,7 @@ module.exports = Backbone.Router.extend({
 
         // Render two-column layout in main content area
         twoColumn.left.show(projectView);
+        twoColumn.right.show(shotListView);
     },
 
     shot: function(project, shot) {

@@ -1,5 +1,9 @@
 /* Routes - Contains all routes for client-side app */
 
+/* Layouts */
+var TwoColumnLayout = require('./layouts/twoColumnLayout.js');
+
+/* Views */
 // Top Navigation
 var NavView = require('./components/nav/navView.js');
 
@@ -56,7 +60,13 @@ module.exports = Backbone.Router.extend({
         // Display a single project
         var projectView = new ProjectView({id: project});
 
-        app.content.show(projectView);
+        // Use a two column layout to display the project
+        var twoColumn = new TwoColumnLayout();
+
+        app.content.show(twoColumn);
+
+        // Render two-column layout in main content area
+        twoColumn.left.show(projectView);
     },
 
     shot: function(project, shot) {

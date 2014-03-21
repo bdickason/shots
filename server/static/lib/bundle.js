@@ -42,7 +42,7 @@ window.onload = function(){
 };
 
 
-},{"./components/users/loginModel.js":36,"./routes.js":37,"./utils.js":38}],2:[function(require,module,exports){
+},{"./components/users/loginModel.js":36,"./routes.js":39,"./utils.js":40}],2:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
 var utils = require('../../utils.js');
@@ -65,7 +65,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"../../utils.js":38}],3:[function(require,module,exports){
+},{"../../utils.js":40}],3:[function(require,module,exports){
 /* Comments Collection - An ordered list of Comments */
 var CommentModel = require('./commentModel.js');
 
@@ -99,7 +99,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],5:[function(require,module,exports){
+},{"hbsfy/runtime":48}],5:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
 var commentListCardTemplate = require('./commentListCardTemplate.hbs');
@@ -141,7 +141,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],7:[function(require,module,exports){
+},{"hbsfy/runtime":48}],7:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
 var CommentView = require('../show/commentView.js');
@@ -276,7 +276,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],9:[function(require,module,exports){
+},{"hbsfy/runtime":48}],9:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
 var commentTemplate = require('./commentTemplate.hbs');
@@ -400,7 +400,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h1>Contribute!</h1>\n  \n<h2>Designer</h2>\n\n<a href=\"http://discuss.braddickason.com\" target=\"_blank\">Tell us what you want to change. We'll take a look and figure out how you can contribute!</a>\n\n<h2>Developer</h2>\n\n<a href=\"http://github.com/bdickason/shots\" target=\"_blank\">Check us out on Github.</a>\n";
   });
 
-},{"hbsfy/runtime":46}],11:[function(require,module,exports){
+},{"hbsfy/runtime":48}],11:[function(require,module,exports){
 /* Contribute View - For anyone who wants to contribute! */
 
 var contributeTemplate = require('./contributeTemplate.hbs');
@@ -423,7 +423,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h1>Help!</h1>\n  \n<ul class=\"help\">\n  <li>Find us on Twitter: <a href=\"http://twitter.com/bdickason\" target=\"_blank\">@bdickason</a>, <a href=\"http://twitter.com/trey_mckay\" target=\"_blank\">@trey_mckay</a></li>\n  <li>Visit our <a href=\"http://discuss.braddickason.com\">Discussion Forum</a></li>\n  <li>Visit our Chatroom</li>\n</ul>\n";
   });
 
-},{"hbsfy/runtime":46}],13:[function(require,module,exports){
+},{"hbsfy/runtime":48}],13:[function(require,module,exports){
 /* Help View - For anyone that needs help, gets lost, etc. */
 
 var helpTemplate = require('./helpTemplate.hbs');
@@ -466,7 +466,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],15:[function(require,module,exports){
+},{"hbsfy/runtime":48}],15:[function(require,module,exports){
 /* Nav View - Renders the navigation */
 
 var navTemplate = require('./navTemplate.hbs');
@@ -528,7 +528,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "  <div class=\"view\">\n    <label><h3>Create a Project</h3></label>\n    <input id=\"name\" type=\"textarea\" class\"input\" placeholder=\"\" autofocus>\n    <button id=\"createProject\" class=\"save\">save</button>\n    <label id=\"projectsError\" class=\"error\"></label>\n    <ul class=\"projects\">\n    </ul>\n  </div> ";
   });
 
-},{"hbsfy/runtime":46}],17:[function(require,module,exports){
+},{"hbsfy/runtime":48}],17:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./projectListTemplate.hbs');
@@ -626,7 +626,7 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{"../../utils.js":38}],19:[function(require,module,exports){
+},{"../../utils.js":40}],19:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
 
 var utils = require('../../utils.js');
@@ -661,7 +661,7 @@ module.exports = Backbone.Firebase.Model.extend({
   }
 });
 
-},{"../../utils.js":38}],20:[function(require,module,exports){
+},{"../../utils.js":40}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -682,7 +682,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],21:[function(require,module,exports){
+},{"hbsfy/runtime":48}],21:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./projectNavTemplate.hbs');
@@ -750,7 +750,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],24:[function(require,module,exports){
+},{"hbsfy/runtime":48}],24:[function(require,module,exports){
 /* Project Card View - displays a snapshot of a single projects */
 
 var ProjectModelFirebase = require('../projectModelFirebase.js');
@@ -823,7 +823,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],26:[function(require,module,exports){
+},{"hbsfy/runtime":48}],26:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var ProjectModelFirebase = require('../projectModelFirebase.js');
@@ -957,7 +957,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"300\" class=\"input\" placeholder=\"Enter any additional info\" /><br />\n    <button id=\"createShot\">save</button>\n    <label id=\"shotsError\" class=\"error\"></label>\n    <ul class=\"shots\">\n    </ul>";
   });
 
-},{"hbsfy/runtime":46}],28:[function(require,module,exports){
+},{"hbsfy/runtime":48}],28:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
 var ShotCardView = require('../show/shotCardView.js');
@@ -1091,7 +1091,7 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"../../utils.js":38}],30:[function(require,module,exports){
+},{"../../utils.js":40}],30:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
 var utils = require('../../utils.js');
@@ -1118,7 +1118,7 @@ module.exports = Backbone.Firebase.Model.extend({
     }
 });
 
-},{"../../utils.js":38}],31:[function(require,module,exports){
+},{"../../utils.js":40}],31:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('./shotModel.js');
 
@@ -1184,7 +1184,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],33:[function(require,module,exports){
+},{"hbsfy/runtime":48}],33:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var ShotModelFirebase = require('../shotModelFirebase.js');
@@ -1317,7 +1317,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-},{"hbsfy/runtime":46}],35:[function(require,module,exports){
+},{"hbsfy/runtime":48}],35:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
 var ShotModelFirebase = require('../shotModelFirebase.js');
@@ -1509,8 +1509,41 @@ module.exports = Backbone.Model.extend({
 });
 
 },{}],37:[function(require,module,exports){
+/* Two Column Layout - Sets up left and right side-by-side views */
+
+var twoColumnLayoutTemplate = require('./twoColumnLayoutTemplate.hbs');
+
+module.exports = Backbone.Marionette.Layout.extend({
+  template: twoColumnLayoutTemplate,
+
+  regions: {
+    left: {
+      selector: "#left"
+    },
+    right: {
+      selector: "#right"
+    }
+  }
+});
+},{"./twoColumnLayoutTemplate.hbs":38}],38:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<section id=\"left\"></section>\n<section id=\"right\"></section>";
+  });
+
+},{"hbsfy/runtime":48}],39:[function(require,module,exports){
 /* Routes - Contains all routes for client-side app */
 
+/* Layouts */
+var TwoColumnLayout = require('./layouts/twoColumnLayout.js');
+
+/* Views */
 // Top Navigation
 var NavView = require('./components/nav/navView.js');
 
@@ -1567,7 +1600,13 @@ module.exports = Backbone.Router.extend({
         // Display a single project
         var projectView = new ProjectView({id: project});
 
-        app.content.show(projectView);
+        // Use a two column layout to display the project
+        var twoColumn = new TwoColumnLayout();
+
+        app.content.show(twoColumn);
+
+        // Render two-column layout in main content area
+        twoColumn.left.show(projectView);
     },
 
     shot: function(project, shot) {
@@ -1619,7 +1658,7 @@ module.exports = Backbone.Router.extend({
         app.content.show(helpView);
     }
 });
-},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/list/projectListView.js":17,"./components/projects/projectNav/projectNavView.js":21,"./components/projects/show/projectView.js":26,"./components/shots/show/shotView.js":35}],38:[function(require,module,exports){
+},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/list/projectListView.js":17,"./components/projects/projectNav/projectNavView.js":21,"./components/projects/show/projectView.js":26,"./components/shots/show/shotView.js":35,"./layouts/twoColumnLayout.js":37}],40:[function(require,module,exports){
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js
@@ -1659,7 +1698,7 @@ app.Handlebars.registerHelper('pluralize', function(number, singular, plural) {
             return(plural);
     }
 });
-},{"hbsfy/runtime":46,"moment":47}],39:[function(require,module,exports){
+},{"hbsfy/runtime":48,"moment":49}],41:[function(require,module,exports){
 "use strict";
 /*globals Handlebars: true */
 var base = require("./handlebars/base");
@@ -1692,7 +1731,7 @@ var Handlebars = create();
 Handlebars.create = create;
 
 exports["default"] = Handlebars;
-},{"./handlebars/base":40,"./handlebars/exception":41,"./handlebars/runtime":42,"./handlebars/safe-string":43,"./handlebars/utils":44}],40:[function(require,module,exports){
+},{"./handlebars/base":42,"./handlebars/exception":43,"./handlebars/runtime":44,"./handlebars/safe-string":45,"./handlebars/utils":46}],42:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -1873,7 +1912,7 @@ exports.log = log;var createFrame = function(object) {
   return obj;
 };
 exports.createFrame = createFrame;
-},{"./exception":41,"./utils":44}],41:[function(require,module,exports){
+},{"./exception":43,"./utils":46}],43:[function(require,module,exports){
 "use strict";
 
 var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
@@ -1902,7 +1941,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports["default"] = Exception;
-},{}],42:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict";
 var Utils = require("./utils");
 var Exception = require("./exception")["default"];
@@ -2040,7 +2079,7 @@ exports.program = program;function invokePartial(partial, name, context, helpers
 exports.invokePartial = invokePartial;function noop() { return ""; }
 
 exports.noop = noop;
-},{"./base":40,"./exception":41,"./utils":44}],43:[function(require,module,exports){
+},{"./base":42,"./exception":43,"./utils":46}],45:[function(require,module,exports){
 "use strict";
 // Build out our basic SafeString type
 function SafeString(string) {
@@ -2052,7 +2091,7 @@ SafeString.prototype.toString = function() {
 };
 
 exports["default"] = SafeString;
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 /*jshint -W004 */
 var SafeString = require("./safe-string")["default"];
@@ -2129,15 +2168,15 @@ exports.escapeExpression = escapeExpression;function isEmpty(value) {
 }
 
 exports.isEmpty = isEmpty;
-},{"./safe-string":43}],45:[function(require,module,exports){
+},{"./safe-string":45}],47:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime');
 
-},{"./dist/cjs/handlebars.runtime":39}],46:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":41}],48:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":45}],47:[function(require,module,exports){
+},{"handlebars/runtime":47}],49:[function(require,module,exports){
 //! moment.js
 //! version : 2.5.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors

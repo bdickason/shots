@@ -141,6 +141,12 @@ img.shot.big {
 
 /* Projects Styles */
 /* Single Project View */
+/* line 7, ../../../app/sass/_projects.scss */
+p.projectSettings #saveProject {
+  /* Save button is hidden until editing is enabled */
+  display: none;
+}
+
 /* Base UI styling */
 /* line 3, ../../../app/sass/_base.scss */
 #nav {

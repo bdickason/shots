@@ -2,8 +2,12 @@
 
 
 /* Single Project View */
-div .projectDetails {
-  // Styling for project details area goes here
+p.projectSettings {
+  // Styling for project settings area goes here
+  & #saveProject {
+    /* Save button is hidden until editing is enabled */
+    display: none;
+  }
 }
 
 div .shots {

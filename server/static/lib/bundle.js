@@ -780,46 +780,46 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, helper;
-  buffer += "\n    <p class=\"projectSettings\">\n      <a href=\"#edit\" id=\"editProject\" data-id=\"";
+  buffer += "\n  <p class=\"projectSettings\">\n    <a href=\"#edit\" id=\"editProject\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">edit</a> \n      <a href=\"#cancel\" id=\"cancelProjectEdit\" style=\"display: none\" data-id=\"";
+    + "\">edit</a> \n    <a href=\"#cancel\" id=\"cancelProjectEdit\" style=\"display: none\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">cancel</a> \n      <button id=\"saveProject\" data-id=\"";
+    + "\">cancel</a> \n    <button id=\"saveProject\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">Save</button> \n      <a href=\"#delete\" id=\"deleteProject\" data-id=\"";
+    + "\">Save</button> \n    <a href=\"#delete\" id=\"deleteProject\" data-id=\"";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\">delete</a>\n    </p>\n  ";
+    + "\">delete</a>\n  </p>\n";
   return buffer;
   }
 
-  buffer += "<div class=\"projectDetails\">\n  <h1>";
+  buffer += "<h1>";
   if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</h1>\n  ";
+    + "</h1>\n";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.owner), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n  <label>Description</label>\n  <p class=\"description\">";
+  buffer += "\n<label>Description</label>\n<p class=\"description\">";
   if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</p>\n  <label>Users</label>\n  <div class=\"users\">";
+    + "</p>\n<label>Users</label>\n<div class=\"users\">";
   if (helper = helpers.users) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.users); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</div>\n  <label>Activity</label>\n  <div class=\"activity\">";
+    + "</div>\n<label>Activity</label>\n<div class=\"activity\">";
   if (helper = helpers.activity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.activity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</div>\n</container>\n<div class=\"shots\">\n</div>\n";
+    + "</div>";
   return buffer;
   });
 
@@ -847,6 +847,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.listenTo(this.model, 'sync', this.render); // Without this, the model doesn't render after it completes loading
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
+
+    // this.setElement(this.$el);
   },
 
   events: {

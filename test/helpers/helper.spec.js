@@ -16,17 +16,23 @@ module.exports.setup = setup = function(callback) {
 
   var scriptDir = '../../server/static/lib/';
 
+  // Inject css so styles are set properly
+  var css = '<style type="text/css">';
+  css += fs.readFileSync(path.normalize(__dirname + "/../../server/static/css/screen.css"), 'utf8');
+  css += '</style>';
+
   // Setup a jsdom env and globally expose window along with other libraries
   jsdom.env({
-    html: "<html><body></body></html>",
+    html: "<html><head>" + css + "</head><body></body></html>",
     scripts: [scriptDir + 'jquery-2.1.0.min.js',
               scriptDir + 'underscore.js',
               scriptDir + 'backbone.js',
               scriptDir + 'backbone.marionette.js',
               scriptDir + 'firebase.js',
               scriptDir + 'backbone-firebase.js',
-              scriptDir + 'firebase-simple-login.js'
+              scriptDir + 'firebase-simple-login.js',
               ],
+    styleSheets: '../../server/static/css/screen.css',
     done: function(errs, window) {
       global.window = window;
       

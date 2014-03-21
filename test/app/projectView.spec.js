@@ -79,6 +79,41 @@ describe('projectView', function() {
 
       projectStub.restore();
     });
+
+    it('Owner should see Cancel/Save after clicking edit', function() {
+      // Fake JSON output for model stub
+      var fakeOutput = {
+        owner: true
+      };
+      var projectModel = new ProjectModel({});
+      var projectJSONStub = sinon.stub(projectModel, 'toJSON').returns(fakeOutput);
+      
+      // Fake out isOwner return)      
+      projectModel.isOwner = function(tmp) {
+        return(true);
+      };
+
+      var projectView = new ProjectView({model: projectModel});
+      projectModel.trigger('sync'); // Render the view
+
+      var project = projectView.$el.find('p.projectSettings');
+
+      var editButton = project.find('#editProject');
+      var cancelButton = project.find('#cancelProjectEdit');
+      var saveButton = project.find('#saveProject');
+
+      editButton.css('display').should.eql('');
+      cancelButton.css('display').should.eql('none');
+      saveButton.css('display').should.eql('none');
+
+      // User clicks 'Edit'
+      editButton.trigger('click');
+
+      editButton.css('display').should.eql('none');
+      cancelButton.css('display').should.eql('');
+
+      projectJSONStub.restore();
+    });
   });
 
 

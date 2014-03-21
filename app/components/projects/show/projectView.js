@@ -21,6 +21,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.listenTo(this.model, 'sync', this.render); // Without this, the model doesn't render after it completes loading
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
+
+    // this.setElement(this.$el);
   },
 
   events: {

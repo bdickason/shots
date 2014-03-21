@@ -1,19 +1,15 @@
-<div class="projectDetails">
-  <h1>{{ id }}</h1>
-  {{#if owner}}
-    <p class="projectSettings">
-      <a href="#edit" id="editProject" data-id="{{ id }}">edit</a> 
-      <a href="#cancel" id="cancelProjectEdit" style="display: none" data-id="{{ id }}">cancel</a> 
-      <button id="saveProject" data-id="{{ id }}">Save</button> 
-      <a href="#delete" id="deleteProject" data-id="{{ id }}">delete</a>
-    </p>
-  {{/if}}
-  <label>Description</label>
-  <p class="description">{{ description }}</p>
-  <label>Users</label>
-  <div class="users">{{ users }}</div>
-  <label>Activity</label>
-  <div class="activity">{{ activity }}</div>
-</container>
-<div class="shots">
-</div>
+<h1>{{ id }}</h1>
+{{#if owner}}
+  <p class="projectSettings">
+    <a href="#edit" id="editProject" data-id="{{ id }}">edit</a> 
+    <a href="#cancel" id="cancelProjectEdit" style="display: none" data-id="{{ id }}">cancel</a> 
+    <button id="saveProject" data-id="{{ id }}">Save</button> 
+    <a href="#delete" id="deleteProject" data-id="{{ id }}">delete</a>
+  </p>
+{{/if}}
+<label>Description</label>
+<p class="description">{{ description }}</p>
+<label>Users</label>
+<div class="users">{{ users }}</div>
+<label>Activity</label>
+<div class="activity">{{ activity }}</div>

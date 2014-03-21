@@ -1514,10 +1514,10 @@ module.exports = Backbone.Marionette.Layout.extend({
 
   regions: {
     left: {
-      selector: "#left"
+      selector: "section#left"
     },
     right: {
-      selector: "#right"
+      selector: "section#right"
     }
   }
 });

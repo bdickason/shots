@@ -750,6 +750,20 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
     }
 });
 
+
+module.exports.ShowCard = Backbone.Marionette.Controller.extend({
+    /* ShowCard - Displays a single Project's Card (summary view)
+     Inputs:
+        id: project's ID
+    */
+    initialize: function(options) {
+        this.id = options.id;
+
+        this.project = new ProjectModelFirebase({id: this.id});
+        this.view = new ProjectShowCardView({model: this.project});
+    }
+});
+
 },{"./list/projectListView.js":17,"./models/projectModelFirebase.js":19,"./models/projectsCollectionFirebase.js":20,"./show/projectShowView.js":26}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
@@ -788,14 +802,7 @@ var projectCardTemplate = require('./projectCardTemplate.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
-
-  template: projectCardTemplate,
-
-  initialize: function() {
-    if(!this.model) {
-      this.model = new ProjectModelFirebase({id: this.id});
-    }
-  }
+  template: projectCardTemplate
 });
 
 },{"../models/projectModelFirebase.js":19,"./projectCardTemplate.hbs":24}],26:[function(require,module,exports){

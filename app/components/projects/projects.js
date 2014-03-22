@@ -30,3 +30,17 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
         this.view = new ProjectShowView({model: this.project});
     }
 });
+
+
+module.exports.ShowCard = Backbone.Marionette.Controller.extend({
+    /* ShowCard - Displays a single Project's Card (summary view)
+     Inputs:
+        id: project's ID
+    */
+    initialize: function(options) {
+        this.id = options.id;
+
+        this.project = new ProjectModelFirebase({id: this.id});
+        this.view = new ProjectShowCardView({model: this.project});
+    }
+});

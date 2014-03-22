@@ -1,12 +1,14 @@
 /* Base UI styling */
+body {
+  font-family: 'Open Sans', Helvetica Neue,  sans-serif;
+  font-size: 14px;
+}
 #content {
   float: left;
-  div {
+  > div {
     float:left;
   }
 }
-
-
 #nav {
   display: block;
   padding: 0;
@@ -25,7 +27,6 @@
 #logout {
 	float:right;
 }
-
 // Error messages should not be shown by default
 .error {
   display: none;

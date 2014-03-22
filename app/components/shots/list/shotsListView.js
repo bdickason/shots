@@ -59,6 +59,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
           };
 
           this.collection.create(input);
+          this.collection.trigger('sync');  // HACK - Marionette View normally places new models at the end of the collection
           mixpanel.track('Create Shot', input);
 
           textField.val('');

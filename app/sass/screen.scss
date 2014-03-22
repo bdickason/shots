@@ -6,11 +6,11 @@
 @import "compass/utilities/general";
 
 /* Custom Partials */
-@import "_variables.scss";	// Variables: Color, size, etc. 
-@import "_app.scss";        // Base app styles (body, etc)
-@import "_images.scss";     // Anything related to images
-@import "_comments.scss";   // Comments
-@import "_shots.scss";      // Shots
-@import "_projects.scss";   // Projects
-@import "_base.scss";		// Base Styling
-@import "_layouts.scss";    // Layouts (two-column, full-width, etc)
+@import "partials/_variables.scss";	// Variables: Color, size, etc. 
+@import "partials/_app.scss";        // Base app styles (body, etc)
+@import "partials/_images.scss";     // Anything related to images
+@import "partials/_comments.scss";   // Comments
+@import "partials/_shots.scss";      // Shots
+@import "partials/_projects.scss";   // Projects
+@import "partials/_base.scss";		// Base Styling
+@import "partials/_layouts.scss";    // Layouts (two-column, full-width, etc)

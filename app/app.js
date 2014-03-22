@@ -2,7 +2,7 @@
 
 Backbone.$ = window.$;
 
-var userModel = require('./components/users/loginModel.js');
+var userModel = require('./components/users/models/loginModel.js');
 
 app = new Backbone.Marionette.Application();
 

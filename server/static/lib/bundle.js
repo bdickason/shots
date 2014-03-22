@@ -3,7 +3,7 @@
 
 Backbone.$ = window.$;
 
-var userModel = require('./components/users/loginModel.js');
+var userModel = require('./components/users/models/loginModel.js');
 
 app = new Backbone.Marionette.Application();
 
@@ -42,7 +42,7 @@ window.onload = function(){
 };
 
 
-},{"./components/users/loginModel.js":39,"./routes.js":42,"./utils.js":43}],2:[function(require,module,exports){
+},{"./components/users/models/loginModel.js":39,"./routes.js":42,"./utils.js":43}],2:[function(require,module,exports){
 /* Comments Controller - Ties together Layout, View, and Model/Controllers */
 
 // Views

@@ -11,7 +11,7 @@ describe('loginModel', function() {
   beforeEach(function(done) {
     clientenv.setup(function() {
       app.fbUrl = 'http://blah.firebaseio.com';
-      UserModel = require(componentsDir + 'users/loginModel.js');
+      UserModel = require(componentsDir + 'users/models/loginModel.js');
 
       fbStub = sinon.stub(global, 'Firebase');
       loginStub = sinon.stub(global, 'FirebaseSimpleLogin');

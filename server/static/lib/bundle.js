@@ -1022,7 +1022,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"300\" class=\"input\" placeholder=\"Enter any additional info\" /><br />\n    <button id=\"createShot\">save</button>\n    <label id=\"shotsError\" class=\"error\"></label>\n    <ul class=\"shots\">\n    </ul>";
+  return "    <div class=\"shotsNav\">\n        <label><h3>Screens</h3></label>\n        <button id=\"newShot\">+</button>\n    </div>\n    <div class=\"newShotView\">\n        <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n        <textarea id=\"text\" type=\"text\" maxlength=\"300\" class=\"input\" placeholder=\"Enter any additional info\" /><br />\n        <button id=\"createShot\">save</button>\n        <label id=\"shotsError\" class=\"error\"></label>\n    </div>\n    <ul class=\"shots\">\n    </ul>";
   });
 
 },{"hbsfy/runtime":51}],30:[function(require,module,exports){
@@ -1049,6 +1049,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     
     events: {
       'keyup .input': 'pressEnter',
+      'click #newShot': 'toggleNewShot',
       'click #createShot': 'createShot',
       'click #deleteShot': 'deleteShot',
       'click img': 'toggleSize',
@@ -1061,6 +1062,15 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         this.createShot();
       }
       return(false);
+    },
+
+    toggleNewShot: function() {
+      // Displays/hides the 'New Shot' interface
+
+      if(app.user.get('loggedIn')) {
+        var newShotView = this.$el.find('.newShotView');
+        newShotView.toggle();
+      }
     },
 
     createShot: function(shot) {
@@ -1081,6 +1091,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
           textField.val('');
           imageField.val('');
+
+          this.toggleNewShot(); // Hide 'new' dialog
         }
       }
       else {

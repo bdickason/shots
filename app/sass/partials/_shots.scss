@@ -5,17 +5,38 @@
 
 }
 
+
+/* Shots List */
+.shotsNav {
+  width: 100%;
+  padding-bottom: 10px;
+  
+  & label {
+    float: left;
+  }
+  & #newShot {
+    margin: 0 20px 0 20px;
+  }
+}
+
+.newShotView {
+  // Hidden until a user clicks on 'newShot'
+  display: none;
+  padding-bottom: 10px;
+}
+
+/* Single Shot */
 .shot {
   width: 50%;
   padding-top: 40px;
 
   & p #saveShot {
-    /* Save button is hidden until editing is enabled */
+    // Save button is hidden until editing is enabled 
     display: none;
   }
 
   & p #cancelShotEdit {
-    /* Cancel button is hidden until editing is enabled */
+    // Cancel button is hidden until editing is enabled 
     display: none;
   }
 
@@ -28,6 +49,3 @@
   }
 }
 
-[contenteditable="true"] {
-  background: yellow;
-}

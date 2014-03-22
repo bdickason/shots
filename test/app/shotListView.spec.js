@@ -86,7 +86,37 @@ describe('shotsListView', function() {
     });
   });
 
- describe('create', function() {
+  describe('new', function() {
+
+    var newButton,
+        newShotView;
+
+    beforeEach(function(done) {
+      var projectId = 'testProject';  // Usually passed to the view from the URL
+      
+      // Setup fake collection
+      shotsCollection = new ShotsCollection([]);
+
+      shotsView = new ShotsView({ collection: shotsCollection, project: projectId });
+
+      shotsCollection.trigger('sync');  // Sync event from collection causes view to render
+
+      newButton = shotsView.$el.find('#newShot');
+      newShotView = shotsView.$el.find('.newShotView');
+
+      done();
+    });
+
+    it('Should show the New Button', function() {
+      newButton.html().length.should.be.greaterThan(0);
+    });
+
+    it('Should hide the Create dialog by default', function() {
+      newShotView.css('display').should.eql('none');
+    });
+  });
+
+  describe('create', function() {
 
     it('Should start with an empty list of shots', function() {
       var projectId = 'testProject';  // Usually passed to the view from the URL

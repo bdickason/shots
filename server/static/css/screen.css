@@ -71,84 +71,108 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 /* Background Colors */
 /* Core App styles */
 /* All Image-related styles */
-/* line 4, ../../../app/sass/_images.scss */
+/* line 4, ../../../app/sass/partials/_images.scss */
 img.shot {
   width: 50%;
   cursor: -webkit-zoom-in;
 }
-/* line 8, ../../../app/sass/_images.scss */
+/* line 8, ../../../app/sass/partials/_images.scss */
 img.shot.big {
   width: 100%;
   cursor: -webkit-zoom-out;
 }
 
 /* Comment Styles */
-/* line 3, ../../../app/sass/_comments.scss */
+/* line 3, ../../../app/sass/partials/_comments.scss */
 .comments {
   width: 50%;
 }
 
-/* line 9, ../../../app/sass/_comments.scss */
+/* line 9, ../../../app/sass/partials/_comments.scss */
 .comment p #saveComment {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
-/* line 14, ../../../app/sass/_comments.scss */
+/* line 14, ../../../app/sass/partials/_comments.scss */
 .comment p #cancelCommentEdit {
   /* Cancel button is hidden until editing is enabled */
   display: none;
 }
 
-/* line 20, ../../../app/sass/_comments.scss */
+/* line 20, ../../../app/sass/partials/_comments.scss */
 [contenteditable="true"] {
   background: yellow;
 }
 
 /* Shots Styles */
-/* line 3, ../../../app/sass/_shots.scss */
+/* line 3, ../../../app/sass/partials/_shots.scss */
 .comments {
   width: 100%;
 }
 
-/* line 8, ../../../app/sass/_shots.scss */
+/* Shots List */
+/* line 10, ../../../app/sass/partials/_shots.scss */
+.shotsNav {
+  width: 100%;
+  padding-bottom: 10px;
+}
+/* line 14, ../../../app/sass/partials/_shots.scss */
+.shotsNav label {
+  float: left;
+}
+/* line 17, ../../../app/sass/partials/_shots.scss */
+.shotsNav #newShot {
+  margin: 0 20px 0 20px;
+}
+
+/* line 22, ../../../app/sass/partials/_shots.scss */
+.newShotView {
+  display: none;
+  padding-bottom: 10px;
+}
+
+/* Single Shot */
+/* line 29, ../../../app/sass/partials/_shots.scss */
 .shot {
   width: 50%;
   padding-top: 40px;
 }
-/* line 12, ../../../app/sass/_shots.scss */
+/* line 33, ../../../app/sass/partials/_shots.scss */
 .shot p #saveShot {
-  /* Save button is hidden until editing is enabled */
   display: none;
 }
-/* line 17, ../../../app/sass/_shots.scss */
+/* line 38, ../../../app/sass/partials/_shots.scss */
 .shot p #cancelShotEdit {
-  /* Cancel button is hidden until editing is enabled */
   display: none;
 }
-/* line 22, ../../../app/sass/_shots.scss */
+/* line 43, ../../../app/sass/partials/_shots.scss */
 .shot p .shotCreator {
   float: left;
 }
-/* line 26, ../../../app/sass/_shots.scss */
+/* line 47, ../../../app/sass/partials/_shots.scss */
 .shot .shotComments {
   float: right;
 }
 
-/* line 31, ../../../app/sass/_shots.scss */
-[contenteditable="true"] {
-  background: yellow;
-}
-
 /* Projects Styles */
 /* Single Project View */
-/* line 7, ../../../app/sass/_projects.scss */
+/* line 7, ../../../app/sass/partials/_projects.scss */
 p.projectSettings #saveProject {
   /* Save button is hidden until editing is enabled */
   display: none;
 }
 
 /* Base UI styling */
-/* line 3, ../../../app/sass/_base.scss */
+/* line 2, ../../../app/sass/partials/_base.scss */
+#content {
+  float: left;
+}
+/* line 4, ../../../app/sass/partials/_base.scss */
+#content div {
+  float: left;
+}
+
+/* line 10, ../../../app/sass/partials/_base.scss */
 #nav {
   display: block;
   padding: 0;
@@ -158,35 +182,40 @@ p.projectSettings #saveProject {
   -webkit-font-smoothing: antialiased;
 }
 
-/* line 11, ../../../app/sass/_base.scss */
+/* line 18, ../../../app/sass/partials/_base.scss */
 #main {
   padding: 25px;
 }
 
-/* line 14, ../../../app/sass/_base.scss */
+/* line 21, ../../../app/sass/partials/_base.scss */
 #username {
   float: right;
   padding-right: 15px;
 }
 
-/* line 18, ../../../app/sass/_base.scss */
+/* line 25, ../../../app/sass/partials/_base.scss */
 #logout {
   float: right;
 }
 
-/* line 23, ../../../app/sass/_base.scss */
+/* line 30, ../../../app/sass/partials/_base.scss */
 .error {
   display: none;
 }
 
+/* line 35, ../../../app/sass/partials/_base.scss */
+[contenteditable="true"] {
+  background: yellow;
+}
+
 /* Page Layouts - Two Column, Full-Width, etc */
-/* line 3, ../../../app/sass/_layouts.scss */
+/* line 3, ../../../app/sass/partials/_layouts.scss */
 section#left {
   float: left;
   width: 30%;
 }
 
-/* line 8, ../../../app/sass/_layouts.scss */
+/* line 8, ../../../app/sass/partials/_layouts.scss */
 section#right {
   float: right;
   width: 70%;

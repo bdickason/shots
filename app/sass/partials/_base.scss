@@ -30,3 +30,8 @@
 .error {
   display: none;
 }
+
+// Global style for any time a piece of content becomes editable
+[contenteditable="true"] {
+  background: yellow;
+}

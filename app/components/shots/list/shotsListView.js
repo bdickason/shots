@@ -21,6 +21,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     
     events: {
       'keyup .input': 'pressEnter',
+      'click #newShot': 'toggleNewShot',
       'click #createShot': 'createShot',
       'click #deleteShot': 'deleteShot',
       'click img': 'toggleSize',
@@ -33,6 +34,15 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         this.createShot();
       }
       return(false);
+    },
+
+    toggleNewShot: function() {
+      // Displays/hides the 'New Shot' interface
+
+      if(app.user.get('loggedIn')) {
+        var newShotView = this.$el.find('.newShotView');
+        newShotView.toggle();
+      }
     },
 
     createShot: function(shot) {
@@ -53,6 +63,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
           textField.val('');
           imageField.val('');
+
+          this.toggleNewShot(); // Hide 'new' dialog
         }
       }
       else {

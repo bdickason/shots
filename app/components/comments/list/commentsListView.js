@@ -12,9 +12,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     itemViewContainer: '.comments', // Automatically inserts comments here
 
     initialize: function() {
-      this.id = this.collection.id;  // Shot ID
-      this.projectId = this.collection.projectId;
-
       this.listenTo(this.collection, 'sync', this.render);    // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
     },

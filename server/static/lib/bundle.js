@@ -164,14 +164,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":51}],6:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
-var CommentView = require('../show/commentView.js');
+var CommentShowView = require('../show/commentShowView.js');
 var commentsListTemplate = require('./commentsListTemplate.hbs');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: commentsListTemplate,
 
-    itemView: CommentView,
+    itemView: CommentShowView,
     itemViewContainer: '.comments', // Automatically inserts comments here
 
     initialize: function() {
@@ -238,7 +238,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     }
   });
 
-},{"../show/commentView.js":10,"./commentsListTemplate.hbs":5}],7:[function(require,module,exports){
+},{"../show/commentShowView.js":10,"./commentsListTemplate.hbs":5}],7:[function(require,module,exports){
 /* Comment Model - data layer for a single Comment */
 
 var utils = require('../../../utils.js');
@@ -335,11 +335,11 @@ function program1(depth0,data) {
 },{"hbsfy/runtime":51}],10:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
-var commentTemplate = require('./commentTemplate.hbs');
+var commentShowTemplate = require('./commentShowTemplate.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
-    template: commentTemplate,
+    template: commentShowTemplate,
 
     initialize: function() {
       this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
@@ -444,7 +444,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
   });
 
-},{"./commentTemplate.hbs":9}],11:[function(require,module,exports){
+},{"./commentShowTemplate.hbs":9}],11:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1327,6 +1327,11 @@ var Comments = require('../../comments/comments.js');
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotShowCardTemplate,
+  id: function() {
+    // Sets the id= attribute of our <li>
+    return(this.model.get('id'));
+  },
+  className: 'shot',
 
   initialize: function(options) {
     // Model is passed in via controller   
@@ -1337,9 +1342,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     // Setup comment card to show # of comments
     this.comments = new Comments.ListCard({shotId: this.model.get('id'), projectId: this.model.get('projectId')});
-
-    this.$el.attr('id', this.model.get('id'));
-    this.$el.addClass('shot');
   },
 
   events: {
@@ -1454,6 +1456,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: shotShowTemplate,
   className: 'shot',
   id: function() {
+    // Sets the id= of our <li>
     return(this.model.get('id'));
   },
 

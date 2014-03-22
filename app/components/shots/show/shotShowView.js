@@ -9,6 +9,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: shotShowTemplate,
   className: 'shot',
   id: function() {
+    // Sets the id= of our <li>
     return(this.model.get('id'));
   },
 

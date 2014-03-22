@@ -7,6 +7,11 @@ var Comments = require('../../comments/comments.js');
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotShowCardTemplate,
+  id: function() {
+    // Sets the id= attribute of our <li>
+    return(this.model.get('id'));
+  },
+  className: 'shot',
 
   initialize: function(options) {
     // Model is passed in via controller   
@@ -17,9 +22,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     // Setup comment card to show # of comments
     this.comments = new Comments.ListCard({shotId: this.model.get('id'), projectId: this.model.get('projectId')});
-
-    this.$el.attr('id', this.model.get('id'));
-    this.$el.addClass('shot');
   },
 
   events: {

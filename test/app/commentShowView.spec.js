@@ -15,11 +15,11 @@ describe('commentView', function() {
       
       // Pre-compile Handlebars template
       var Handlebars = require('handlebars');
-      var templateFilename = path.resolve(__dirname, componentsDir + 'comments/show/commentTemplate.hbs');
+      var templateFilename = path.resolve(__dirname, componentsDir + 'comments/show/commentShowTemplate.hbs');
       var commentTemplate = Handlebars.compile(templateFilename);
 
       // Setup objects
-      CommentView = require(componentsDir + 'comments/show/commentView.js');
+      CommentView = require(componentsDir + 'comments/show/commentShowView.js');
       CommentModel = Backbone.Model;  // Dummy model to pass into view
 
       done();

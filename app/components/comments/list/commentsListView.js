@@ -1,13 +1,13 @@
 /* Comments View - displays a list of comments */
 
-var CommentView = require('../show/commentView.js');
+var CommentShowView = require('../show/commentShowView.js');
 var commentsListTemplate = require('./commentsListTemplate.hbs');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: commentsListTemplate,
 
-    itemView: CommentView,
+    itemView: CommentShowView,
     itemViewContainer: '.comments', // Automatically inserts comments here
 
     initialize: function() {

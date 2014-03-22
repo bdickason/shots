@@ -1,10 +1,10 @@
 /* Comments View - displays a list of comments */
 
-var commentTemplate = require('./commentTemplate.hbs');
+var commentShowTemplate = require('./commentShowTemplate.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
-    template: commentTemplate,
+    template: commentShowTemplate,
 
     initialize: function() {
       this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading

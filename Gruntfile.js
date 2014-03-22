@@ -48,6 +48,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['browserify', 'mochaTest']); // By default run tests
+  grunt.registerTask('default', ['browserify', 'compass', 'mochaTest']); // By default run tests
   grunt.registerTask('tests', 'mochaTest');   // Only run tests 
 };

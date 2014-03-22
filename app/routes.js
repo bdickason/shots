@@ -8,7 +8,8 @@ var TwoColumnLayout = require('./layouts/twoColumnLayout.js');
 var NavView = require('./components/nav/navView.js');
 
 // Projects
-var ProjectListView = require('./components/projects/list/projectListView.js');
+var ProjectList = require('./components/projects/list/projectList.js');
+// var ProjectListView = require('./components/projects/list/projectListView.js');
 var ProjectView = require('./components/projects/show/projectView.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
@@ -43,8 +44,7 @@ module.exports = Backbone.Router.extend({
         app.subhead.close();
 
         // Display list of latest projects
-        var projectListView = new ProjectListView();
-        app.content.show(projectListView);
+        var projectList = new ProjectList({region: app.content});
     },
 
     project: function(project) {

@@ -32,7 +32,10 @@ module.exports = function(grunt) {
     browserify: {
       'server/static/lib/bundle.js': ['app/app.js'],
       options: {
-        transform: ['hbsfy']
+        transform: ['hbsfy'],
+        detectGlobals: false,
+        cache: true,
+        debug: false
       }
     },
     watch: {

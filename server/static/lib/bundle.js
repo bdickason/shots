@@ -724,6 +724,7 @@ var ProjectListView = require('./list/projectListView.js');
 var ProjectShowView = require('./show/projectShowView.js');
 
 // Models
+var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ProjectsCollectionFirebase = require('./models/projectsCollectionFirebase.js');
 
 module.exports.List = Backbone.Marionette.Controller.extend({
@@ -743,11 +744,13 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
     */
     initialize: function(options) {
         this.id = options.id;
-        this.view = new ProjectShowView({id: this.id});
+
+        this.project = new ProjectModelFirebase({id: this.id});
+        this.view = new ProjectShowView({model: this.project});
     }
 });
 
-},{"./list/projectListView.js":17,"./models/projectsCollectionFirebase.js":20,"./show/projectShowView.js":26}],24:[function(require,module,exports){
+},{"./list/projectListView.js":17,"./models/projectModelFirebase.js":19,"./models/projectsCollectionFirebase.js":20,"./show/projectShowView.js":26}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -798,8 +801,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
 },{"../models/projectModelFirebase.js":19,"./projectCardTemplate.hbs":24}],26:[function(require,module,exports){
 /* Project View - displays a single projects */
 
-var ProjectModelFirebase = require('../models/projectModelFirebase.js');
-
 var projectTemplate = require('./projectTemplate.hbs');
 
 var ShotsCollectionFirebase = require('../../shots/shotsCollectionFirebase.js');
@@ -812,10 +813,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: projectTemplate,
 
   initialize: function() {
-    if(!this.model) {
-      this.model = new ProjectModelFirebase({id: this.id});
-    }
-
+    // Model must be passed in by controller
     this.listenTo(this.model, 'sync', this.render); // Without this, the model doesn't render after it completes loading
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
@@ -906,7 +904,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../shots/list/shotListView.js":30,"../../shots/shotsCollectionFirebase.js":33,"../models/projectModelFirebase.js":19,"./projectTemplate.hbs":27}],27:[function(require,module,exports){
+},{"../../shots/list/shotListView.js":30,"../../shots/shotsCollectionFirebase.js":33,"./projectTemplate.hbs":27}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

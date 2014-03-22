@@ -1,7 +1,5 @@
 /* Project View - displays a single projects */
 
-var ProjectModelFirebase = require('../models/projectModelFirebase.js');
-
 var projectTemplate = require('./projectTemplate.hbs');
 
 var ShotsCollectionFirebase = require('../../shots/shotsCollectionFirebase.js');
@@ -14,10 +12,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: projectTemplate,
 
   initialize: function() {
-    if(!this.model) {
-      this.model = new ProjectModelFirebase({id: this.id});
-    }
-
+    // Model must be passed in by controller
     this.listenTo(this.model, 'sync', this.render); // Without this, the model doesn't render after it completes loading
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render

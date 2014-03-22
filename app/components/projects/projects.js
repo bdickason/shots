@@ -5,6 +5,7 @@ var ProjectListView = require('./list/projectListView.js');
 var ProjectShowView = require('./show/projectShowView.js');
 
 // Models
+var ProjectModelFirebase = require('./models/projectModelFirebase.js');
 var ProjectsCollectionFirebase = require('./models/projectsCollectionFirebase.js');
 
 module.exports.List = Backbone.Marionette.Controller.extend({
@@ -24,6 +25,8 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
     */
     initialize: function(options) {
         this.id = options.id;
-        this.view = new ProjectShowView({id: this.id});
+
+        this.project = new ProjectModelFirebase({id: this.id});
+        this.view = new ProjectShowView({model: this.project});
     }
 });

@@ -2,11 +2,12 @@
 
 // Views
 var CommentsListView = require('./list/commentsListView.js');
+var CommentsListCardView = require('./list/commentsListCardView.js');
 // var ShotShowView = require('./show/shotShowView.js');
 // var ShotShowCardView = require('./show/shotShowCardView.js');
 
 // Models
-var CommentModelFirebase = require('./models/commentModelFirebase.js');
+var CommentModel = require('./models/commentModel.js');
 var CommentsCollectionFirebase = require('./models/commentsCollectionFirebase.js');
 
 module.exports.List = Backbone.Marionette.Controller.extend({
@@ -20,24 +21,24 @@ module.exports.List = Backbone.Marionette.Controller.extend({
         this.shotId = options.shotId;
 
         this.comments = new CommentsCollectionFirebase([], {projectId: this.projectId, shotId: this.shotId});
-        this.view = new CommentssListView({collection: this.comments});
+        this.view = new CommentsListView({collection: this.comments});
    }
 });
 
-// module.exports.ListCard = Backbone.Marionette.Controller.extend({
-//     /* ShowCard - Displays a single Shot's Card (summary view)
-//      Inputs:
-//         projectId: ID of the project the shot belongs to
-//         id: shot's ID
-//     */
-//     initialize: function(options) {
-//         this.projectId = options.projectId;
-//         this.id = options.id;
+module.exports.ListCard = Backbone.Marionette.Controller.extend({
+    /* ListCard - Displays the # of comments for a given Shot
+     Inputs:
+        projectId: ID of the project the shot belongs to
+        id: shot's ID
+    */
+    initialize: function(options) {
+        this.projectId = options.projectId;
+        this.shotId = options.shotId;
 
-//         this.shot = new ShotModelFirebase({id: this.id});
-//         this.view = new ShotShowCardView({model: this.projectId});
-//     }
-// });
+        this.comments = new CommentsCollectionFirebase([], {projectId: this.projectId, shotId: this.shotId});
+        this.view = new CommentsListCardView({collection: this.comments});
+    }
+});
 
 // module.exports.Show = Backbone.Marionette.Controller.extend({
 //     /* Show - Displays a single Shot

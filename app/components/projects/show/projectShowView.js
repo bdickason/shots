@@ -1,6 +1,6 @@
 /* Project View - displays a single projects */
 
-var ProjectModelFirebase = require('../projectModelFirebase.js');
+var ProjectModelFirebase = require('../models/projectModelFirebase.js');
 
 var projectTemplate = require('./projectTemplate.hbs');
 

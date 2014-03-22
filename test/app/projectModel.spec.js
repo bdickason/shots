@@ -9,7 +9,7 @@ describe('projectModel', function() {
 
   beforeEach(function(done) {
     clientenv.setup(function() {
-      ProjectModel = require(componentsDir + 'projects/projectModel.js');
+      ProjectModel = require(componentsDir + 'projects/models/projectModel.js');
 
       done();
     });

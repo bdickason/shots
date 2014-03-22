@@ -2,7 +2,7 @@
 
 var projectsTemplate = require('./projectListTemplate.hbs');
 
-var ProjectsCollectionFirebase = require('../projectsCollectionFirebase.js');
+var ProjectsCollectionFirebase = require('../models/projectsCollectionFirebase.js');
 
 var ProjectCardView = require('../show/projectCardView.js');
 

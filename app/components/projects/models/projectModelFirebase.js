@@ -1,9 +1,13 @@
-/* Project Model - data layer for a single Project for use in Firebase Collections */
+/* Project Model - For standalone use (not in a collection) */
 
-var utils = require('../../utils.js');
+var utils = require('../../../utils.js');
 
-module.exports = Backbone.Model.extend({
+module.exports = Backbone.Firebase.Model.extend({
+  firebase: function() {
+    return(new Firebase(this.fbUrl));
+  },
   initialize: function() {
+    this.fbUrl = app.fbUrl + '/projects/' + this.get('id');
   },
   isOwner: function(user) {
     if(this.get('user') == user) {
@@ -19,11 +23,11 @@ module.exports = Backbone.Model.extend({
 
     if(currentUser) {
       if(this.isOwner(currentUser)) {
-      // User owns this project
-      output.owner = true;
+        // User owns this project
+        output.owner = true;
       }
     }
-
+    
     return(output);
   }
 });

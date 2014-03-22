@@ -533,7 +533,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var projectsTemplate = require('./projectListTemplate.hbs');
 
-var ProjectsCollectionFirebase = require('../projectsCollectionFirebase.js');
+var ProjectsCollectionFirebase = require('../models/projectsCollectionFirebase.js');
 
 var ProjectCardView = require('../show/projectCardView.js');
 
@@ -595,10 +595,10 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   },
 });
 
-},{"../projectsCollectionFirebase.js":23,"../show/projectCardView.js":25,"./projectListTemplate.hbs":16}],18:[function(require,module,exports){
+},{"../models/projectsCollectionFirebase.js":20,"../show/projectCardView.js":25,"./projectListTemplate.hbs":16}],18:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
-var utils = require('../../utils.js');
+var utils = require('../../../utils.js');
 
 module.exports = Backbone.Model.extend({
   initialize: function() {
@@ -626,10 +626,10 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{"../../utils.js":42}],19:[function(require,module,exports){
+},{"../../../utils.js":42}],19:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
 
-var utils = require('../../utils.js');
+var utils = require('../../../utils.js');
 
 module.exports = Backbone.Firebase.Model.extend({
   firebase: function() {
@@ -661,7 +661,17 @@ module.exports = Backbone.Firebase.Model.extend({
   }
 });
 
-},{"../../utils.js":42}],20:[function(require,module,exports){
+},{"../../../utils.js":42}],20:[function(require,module,exports){
+/* Projects Collection - An ordered list of Projects */
+var ProjectModel = require('./projectModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: ProjectModel,
+    firebase: new Firebase(app.fbUrl + '/projects/'),
+    initialize: function() {
+    }
+  });
+},{"./projectModel.js":18}],21:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -682,7 +692,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":50}],21:[function(require,module,exports){
+},{"hbsfy/runtime":50}],22:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./projectNavTemplate.hbs');
@@ -711,7 +721,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"./projectNavTemplate.hbs":20}],22:[function(require,module,exports){
+},{"./projectNavTemplate.hbs":21}],23:[function(require,module,exports){
 /* Projects Controller - Ties together Layout, View, and Model/Controllers */
 
 var ProjectListView = require('./list/projectListView.js');
@@ -737,17 +747,7 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
     }
 });
 
-},{"./list/projectListView.js":17,"./show/projectShowView.js":26}],23:[function(require,module,exports){
-/* Projects Collection - An ordered list of Projects */
-var ProjectModel = require('./projectModel.js');
-
-module.exports = Backbone.Firebase.Collection.extend({
-    model: ProjectModel,
-    firebase: new Firebase(app.fbUrl + '/projects/'),
-    initialize: function() {
-    }
-  });
-},{"./projectModel.js":18}],24:[function(require,module,exports){
+},{"./list/projectListView.js":17,"./show/projectShowView.js":26}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -779,7 +779,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":50}],25:[function(require,module,exports){
 /* Project Card View - displays a snapshot of a single projects */
 
-var ProjectModelFirebase = require('../projectModelFirebase.js');
+var ProjectModelFirebase = require('../models/projectModelFirebase.js');
 
 var projectCardTemplate = require('./projectCardTemplate.hbs');
 
@@ -795,10 +795,10 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../projectModelFirebase.js":19,"./projectCardTemplate.hbs":24}],26:[function(require,module,exports){
+},{"../models/projectModelFirebase.js":19,"./projectCardTemplate.hbs":24}],26:[function(require,module,exports){
 /* Project View - displays a single projects */
 
-var ProjectModelFirebase = require('../projectModelFirebase.js');
+var ProjectModelFirebase = require('../models/projectModelFirebase.js');
 
 var projectTemplate = require('./projectTemplate.hbs');
 
@@ -906,7 +906,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../shots/list/shotListView.js":30,"../../shots/shotsCollectionFirebase.js":33,"../projectModelFirebase.js":19,"./projectTemplate.hbs":27}],27:[function(require,module,exports){
+},{"../../shots/list/shotListView.js":30,"../../shots/shotsCollectionFirebase.js":33,"../models/projectModelFirebase.js":19,"./projectTemplate.hbs":27}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1692,7 +1692,7 @@ module.exports = Backbone.Router.extend({
         app.content.show(helpView);
     }
 });
-},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/projectNav/projectNavView.js":21,"./components/projects/projects.js":22,"./components/shots/list/shotListView.js":30,"./components/shots/show/shotView.js":37,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
+},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/projectNav/projectNavView.js":22,"./components/projects/projects.js":23,"./components/shots/list/shotListView.js":30,"./components/shots/show/shotView.js":37,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js

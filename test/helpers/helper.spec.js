@@ -32,7 +32,6 @@ module.exports.setup = setup = function(callback) {
               scriptDir + 'backbone-firebase.js',
               scriptDir + 'firebase-simple-login.js',
               ],
-    styleSheets: '../../server/static/css/screen.css',
     done: function(errs, window) {
       global.window = window;
       

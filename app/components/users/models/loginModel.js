@@ -5,6 +5,8 @@ profileImage: User's avatar
 username: user's handle
 */
 
+// var UserModelFirebase = require('../models/UserModelFirebase.js');
+
 module.exports = Backbone.Model.extend({
     initialize: function() {
       /* Authentication via Twitter/Firebase */

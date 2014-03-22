@@ -2,13 +2,13 @@
 
 var shotsListTemplate = require('./shotsListTemplate.hbs');
 
-var ShotCardView = require('../show/shotCardView.js');
+var ShotShowCardView = require('../show/shotShowCardView.js');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: shotsListTemplate,
 
-    itemView: ShotCardView,
+    itemView: ShotShowCardView,
     itemViewContainer: 'ul.shots',
 
     initialize: function(options) {

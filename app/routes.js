@@ -13,7 +13,6 @@ var ProjectNavView = require('./components/projects/projectNav/projectNavView.js
 
 // Shots
 var Shots = require('./components/shots/shots.js');
-// var ShotView = require('./components/shots/show/shotView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');

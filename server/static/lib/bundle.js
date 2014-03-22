@@ -978,13 +978,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var shotsListTemplate = require('./shotsListTemplate.hbs');
 
-var ShotCardView = require('../show/shotCardView.js');
+var ShotShowCardView = require('../show/shotShowCardView.js');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: shotsListTemplate,
 
-    itemView: ShotCardView,
+    itemView: ShotShowCardView,
     itemViewContainer: 'ul.shots',
 
     initialize: function(options) {
@@ -1086,7 +1086,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     }
   });
 
-},{"../show/shotCardView.js":35,"./shotsListTemplate.hbs":28}],30:[function(require,module,exports){
+},{"../show/shotShowCardView.js":35,"./shotsListTemplate.hbs":28}],30:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
 var utils = require('../../../utils.js');
@@ -1159,6 +1159,7 @@ module.exports = Backbone.Firebase.Collection.extend({
 // Views
 var ShotsListView = require('./list/shotsListView.js');
 var ShotShowView = require('./show/shotShowView.js');
+var ShotShowCardView = require('./show/shotShowCardView.js');
 
 // Models
 var ShotModelFirebase = require('./models/shotModelFirebase.js');
@@ -1192,20 +1193,22 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
 });
 
 
-// module.exports.ShowCard = Backbone.Marionette.Controller.extend({
-//     /* ShowCard - Displays a single Project's Card (summary view)
-//      Inputs:
-//         id: project's ID
-//     */
-//     initialize: function(options) {
-//         this.id = options.id;
+module.exports.ShowCard = Backbone.Marionette.Controller.extend({
+    /* ShowCard - Displays a single Shot's Card (summary view)
+     Inputs:
+        projectId: ID of the project the shot belongs to
+        id: shot's ID
+    */
+    initialize: function(options) {
+        this.projectId = options.projectId;
+        this.id = options.id;
 
-//         this.project = new ProjectModelFirebase({id: this.id});
-//         this.view = new ProjectShowCardView({model: this.project});
-//     }
-// });
+        this.shot = new ShotModelFirebase({id: this.id});
+        this.view = new ShotShowCardView({model: this.projectId});
+    }
+});
 
-},{"./list/shotsListView.js":29,"./models/shotModelFirebase.js":31,"./models/shotsCollectionFirebase.js":32,"./show/shotShowView.js":37}],34:[function(require,module,exports){
+},{"./list/shotsListView.js":29,"./models/shotModelFirebase.js":31,"./models/shotsCollectionFirebase.js":32,"./show/shotShowCardView.js":35,"./show/shotShowView.js":37}],34:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1265,23 +1268,17 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":50}],35:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('../models/shotModelFirebase.js');
-
-var shotCardTemplate = require('./shotCardTemplate.hbs');
+var shotShowCardTemplate = require('./shotShowCardTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase.js');
 var CommentsCardView = require('../../comments/list/commentListCardView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
-  template: shotCardTemplate,
+  template: shotShowCardTemplate,
 
   initialize: function(options) {
-    if(!this.model) {
-      // Model is not passed in by parent View
-      this.model = new ShotModelFirebase({id: options.id, projectId: options.projectId});
-    }
-   
+    // Model is passed in via controller   
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
 
@@ -1321,7 +1318,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase.js":3,"../../comments/list/commentListCardView.js":5,"../models/shotModelFirebase.js":31,"./shotCardTemplate.hbs":34}],36:[function(require,module,exports){
+},{"../../comments/commentsCollectionFirebase.js":3,"../../comments/list/commentListCardView.js":5,"./shotShowCardTemplate.hbs":34}],36:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1625,7 +1622,6 @@ var ProjectNavView = require('./components/projects/projectNav/projectNavView.js
 
 // Shots
 var Shots = require('./components/shots/shots.js');
-// var ShotView = require('./components/shots/show/shotView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');

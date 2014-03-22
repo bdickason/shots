@@ -14,7 +14,7 @@ describe('shotView', function() {
     clientenv.setup(function() {
       
       // Pre-compile Handlebars template
-      var templateFilename = path.resolve(__dirname, componentsDir + 'shots/show/shotCardTemplate.hbs');
+      var templateFilename = path.resolve(__dirname, componentsDir + 'shots/show/shotShowCardTemplate.hbs');
 
       var Handlebars = require('handlebars');
 
@@ -40,7 +40,7 @@ describe('shotView', function() {
       shotTemplate = Handlebars.compile(templateFilename);
 
       // Setup objects
-      ShotView = require(componentsDir + 'shots/show/shotCardView.js');
+      ShotView = require(componentsDir + 'shots/show/shotShowCardView.js');
       ShotModel = Backbone.Model;  // Dummy model to pass into view
 
       done();

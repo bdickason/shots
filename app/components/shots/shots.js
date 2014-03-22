@@ -3,6 +3,7 @@
 // Views
 var ShotsListView = require('./list/shotsListView.js');
 var ShotShowView = require('./show/shotShowView.js');
+var ShotShowCardView = require('./show/shotShowCardView.js');
 
 // Models
 var ShotModelFirebase = require('./models/shotModelFirebase.js');
@@ -36,15 +37,17 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
 });
 
 
-// module.exports.ShowCard = Backbone.Marionette.Controller.extend({
-//     /* ShowCard - Displays a single Project's Card (summary view)
-//      Inputs:
-//         id: project's ID
-//     */
-//     initialize: function(options) {
-//         this.id = options.id;
+module.exports.ShowCard = Backbone.Marionette.Controller.extend({
+    /* ShowCard - Displays a single Shot's Card (summary view)
+     Inputs:
+        projectId: ID of the project the shot belongs to
+        id: shot's ID
+    */
+    initialize: function(options) {
+        this.projectId = options.projectId;
+        this.id = options.id;
 
-//         this.project = new ProjectModelFirebase({id: this.id});
-//         this.view = new ProjectShowCardView({model: this.project});
-//     }
-// });
+        this.shot = new ShotModelFirebase({id: this.id});
+        this.view = new ShotShowCardView({model: this.projectId});
+    }
+});

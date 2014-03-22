@@ -1,22 +1,16 @@
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('../models/shotModelFirebase.js');
-
-var shotCardTemplate = require('./shotCardTemplate.hbs');
+var shotShowCardTemplate = require('./shotShowCardTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase.js');
 var CommentsCardView = require('../../comments/list/commentListCardView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
-  template: shotCardTemplate,
+  template: shotShowCardTemplate,
 
   initialize: function(options) {
-    if(!this.model) {
-      // Model is not passed in by parent View
-      this.model = new ShotModelFirebase({id: options.id, projectId: options.projectId});
-    }
-   
+    // Model is passed in via controller   
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
 

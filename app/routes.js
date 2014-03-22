@@ -13,8 +13,7 @@ var ProjectNavView = require('./components/projects/projectNav/projectNavView.js
 
 // Shots
 var Shots = require('./components/shots/shots.js');
-var ShotView = require('./components/shots/show/shotView.js');
-// var ShotListView = require('./components/shots/list/shotListView.js');
+// var ShotView = require('./components/shots/show/shotView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');
@@ -72,21 +71,21 @@ module.exports = Backbone.Router.extend({
         twoColumn.right.show(shots.view);
     },
 
-    shot: function(project, shot) {
+    shot: function(projectId, shotId) {
         // (/:projectName/shotName) - Loads a single shot
-        console.log('[shot]: /#' + project + '/' + shot);
+        console.log('[shot]: /#' + projectId + '/' + shotId);
 
         // Display navigation
         var navView = new NavView({model: app.user});
         app.header.show(navView);
 
         // Display 'project' sub-navigation
-        var projectNav = new ProjectNavView({id: project});
+        var projectNav = new ProjectNavView({id: projectId});
         app.subhead.show(projectNav);
 
         // Display a single shot
-        var shotView = new ShotView({id: shot, projectId: project });
-        app.content.show(shotView);
+        var shot = new Shots.Show({projectId: projectId, id: shotId});
+        app.content.show(shot.view);
     },
 
     contribute: function() {

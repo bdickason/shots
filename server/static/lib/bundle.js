@@ -1158,7 +1158,7 @@ module.exports = Backbone.Firebase.Collection.extend({
 
 // Views
 var ShotsListView = require('./list/shotsListView.js');
-// var ShotShowView = require('./show/shotShowView.js');
+var ShotShowView = require('./show/shotShowView.js');
 
 // Models
 var ShotModelFirebase = require('./models/shotModelFirebase.js');
@@ -1176,18 +1176,20 @@ module.exports.List = Backbone.Marionette.Controller.extend({
    }
 });
 
-// module.exports.Show = Backbone.Marionette.Controller.extend({
-//     /* Show - Displays a single Project
-//      Inputs:
-//         id: project's ID
-//     */
-//     initialize: function(options) {
-//         this.id = options.id;
+module.exports.Show = Backbone.Marionette.Controller.extend({
+    /* Show - Displays a single Shot
+     Inputs:
+        projectId: ID of the project the shot belongs to
+        id: shot's ID
+    */
+    initialize: function(options) {
+        this.projectId = options.projectId;
+        this.id = options.id;
 
-//         this.project = new ProjectModelFirebase({id: this.id});
-//         this.view = new ProjectShowView({model: this.project});
-//     }
-// });
+        this.shot = new ShotModelFirebase({projectId: this.projectId, id: this.id});
+        this.view = new ShotShowView({model: this.shot});
+    }
+});
 
 
 // module.exports.ShowCard = Backbone.Marionette.Controller.extend({
@@ -1203,7 +1205,7 @@ module.exports.List = Backbone.Marionette.Controller.extend({
 //     }
 // });
 
-},{"./list/shotsListView.js":29,"./models/shotModelFirebase.js":31,"./models/shotsCollectionFirebase.js":32}],34:[function(require,module,exports){
+},{"./list/shotsListView.js":29,"./models/shotModelFirebase.js":31,"./models/shotsCollectionFirebase.js":32,"./show/shotShowView.js":37}],34:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1396,27 +1398,21 @@ function program1(depth0,data) {
 },{"hbsfy/runtime":50}],37:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('../models/shotModelFirebase.js');
-
-var shotTemplate = require('./shotTemplate.hbs');
+var shotShowTemplate = require('./shotShowTemplate.hbs');
 
 var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase');
 var CommentsView = require('../../comments/list/commentListView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
-  template: shotTemplate,
+  template: shotShowTemplate,
   className: 'shot',
   id: function() {
     return(this.model.get('id'));
   },
 
   initialize: function(options) {
-    if(!this.model) {
-      // Model is not passed in by parent View
-      this.model = new ShotModelFirebase({id: options.id, projectId: options.projectId});
-    }
-   
+    // Model is passed in by Controller   
     this.listenTo(this.model, 'change', this.render); // Without this, the model doesn't render after it completes loading
     this.listenTo(this.model, 'remove', this.render); // Without this, the model sticks around after being deleted elsewhere
    
@@ -1532,7 +1528,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase":3,"../../comments/list/commentListView.js":7,"../models/shotModelFirebase.js":31,"./shotTemplate.hbs":36}],38:[function(require,module,exports){
+},{"../../comments/commentsCollectionFirebase":3,"../../comments/list/commentListView.js":7,"./shotShowTemplate.hbs":36}],38:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name
@@ -1629,8 +1625,7 @@ var ProjectNavView = require('./components/projects/projectNav/projectNavView.js
 
 // Shots
 var Shots = require('./components/shots/shots.js');
-var ShotView = require('./components/shots/show/shotView.js');
-// var ShotListView = require('./components/shots/list/shotListView.js');
+// var ShotView = require('./components/shots/show/shotView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');
@@ -1688,21 +1683,21 @@ module.exports = Backbone.Router.extend({
         twoColumn.right.show(shots.view);
     },
 
-    shot: function(project, shot) {
+    shot: function(projectId, shotId) {
         // (/:projectName/shotName) - Loads a single shot
-        console.log('[shot]: /#' + project + '/' + shot);
+        console.log('[shot]: /#' + projectId + '/' + shotId);
 
         // Display navigation
         var navView = new NavView({model: app.user});
         app.header.show(navView);
 
         // Display 'project' sub-navigation
-        var projectNav = new ProjectNavView({id: project});
+        var projectNav = new ProjectNavView({id: projectId});
         app.subhead.show(projectNav);
 
         // Display a single shot
-        var shotView = new ShotView({id: shot, projectId: project });
-        app.content.show(shotView);
+        var shot = new Shots.Show({projectId: projectId, id: shotId});
+        app.content.show(shot.view);
     },
 
     contribute: function() {
@@ -1737,7 +1732,7 @@ module.exports = Backbone.Router.extend({
         app.content.show(helpView);
     }
 });
-},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/projectNav/projectNavView.js":22,"./components/projects/projects.js":23,"./components/shots/shots.js":33,"./components/shots/show/shotView.js":37,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
+},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/projectNav/projectNavView.js":22,"./components/projects/projects.js":23,"./components/shots/shots.js":33,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js

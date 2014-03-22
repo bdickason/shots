@@ -2,8 +2,8 @@
 
 var shotShowTemplate = require('./shotShowTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase');
-var CommentsView = require('../../comments/list/commentListView.js');
+var CommentsCollectionFirebase = require('../../comments/models/commentsCollectionFirebase.js');
+var CommentsView = require('../../comments/list/commentsListView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',

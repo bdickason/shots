@@ -9,7 +9,7 @@ describe('commentModel', function() {
 
   beforeEach(function(done) {
     clientenv.setup(function() {
-      CommentModel = require(componentsDir + 'comments/commentModel.js');
+      CommentModel = require(componentsDir + 'comments/models/commentModel.js');
 
       done();
     });

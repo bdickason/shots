@@ -1,10 +1,10 @@
 /* Comments View - displays a list of comments */
 
-var commentListCardTemplate = require('./commentListCardTemplate.hbs');
+var commentsListCardTemplate = require('./commentsListCardTemplate.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
-    template: commentListCardTemplate,
+    template: commentsListCardTemplate,
 
     initialize: function() {
       this.id = this.collection.id;  // Shot ID

@@ -6,7 +6,7 @@ var clientenv = require('../helpers/helper.spec.js'),
     fs = require('fs'),
     path = require('path');
     
-describe('commentListView', function() {
+describe('commentsListView', function() {
 
   var CommentsCollection,
       CommentModel;
@@ -14,7 +14,7 @@ describe('commentListView', function() {
   beforeEach(function(done) {
     clientenv.setup(function() {
       // Pre-compile Handlebars template
-      var templateFilename = path.resolve(__dirname, componentsDir + 'comments/list/commentListTemplate.hbs');
+      var templateFilename = path.resolve(__dirname, componentsDir + 'comments/list/commentsListTemplate.hbs');
 
       var Handlebars = require('handlebars');
 
@@ -44,7 +44,7 @@ describe('commentListView', function() {
       syncStub = sinon.stub(Backbone.Model.prototype, 'sync');
 
       // Objects
-      CommentsView = require(componentsDir + 'comments/list/commentListView.js');
+      CommentsView = require(componentsDir + 'comments/list/commentsListView.js');
       CommentsCollection = Backbone.Collection;  // Dummy collection to pass into view
       CommentModel = Backbone.Model;             // Dummy model to pass into view
 

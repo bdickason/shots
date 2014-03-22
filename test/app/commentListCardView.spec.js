@@ -16,7 +16,7 @@ describe('commentListCardView', function() {
   beforeEach(function(done) {
     clientenv.setup(function() {
       // Pre-compile Handlebars template
-      var templateFilename = path.resolve(__dirname, componentsDir + 'comments/list/commentListCardTemplate.hbs');
+      var templateFilename = path.resolve(__dirname, componentsDir + 'comments/list/commentsListCardTemplate.hbs');
 
       var Handlebars = require('handlebars');
 
@@ -46,7 +46,7 @@ describe('commentListCardView', function() {
       syncStub = sinon.stub(Backbone.Model.prototype, 'sync');
 
       // Objects
-      CommentsCardView = require(componentsDir + 'comments/list/commentListCardView.js');
+      CommentsCardView = require(componentsDir + 'comments/list/commentsListCardView.js');
       CommentsCollection = Backbone.Collection;  // Dummy collection to pass into view
       CommentModel = Backbone.Model;             // Dummy model to pass into view
 

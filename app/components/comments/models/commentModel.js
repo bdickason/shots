@@ -1,6 +1,6 @@
 /* Comment Model - data layer for a single Comment */
 
-var utils = require('../../utils.js');
+var utils = require('../../../utils.js');
 
 module.exports = Backbone.Model.extend({
     initialize: function() {

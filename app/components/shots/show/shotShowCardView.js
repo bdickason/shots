@@ -2,8 +2,8 @@
 
 var shotShowCardTemplate = require('./shotShowCardTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase.js');
-var CommentsCardView = require('../../comments/list/commentListCardView.js');
+var CommentsCollectionFirebase = require('../../comments/models/commentsCollectionFirebase.js');
+var CommentsCardView = require('../../comments/list/commentsListCardView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',

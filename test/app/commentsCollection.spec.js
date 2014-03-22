@@ -10,7 +10,7 @@ describe('commentsCollectionFirebase', function() {
 
   beforeEach(function(done) {
     clientenv.setup(function() {
-      CommentsCollectionFirebase = require(componentsDir + 'comments/commentsCollectionFirebase.js');
+      CommentsCollectionFirebase = require(componentsDir + 'comments/models/commentsCollectionFirebase.js');
 
       app.fbUrl = 'http://www.blah.com';
       // Stub external libraries

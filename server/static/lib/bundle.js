@@ -43,46 +43,6 @@ window.onload = function(){
 
 
 },{"./components/users/loginModel.js":38,"./routes.js":41,"./utils.js":42}],2:[function(require,module,exports){
-/* Comment Model - data layer for a single Comment */
-
-var utils = require('../../utils.js');
-
-module.exports = Backbone.Model.extend({
-    initialize: function() {
-    },
-    defaults: {
-      text: ''
-    },
-    toJSON: function() {
-      var output = utils.formatTime(this);  // Generate human-readable timestamp
-      
-      if(this.get('user') === app.user.get('username')) {
-        // User owns this comment
-        output.owner = true;
-      }
-      
-      return(output);         // Generate human-readable timestamp
-    }
-});
-
-},{"../../utils.js":42}],3:[function(require,module,exports){
-/* Comments Collection - An ordered list of Comments */
-var CommentModel = require('./commentModel.js');
-
-module.exports = Backbone.Firebase.Collection.extend({
-    model: CommentModel,
-    comparator: function(model) {
-      // Sorts model by timestamp, newest first
-      return(-model.get('timestamp'));
-    },
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
-    initialize: function(models, options) {
-        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.shotId;
-    }
-  });
-},{"./commentModel.js":2}],4:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -99,14 +59,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":50}],5:[function(require,module,exports){
+},{"hbsfy/runtime":50}],3:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
-var commentListCardTemplate = require('./commentListCardTemplate.hbs');
+var commentsListCardTemplate = require('./commentsListCardTemplate.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
-    template: commentListCardTemplate,
+    template: commentsListCardTemplate,
 
     initialize: function() {
       this.id = this.collection.id;  // Shot ID
@@ -124,7 +84,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     }
   });
 
-},{"./commentListCardTemplate.hbs":4}],6:[function(require,module,exports){
+},{"./commentsListCardTemplate.hbs":2}],4:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -141,16 +101,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":50}],7:[function(require,module,exports){
+},{"hbsfy/runtime":50}],5:[function(require,module,exports){
 /* Comments View - displays a list of comments */
 
 var CommentView = require('../show/commentView.js');
-var commentListTemplate = require('./commentListTemplate.hbs');
+var commentsListTemplate = require('./commentsListTemplate.hbs');
 
 
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
-    template: commentListTemplate,
+    template: commentsListTemplate,
 
     itemView: CommentView,
     itemViewContainer: '.comments', // Automatically inserts comments here
@@ -222,7 +182,47 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     }
   });
 
-},{"../show/commentView.js":9,"./commentListTemplate.hbs":6}],8:[function(require,module,exports){
+},{"../show/commentView.js":9,"./commentsListTemplate.hbs":4}],6:[function(require,module,exports){
+/* Comment Model - data layer for a single Comment */
+
+var utils = require('../../../utils.js');
+
+module.exports = Backbone.Model.extend({
+    initialize: function() {
+    },
+    defaults: {
+      text: ''
+    },
+    toJSON: function() {
+      var output = utils.formatTime(this);  // Generate human-readable timestamp
+      
+      if(this.get('user') === app.user.get('username')) {
+        // User owns this comment
+        output.owner = true;
+      }
+      
+      return(output);         // Generate human-readable timestamp
+    }
+});
+
+},{"../../../utils.js":42}],7:[function(require,module,exports){
+/* Comments Collection - An ordered list of Comments */
+var CommentModel = require('./commentModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: CommentModel,
+    comparator: function(model) {
+      // Sorts model by timestamp, newest first
+      return(-model.get('timestamp'));
+    },
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, options) {
+        this.fbUrl = app.fbUrl + '/comments/' + options.projectId + '/' + options.shotId;
+    }
+  });
+},{"./commentModel.js":6}],8:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1270,8 +1270,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var shotShowCardTemplate = require('./shotShowCardTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase.js');
-var CommentsCardView = require('../../comments/list/commentListCardView.js');
+var CommentsCollectionFirebase = require('../../comments/models/commentsCollectionFirebase.js');
+var CommentsCardView = require('../../comments/list/commentsListCardView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
@@ -1318,7 +1318,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase.js":3,"../../comments/list/commentListCardView.js":5,"./shotShowCardTemplate.hbs":34}],36:[function(require,module,exports){
+},{"../../comments/list/commentsListCardView.js":3,"../../comments/models/commentsCollectionFirebase.js":7,"./shotShowCardTemplate.hbs":34}],36:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1397,8 +1397,8 @@ function program1(depth0,data) {
 
 var shotShowTemplate = require('./shotShowTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../../comments/commentsCollectionFirebase');
-var CommentsView = require('../../comments/list/commentListView.js');
+var CommentsCollectionFirebase = require('../../comments/models/commentsCollectionFirebase.js');
+var CommentsView = require('../../comments/list/commentsListView.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
@@ -1525,7 +1525,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase":3,"../../comments/list/commentListView.js":7,"./shotShowTemplate.hbs":36}],38:[function(require,module,exports){
+},{"../../comments/list/commentsListView.js":5,"../../comments/models/commentsCollectionFirebase.js":7,"./shotShowTemplate.hbs":36}],38:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name

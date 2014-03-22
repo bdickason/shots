@@ -1053,7 +1053,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
       'keyup .input': 'pressEnter',
       'click #newShot': 'toggleNewShot',
       'click #createShot': 'createShot',
-      'click #deleteShot': 'deleteShot',
       'click img': 'toggleSize',
       'error': 'showError'
     },
@@ -1100,17 +1099,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
       }
       else {
         this.showError('Sorry, you must be logged in');
-      }
-    },
-
-    deleteShot: function(e) {
-      e.preventDefault(); // Have to disable the default behavior of the anchor
-      var shotId = $(e.currentTarget).data('id');
-      var shot = this.collection.get(shotId);
-      var owner = shot.get('user');
-
-      if(app.user.get('username') == owner) {
-        this.collection.remove(shot);
       }
     },
 
@@ -1489,7 +1477,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
     'click .shotlink': 'gotoShot',
     'click #editShot': 'editShot',
     'click #cancelShotEdit': 'cancelEdit',
-    'click #saveShot': 'saveShot'
+    'click #saveShot': 'saveShot',
+    'click #deleteShot': 'deleteShot'
   },
 
   render: function() {
@@ -1587,6 +1576,27 @@ module.exports = Backbone.Marionette.ItemView.extend({
       // Save next text value
       this.model.set('image', shotImage.attr('src'));
       this.model.set('text', shotText.text());
+    }
+  },
+
+  deleteShot: function(e) {
+    e.preventDefault(); // Have to disable the default behavior of the anchor
+
+    // Store projectId to redirect user after delete
+    var projectId = this.model.get('projectId');
+
+    var owner = this.model.get('user');
+
+    if(app.user.get('username') == owner) {
+      this.model.destroy(
+      {
+        success: function(model) {
+          // Successfully deleted model, now redirect to the project
+          var route = '/' + projectId;
+
+          app.router.navigate(route, {trigger: true});
+      }
+      });
     }
   }
 });

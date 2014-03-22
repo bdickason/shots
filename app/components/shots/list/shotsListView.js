@@ -23,7 +23,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
       'keyup .input': 'pressEnter',
       'click #newShot': 'toggleNewShot',
       'click #createShot': 'createShot',
-      'click #deleteShot': 'deleteShot',
       'click img': 'toggleSize',
       'error': 'showError'
     },
@@ -70,17 +69,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
       }
       else {
         this.showError('Sorry, you must be logged in');
-      }
-    },
-
-    deleteShot: function(e) {
-      e.preventDefault(); // Have to disable the default behavior of the anchor
-      var shotId = $(e.currentTarget).data('id');
-      var shot = this.collection.get(shotId);
-      var owner = shot.get('user');
-
-      if(app.user.get('username') == owner) {
-        this.collection.remove(shot);
       }
     },
 

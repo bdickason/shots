@@ -121,4 +121,43 @@ describe('shotView', function() {
     });
   });
 
+  describe('delete shots', function() {
+ 
+    it('owner can delete their own shot', function() {
+      // Input
+      var input = {
+        projectId: 'fakeProject'
+      };
+
+      // Fake JSON output for model stub
+      var fakeOutput = {
+        owner: true
+      };
+
+      var shotModel = new ShotModel(input);
+      var shotStub = sinon.stub(shotModel, 'toJSON').returns(fakeOutput);
+
+      var Router = Backbone.Router.extend({});
+      app.router = new Router();
+      var routerStub = sinon.stub(app.router, 'navigate');
+
+      var shotView = new ShotView({model: shotModel});
+      shotModel.trigger('change'); // Render the view
+
+      var deleteButton = shotView.$el.find('#deleteShot');
+      deleteButton.trigger('click');
+
+      // Make sure user is redirected to project
+      var fakeRoute = '/' + input.projectId;
+
+      routerStub.calledOnce.should.be.true;
+      routerStub.getCall(0).args[0].should.eql(fakeRoute);
+      routerStub.getCall(0).args[1].should.eql({trigger: true});
+  
+      shotStub.restore();
+      routerStub.restore();
+    });
+  });
+
+
 });

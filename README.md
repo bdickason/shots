@@ -78,6 +78,12 @@ Do not push to `master` with failing tests. `master` must always be deployable (
 *Coming soon: Browser tests!*
 
 
+# LiveReload
+
+It's annoying to refresh the page every time you make changes! When you have `grunt watch` running, LiveReload will refresh the page for you automagically.
+
+**Requires [Livereload browser plugin](http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-)**
+
 # Contributing
 
 ## As a Designer

@@ -43,7 +43,9 @@ module.exports = function(grunt) {
       tasks: [ 'browserify', 'compass' ],
       options: {
         spawn: false,
-        debounceDelay: 100
+        debounceDelay: 100,
+        livereload: true,
+        hostname: 'localhost'
       }
     }
   });

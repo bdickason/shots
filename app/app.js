@@ -9,7 +9,7 @@ app = new Backbone.Marionette.Application();
 
 app.on('initialize:after', function() {
     // Configure the app
-    
+     
     // Regions define areas in the template (/server/views/client.handlebars) that we'll insert content into
     app.addRegions({
         header: 'nav#primary',      // Used for main nav

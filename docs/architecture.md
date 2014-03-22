@@ -13,6 +13,8 @@ Shots is primarily a javascript app run in the browser. The server only exists t
       |_ /list - Displays a list of many objects
       |_ /create - Creates a new object
       |_ /edit - Edits the current object
+      |_ /models - Models and Collections used by the current component
+      |_ component1.js - Controller to load each Model/View
     |_ /component2
  |_ /sass - css files
  |_ app.js - The main app loaderresides here

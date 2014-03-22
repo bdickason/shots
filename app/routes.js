@@ -12,8 +12,9 @@ var Projects = require('./components/projects/projects.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
+var Shots = require('./components/shots/shots.js');
 var ShotView = require('./components/shots/show/shotView.js');
-var ShotListView = require('./components/shots/list/shotListView.js');
+// var ShotListView = require('./components/shots/list/shotListView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');
@@ -59,7 +60,7 @@ module.exports = Backbone.Router.extend({
 
         // Details for a single project
         var project = new Projects.Show({id: projectId});
-        var shotListView = new ShotListView({project: projectId});
+        var shots = new Shots.List({project: projectId});
 
         // Use a two column layout to display the project
         var twoColumn = new TwoColumnLayout();
@@ -68,7 +69,7 @@ module.exports = Backbone.Router.extend({
 
         // Render two-column layout in main content area
         twoColumn.left.show(project.view);
-        twoColumn.right.show(shotListView);
+        twoColumn.right.show(shots.view);
     },
 
     shot: function(project, shot) {

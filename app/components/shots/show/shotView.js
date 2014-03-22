@@ -1,6 +1,6 @@
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('../shotModelFirebase.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 var shotTemplate = require('./shotTemplate.hbs');
 

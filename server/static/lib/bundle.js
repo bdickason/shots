@@ -810,10 +810,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
 var projectTemplate = require('./projectTemplate.hbs');
 
-var ShotsCollectionFirebase = require('../../shots/shotsCollectionFirebase.js');
-
-var ShotListView = require('../../shots/list/shotListView.js');
-
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
@@ -911,7 +907,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../shots/list/shotListView.js":30,"../../shots/shotsCollectionFirebase.js":33,"./projectTemplate.hbs":27}],27:[function(require,module,exports){
+},{"./projectTemplate.hbs":27}],27:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -966,23 +962,6 @@ function program1(depth0,data) {
   });
 
 },{"hbsfy/runtime":50}],28:[function(require,module,exports){
-/* Shots Collection - An ordered list of Shots */
-var ShotModel = require('./shotModel.js');
-
-module.exports = Backbone.Firebase.Collection.extend({
-    model: ShotModel,
-    comparator: function(model) {
-      // Sorts model by timestamp, newest first
-      return(-model.get('timestamp'));
-    },
-    firebase: function() {
-        return(new Firebase(this.fbUrl));
-    },
-    initialize: function(models, options) {
-        this.fbUrl = app.fbUrl + '/shots/' + options.project;
-    }
-  });
-},{"./shotModel.js":31}],29:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -994,18 +973,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "    <label><h3>What are you working on?</h3></label>\n    <input id=\"image\" type=\"url\" class=\"input\" size=\"58\" placeholder=\"Enter a URL to an image\"><br />\n    <textarea id=\"text\" type=\"text\" maxlength=\"300\" class=\"input\" placeholder=\"Enter any additional info\" /><br />\n    <button id=\"createShot\">save</button>\n    <label id=\"shotsError\" class=\"error\"></label>\n    <ul class=\"shots\">\n    </ul>";
   });
 
-},{"hbsfy/runtime":50}],30:[function(require,module,exports){
+},{"hbsfy/runtime":50}],29:[function(require,module,exports){
 /* Shots View - displays a list of shots */
 
-var shotListTemplate = require('./shotListTemplate.hbs');
+var shotsListTemplate = require('./shotsListTemplate.hbs');
 
 var ShotCardView = require('../show/shotCardView.js');
 
-var ShotsCollectionFirebase = require('../ShotsCollectionFirebase.js');
-
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
-    template: shotListTemplate,
+    template: shotsListTemplate,
 
     itemView: ShotCardView,
     itemViewContainer: 'ul.shots',
@@ -1013,10 +990,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     initialize: function(options) {
       this.project = options.project;  // Save project name in case we need to add
       
-      if(!this.collection) {
-        this.collection = new ShotsCollectionFirebase([], {project: this.project});
-      }
-      
+      // Collection is passed in from Controller
       this.listenTo(this.collection, 'sync', this.render); // Without this, the collection doesn't render after it completes loading
       this.listenTo(this.collection, 'remove', this.render);  // When a shot is deleted, server does not send a sync event
     },
@@ -1112,10 +1086,10 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     }
   });
 
-},{"../ShotsCollectionFirebase.js":28,"../show/shotCardView.js":35,"./shotListTemplate.hbs":29}],31:[function(require,module,exports){
+},{"../show/shotCardView.js":35,"./shotsListTemplate.hbs":28}],30:[function(require,module,exports){
 /* Shot Model - data layer for a single Shot */
 
-var utils = require('../../utils.js');
+var utils = require('../../../utils.js');
 
 module.exports = Backbone.Model.extend({
     initialize: function() {
@@ -1135,10 +1109,10 @@ module.exports = Backbone.Model.extend({
     }
 });
 
-},{"../../utils.js":42}],32:[function(require,module,exports){
+},{"../../../utils.js":42}],31:[function(require,module,exports){
 /* Shot Model - Standalone model (do not use in collections) */
 
-var utils = require('../../utils.js');
+var utils = require('../../../utils.js');
 
 module.exports = Backbone.Firebase.Model.extend({
     firebase: function() {
@@ -1162,9 +1136,74 @@ module.exports = Backbone.Firebase.Model.extend({
     }
 });
 
-},{"../../utils.js":42}],33:[function(require,module,exports){
-module.exports=require(28)
-},{"./shotModel.js":31}],34:[function(require,module,exports){
+},{"../../../utils.js":42}],32:[function(require,module,exports){
+/* Shots Collection - An ordered list of Shots */
+var ShotModel = require('./shotModel.js');
+
+module.exports = Backbone.Firebase.Collection.extend({
+    model: ShotModel,
+    comparator: function(model) {
+      // Sorts model by timestamp, newest first
+      return(-model.get('timestamp'));
+    },
+    firebase: function() {
+        return(new Firebase(this.fbUrl));
+    },
+    initialize: function(models, options) {
+        this.fbUrl = app.fbUrl + '/shots/' + options.project;
+    }
+  });
+},{"./shotModel.js":30}],33:[function(require,module,exports){
+/* Shots Controller - Ties together Layout, View, and Model/Controllers */
+
+// Views
+var ShotsListView = require('./list/shotsListView.js');
+// var ShotShowView = require('./show/shotShowView.js');
+
+// Models
+var ShotModelFirebase = require('./models/shotModelFirebase.js');
+var ShotsCollectionFirebase = require('./models/shotsCollectionFirebase.js');
+
+module.exports.List = Backbone.Marionette.Controller.extend({
+    /* List - Displays a list of Shots
+     Inputs:
+        project: project ID
+    */
+    initialize: function(options) {
+        this.project = options.project;
+        this.shots = new ShotsCollectionFirebase([], {project: this.project});
+        this.view = new ShotsListView({collection: this.shots, project: this.project});
+   }
+});
+
+// module.exports.Show = Backbone.Marionette.Controller.extend({
+//     /* Show - Displays a single Project
+//      Inputs:
+//         id: project's ID
+//     */
+//     initialize: function(options) {
+//         this.id = options.id;
+
+//         this.project = new ProjectModelFirebase({id: this.id});
+//         this.view = new ProjectShowView({model: this.project});
+//     }
+// });
+
+
+// module.exports.ShowCard = Backbone.Marionette.Controller.extend({
+//     /* ShowCard - Displays a single Project's Card (summary view)
+//      Inputs:
+//         id: project's ID
+//     */
+//     initialize: function(options) {
+//         this.id = options.id;
+
+//         this.project = new ProjectModelFirebase({id: this.id});
+//         this.view = new ProjectShowCardView({model: this.project});
+//     }
+// });
+
+},{"./list/shotsListView.js":29,"./models/shotModelFirebase.js":31,"./models/shotsCollectionFirebase.js":32}],34:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1224,7 +1263,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":50}],35:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('../shotModelFirebase.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 var shotCardTemplate = require('./shotCardTemplate.hbs');
 
@@ -1280,7 +1319,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase.js":3,"../../comments/list/commentListCardView.js":5,"../shotModelFirebase.js":32,"./shotCardTemplate.hbs":34}],36:[function(require,module,exports){
+},{"../../comments/commentsCollectionFirebase.js":3,"../../comments/list/commentListCardView.js":5,"../models/shotModelFirebase.js":31,"./shotCardTemplate.hbs":34}],36:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -1357,7 +1396,7 @@ function program1(depth0,data) {
 },{"hbsfy/runtime":50}],37:[function(require,module,exports){
 /* Shot View - displays a shot module embedded inside another page */
 
-var ShotModelFirebase = require('../shotModelFirebase.js');
+var ShotModelFirebase = require('../models/shotModelFirebase.js');
 
 var shotTemplate = require('./shotTemplate.hbs');
 
@@ -1493,7 +1532,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/commentsCollectionFirebase":3,"../../comments/list/commentListView.js":7,"../shotModelFirebase.js":32,"./shotTemplate.hbs":36}],38:[function(require,module,exports){
+},{"../../comments/commentsCollectionFirebase":3,"../../comments/list/commentListView.js":7,"../models/shotModelFirebase.js":31,"./shotTemplate.hbs":36}],38:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name
@@ -1589,8 +1628,9 @@ var Projects = require('./components/projects/projects.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
+var Shots = require('./components/shots/shots.js');
 var ShotView = require('./components/shots/show/shotView.js');
-var ShotListView = require('./components/shots/list/shotListView.js');
+// var ShotListView = require('./components/shots/list/shotListView.js');
 
 // Contribute
 var ContributeView = require('./components/contribute/contributeView.js');
@@ -1636,7 +1676,7 @@ module.exports = Backbone.Router.extend({
 
         // Details for a single project
         var project = new Projects.Show({id: projectId});
-        var shotListView = new ShotListView({project: projectId});
+        var shots = new Shots.List({project: projectId});
 
         // Use a two column layout to display the project
         var twoColumn = new TwoColumnLayout();
@@ -1645,7 +1685,7 @@ module.exports = Backbone.Router.extend({
 
         // Render two-column layout in main content area
         twoColumn.left.show(project.view);
-        twoColumn.right.show(shotListView);
+        twoColumn.right.show(shots.view);
     },
 
     shot: function(project, shot) {
@@ -1697,7 +1737,7 @@ module.exports = Backbone.Router.extend({
         app.content.show(helpView);
     }
 });
-},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/projectNav/projectNavView.js":22,"./components/projects/projects.js":23,"./components/shots/list/shotListView.js":30,"./components/shots/show/shotView.js":37,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
+},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/projectNav/projectNavView.js":22,"./components/projects/projects.js":23,"./components/shots/shots.js":33,"./components/shots/show/shotView.js":37,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js

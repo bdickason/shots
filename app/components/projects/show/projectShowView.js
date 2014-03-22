@@ -2,10 +2,6 @@
 
 var projectTemplate = require('./projectTemplate.hbs');
 
-var ShotsCollectionFirebase = require('../../shots/shotsCollectionFirebase.js');
-
-var ShotListView = require('../../shots/list/shotListView.js');
-
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 

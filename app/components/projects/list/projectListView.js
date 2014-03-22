@@ -2,8 +2,6 @@
 
 var projectsTemplate = require('./projectListTemplate.hbs');
 
-var ProjectsCollectionFirebase = require('../models/projectsCollectionFirebase.js');
-
 var ProjectCardView = require('../show/projectCardView.js');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
@@ -13,10 +11,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   itemViewContainer: 'ul.projects',
 
   initialize: function() {
-    if(!this.collection) {
-      this.collection = new ProjectsCollectionFirebase();
-    }
-
+    // Collection must be passed in by Controller
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
   },

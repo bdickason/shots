@@ -1,14 +1,19 @@
 /* Projects Controller - Ties together Layout, View, and Model/Controllers */
 
+// Views
 var ProjectListView = require('./list/projectListView.js');
 var ProjectShowView = require('./show/projectShowView.js');
+
+// Models
+var ProjectsCollectionFirebase = require('./models/projectsCollectionFirebase.js');
 
 module.exports.List = Backbone.Marionette.Controller.extend({
     /* List - Displays a list of Projects
      Inputs:
     */
     initialize: function(options) {
-        this.view = new ProjectListView();
+        this.projects = new ProjectsCollectionFirebase();
+        this.view = new ProjectListView({collection: this.projects});
    }
 });
 

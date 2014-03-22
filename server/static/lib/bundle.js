@@ -533,8 +533,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 var projectsTemplate = require('./projectListTemplate.hbs');
 
-var ProjectsCollectionFirebase = require('../models/projectsCollectionFirebase.js');
-
 var ProjectCardView = require('../show/projectCardView.js');
 
 module.exports = Backbone.Marionette.CompositeView.extend({
@@ -544,10 +542,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   itemViewContainer: 'ul.projects',
 
   initialize: function() {
-    if(!this.collection) {
-      this.collection = new ProjectsCollectionFirebase();
-    }
-
+    // Collection must be passed in by Controller
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
     this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
   },
@@ -595,7 +590,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   },
 });
 
-},{"../models/projectsCollectionFirebase.js":20,"../show/projectCardView.js":25,"./projectListTemplate.hbs":16}],18:[function(require,module,exports){
+},{"../show/projectCardView.js":25,"./projectListTemplate.hbs":16}],18:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 var utils = require('../../../utils.js');
@@ -724,15 +719,20 @@ module.exports = Backbone.Marionette.ItemView.extend({
 },{"./projectNavTemplate.hbs":21}],23:[function(require,module,exports){
 /* Projects Controller - Ties together Layout, View, and Model/Controllers */
 
+// Views
 var ProjectListView = require('./list/projectListView.js');
 var ProjectShowView = require('./show/projectShowView.js');
+
+// Models
+var ProjectsCollectionFirebase = require('./models/projectsCollectionFirebase.js');
 
 module.exports.List = Backbone.Marionette.Controller.extend({
     /* List - Displays a list of Projects
      Inputs:
     */
     initialize: function(options) {
-        this.view = new ProjectListView();
+        this.projects = new ProjectsCollectionFirebase();
+        this.view = new ProjectListView({collection: this.projects});
    }
 });
 
@@ -747,7 +747,7 @@ module.exports.Show = Backbone.Marionette.Controller.extend({
     }
 });
 
-},{"./list/projectListView.js":17,"./show/projectShowView.js":26}],24:[function(require,module,exports){
+},{"./list/projectListView.js":17,"./models/projectsCollectionFirebase.js":20,"./show/projectShowView.js":26}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

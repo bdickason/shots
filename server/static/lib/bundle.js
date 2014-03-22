@@ -517,19 +517,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
 });
 
 },{"./navTemplate.hbs":14}],16:[function(require,module,exports){
-/* Projects Controller - Ties together Layout, View, and Model/Controllers */
-
-var ProjectListView = require('./projectListView.js');
-
-module.exports = Backbone.Marionette.Controller.extend({
-    initialize: function(options) {
-        this.region = options.region;
-
-        this.view = new ProjectListView();
-        this.region.show(this.view);
-    }
-});
-},{"./projectListView.js":18}],17:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -541,7 +528,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "  <div class=\"view\">\n    <label><h3>Create a Project</h3></label>\n    <input id=\"name\" type=\"textarea\" class\"input\" placeholder=\"\" autofocus>\n    <button id=\"createProject\" class=\"save\">save</button>\n    <label id=\"projectsError\" class=\"error\"></label>\n    <ul class=\"projects\">\n    </ul>\n  </div> ";
   });
 
-},{"hbsfy/runtime":50}],18:[function(require,module,exports){
+},{"hbsfy/runtime":50}],17:[function(require,module,exports){
 /* Projects View - displays all projects active within the system */
 
 var projectsTemplate = require('./projectListTemplate.hbs');
@@ -608,7 +595,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   },
 });
 
-},{"../projectsCollectionFirebase.js":23,"../show/projectCardView.js":25,"./projectListTemplate.hbs":17}],19:[function(require,module,exports){
+},{"../projectsCollectionFirebase.js":23,"../show/projectCardView.js":25,"./projectListTemplate.hbs":16}],18:[function(require,module,exports){
 /* Project Model - data layer for a single Project for use in Firebase Collections */
 
 var utils = require('../../utils.js');
@@ -639,7 +626,7 @@ module.exports = Backbone.Model.extend({
   }
 });
 
-},{"../../utils.js":42}],20:[function(require,module,exports){
+},{"../../utils.js":42}],19:[function(require,module,exports){
 /* Project Model - For standalone use (not in a collection) */
 
 var utils = require('../../utils.js');
@@ -674,7 +661,7 @@ module.exports = Backbone.Firebase.Model.extend({
   }
 });
 
-},{"../../utils.js":42}],21:[function(require,module,exports){
+},{"../../utils.js":42}],20:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -695,7 +682,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-},{"hbsfy/runtime":50}],22:[function(require,module,exports){
+},{"hbsfy/runtime":50}],21:[function(require,module,exports){
 /* projectNav View - Renders a sub-nav for a specific project */
 
 var projectNavTemplate = require('./projectNavTemplate.hbs');
@@ -724,7 +711,33 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"./projectNavTemplate.hbs":21}],23:[function(require,module,exports){
+},{"./projectNavTemplate.hbs":20}],22:[function(require,module,exports){
+/* Projects Controller - Ties together Layout, View, and Model/Controllers */
+
+var ProjectListView = require('./list/projectListView.js');
+var ProjectShowView = require('./show/projectShowView.js');
+
+module.exports.List = Backbone.Marionette.Controller.extend({
+    /* List - Displays a list of Projects
+     Inputs:
+    */
+    initialize: function(options) {
+        this.view = new ProjectListView();
+   }
+});
+
+module.exports.Show = Backbone.Marionette.Controller.extend({
+    /* Show - Displays a single Project
+     Inputs:
+        id: project's ID
+    */
+    initialize: function(options) {
+        this.id = options.id;
+        this.view = new ProjectShowView({id: this.id});
+    }
+});
+
+},{"./list/projectListView.js":17,"./show/projectShowView.js":26}],23:[function(require,module,exports){
 /* Projects Collection - An ordered list of Projects */
 var ProjectModel = require('./projectModel.js');
 
@@ -734,7 +747,7 @@ module.exports = Backbone.Firebase.Collection.extend({
     initialize: function() {
     }
   });
-},{"./projectModel.js":19}],24:[function(require,module,exports){
+},{"./projectModel.js":18}],24:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -782,61 +795,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../projectModelFirebase.js":20,"./projectCardTemplate.hbs":24}],26:[function(require,module,exports){
-// hbsfy compiled Handlebars template
-var Handlebars = require('hbsfy/runtime');
-module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper;
-  buffer += "\n  <p class=\"projectSettings\">\n    <a href=\"#edit\" id=\"editProject\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">edit</a> \n    <a href=\"#cancel\" id=\"cancelProjectEdit\" style=\"display: none\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">cancel</a> \n    <button id=\"saveProject\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">Save</button> \n    <a href=\"#delete\" id=\"deleteProject\" data-id=\"";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\">delete</a>\n  </p>\n";
-  return buffer;
-  }
-
-  buffer += "<h1>";
-  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</h1>\n";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.owner), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n<label>Description</label>\n<p class=\"description\">";
-  if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</p>\n<label>Users</label>\n<div class=\"users\">";
-  if (helper = helpers.users) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.users); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n<label>Activity</label>\n<div class=\"activity\">";
-  if (helper = helpers.activity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.activity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</div>";
-  return buffer;
-  });
-
-},{"hbsfy/runtime":50}],27:[function(require,module,exports){
+},{"../projectModelFirebase.js":19,"./projectCardTemplate.hbs":24}],26:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var ProjectModelFirebase = require('../projectModelFirebase.js');
@@ -947,7 +906,61 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../shots/list/shotListView.js":30,"../../shots/shotsCollectionFirebase.js":33,"../projectModelFirebase.js":20,"./projectTemplate.hbs":26}],28:[function(require,module,exports){
+},{"../../shots/list/shotListView.js":30,"../../shots/shotsCollectionFirebase.js":33,"../projectModelFirebase.js":19,"./projectTemplate.hbs":27}],27:[function(require,module,exports){
+// hbsfy compiled Handlebars template
+var Handlebars = require('hbsfy/runtime');
+module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n  <p class=\"projectSettings\">\n    <a href=\"#edit\" id=\"editProject\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">edit</a> \n    <a href=\"#cancel\" id=\"cancelProjectEdit\" style=\"display: none\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">cancel</a> \n    <button id=\"saveProject\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">Save</button> \n    <a href=\"#delete\" id=\"deleteProject\" data-id=\"";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">delete</a>\n  </p>\n";
+  return buffer;
+  }
+
+  buffer += "<h1>";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</h1>\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.owner), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n<label>Description</label>\n<p class=\"description\">";
+  if (helper = helpers.description) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.description); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</p>\n<label>Users</label>\n<div class=\"users\">";
+  if (helper = helpers.users) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.users); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n<label>Activity</label>\n<div class=\"activity\">";
+  if (helper = helpers.activity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.activity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</div>";
+  return buffer;
+  });
+
+},{"hbsfy/runtime":50}],28:[function(require,module,exports){
 /* Shots Collection - An ordered list of Shots */
 var ShotModel = require('./shotModel.js');
 
@@ -1562,14 +1575,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 /* Layouts */
 var TwoColumnLayout = require('./layouts/twoColumnLayout.js');
 
-/* Views */
+/* Controllers */
 // Top Navigation
 var NavView = require('./components/nav/navView.js');
 
 // Projects
-var ProjectList = require('./components/projects/list/projectList.js');
-// var ProjectListView = require('./components/projects/list/projectListView.js');
-var ProjectView = require('./components/projects/show/projectView.js');
+var Projects = require('./components/projects/projects.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
@@ -1603,12 +1614,13 @@ module.exports = Backbone.Router.extend({
         app.subhead.close();
 
         // Display list of latest projects
-        var projectList = new ProjectList({region: app.content});
+        var projects = new Projects.List();
+        app.content.show(projects.view);
     },
 
-    project: function(project) {
+    project: function(projectId) {
         // (/:projectName) - Loads a single project
-        console.log('[project]: /#' + project);
+        console.log('[project]: /#' + projectId);
 
         // Display navigation
         var navView = new NavView({model: app.user});
@@ -1618,8 +1630,8 @@ module.exports = Backbone.Router.extend({
         app.subhead.close();
 
         // Details for a single project
-        var projectView = new ProjectView({id: project});
-        var shotListView = new ShotListView({project: project});
+        var project = new Projects.Show({id: projectId});
+        var shotListView = new ShotListView({project: projectId});
 
         // Use a two column layout to display the project
         var twoColumn = new TwoColumnLayout();
@@ -1627,7 +1639,7 @@ module.exports = Backbone.Router.extend({
         app.content.show(twoColumn);
 
         // Render two-column layout in main content area
-        twoColumn.left.show(projectView);
+        twoColumn.left.show(project.view);
         twoColumn.right.show(shotListView);
     },
 
@@ -1680,7 +1692,7 @@ module.exports = Backbone.Router.extend({
         app.content.show(helpView);
     }
 });
-},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/list/projectList.js":16,"./components/projects/projectNav/projectNavView.js":22,"./components/projects/show/projectView.js":27,"./components/shots/list/shotListView.js":30,"./components/shots/show/shotView.js":37,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
+},{"./components/contribute/contributeView.js":11,"./components/help/helpView.js":13,"./components/nav/navView.js":15,"./components/projects/projectNav/projectNavView.js":21,"./components/projects/projects.js":22,"./components/shots/list/shotListView.js":30,"./components/shots/show/shotView.js":37,"./layouts/twoColumnLayout.js":39}],42:[function(require,module,exports){
 /* utils - Utility functions */
 
 app.Handlebars = require('hbsfy/runtime');  // Needed for Handlebars mixins in utils.js

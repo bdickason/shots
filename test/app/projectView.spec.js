@@ -19,7 +19,7 @@ describe('projectView', function() {
       var projectTemplate = Handlebars.compile(templateFilename);
 
       // Setup objects
-      ProjectView = require(componentsDir + 'projects/show/projectView.js');
+      ProjectView = require(componentsDir + 'projects/show/projectShowView.js');
       ProjectModel = Backbone.Model;  // Dummy model to pass into view
 
       done();

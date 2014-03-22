@@ -3,14 +3,12 @@
 /* Layouts */
 var TwoColumnLayout = require('./layouts/twoColumnLayout.js');
 
-/* Views */
+/* Controllers */
 // Top Navigation
 var NavView = require('./components/nav/navView.js');
 
 // Projects
-var ProjectList = require('./components/projects/list/projectList.js');
-// var ProjectListView = require('./components/projects/list/projectListView.js');
-var ProjectView = require('./components/projects/show/projectView.js');
+var Projects = require('./components/projects/projects.js');
 var ProjectNavView = require('./components/projects/projectNav/projectNavView.js');   // Used in Shot view
 
 // Shots
@@ -44,12 +42,13 @@ module.exports = Backbone.Router.extend({
         app.subhead.close();
 
         // Display list of latest projects
-        var projectList = new ProjectList({region: app.content});
+        var projects = new Projects.List();
+        app.content.show(projects.view);
     },
 
-    project: function(project) {
+    project: function(projectId) {
         // (/:projectName) - Loads a single project
-        console.log('[project]: /#' + project);
+        console.log('[project]: /#' + projectId);
 
         // Display navigation
         var navView = new NavView({model: app.user});
@@ -59,8 +58,8 @@ module.exports = Backbone.Router.extend({
         app.subhead.close();
 
         // Details for a single project
-        var projectView = new ProjectView({id: project});
-        var shotListView = new ShotListView({project: project});
+        var project = new Projects.Show({id: projectId});
+        var shotListView = new ShotListView({project: projectId});
 
         // Use a two column layout to display the project
         var twoColumn = new TwoColumnLayout();
@@ -68,7 +67,7 @@ module.exports = Backbone.Router.extend({
         app.content.show(twoColumn);
 
         // Render two-column layout in main content area
-        twoColumn.left.show(projectView);
+        twoColumn.left.show(project.view);
         twoColumn.right.show(shotListView);
     },
 

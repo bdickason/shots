@@ -3,7 +3,6 @@
 var CommentView = require('../show/commentView.js');
 var commentsListTemplate = require('./commentsListTemplate.hbs');
 
-
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: commentsListTemplate,

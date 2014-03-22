@@ -167,7 +167,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 var CommentView = require('../show/commentView.js');
 var commentsListTemplate = require('./commentsListTemplate.hbs');
 
-
 module.exports = Backbone.Marionette.CompositeView.extend({
     tagName: 'div',
     template: commentsListTemplate,
@@ -853,8 +852,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 },{"hbsfy/runtime":51}],26:[function(require,module,exports){
 /* Project Card View - displays a snapshot of a single projects */
 
-var ProjectModelFirebase = require('../models/projectModelFirebase.js');
-
 var projectCardTemplate = require('./projectCardTemplate.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
@@ -862,7 +859,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   template: projectCardTemplate
 });
 
-},{"../models/projectModelFirebase.js":20,"./projectCardTemplate.hbs":25}],27:[function(require,module,exports){
+},{"./projectCardTemplate.hbs":25}],27:[function(require,module,exports){
 /* Project View - displays a single projects */
 
 var projectTemplate = require('./projectTemplate.hbs');
@@ -877,8 +874,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.listenTo(this.model, 'sync', this.render); // Without this, the model doesn't render after it completes loading
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
-
-    // this.setElement(this.$el);
   },
 
   events: {
@@ -1452,8 +1447,7 @@ function program1(depth0,data) {
 
 var shotShowTemplate = require('./shotShowTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../../comments/models/commentsCollectionFirebase.js');
-var CommentsView = require('../../comments/list/commentsListView.js');
+var Comments = require('../../comments/comments.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
@@ -1470,8 +1464,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
    
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
-    this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
-    this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});
+    this.comments = new Comments.List({shotId: this.model.get('id'), projectId: this.model.get('projectId')});
   },
 
   events: {
@@ -1485,7 +1478,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.$el.html(this.template(this.model.toJSON()));
 
     // Render comments
-    this.$el.find('.comments').html(this.commentsView.render().el);
+    this.$el.find('.comments').html(this.comments.view.render().el);
     
     // this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
     
@@ -1580,7 +1573,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/list/commentsListView.js":6,"../../comments/models/commentsCollectionFirebase.js":8,"./shotShowTemplate.hbs":37}],39:[function(require,module,exports){
+},{"../../comments/comments.js":2,"./shotShowTemplate.hbs":37}],39:[function(require,module,exports){
 /* User Model - Standalone model integrated w/ Firebase simple login 
 
 displayName: User's full name

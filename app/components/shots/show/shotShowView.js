@@ -2,8 +2,7 @@
 
 var shotShowTemplate = require('./shotShowTemplate.hbs');
 
-var CommentsCollectionFirebase = require('../../comments/models/commentsCollectionFirebase.js');
-var CommentsView = require('../../comments/list/commentsListView.js');
+var Comments = require('../../comments/comments.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
@@ -20,8 +19,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
    
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
-    this.commentsCollectionFirebase = new CommentsCollectionFirebase([], {shotId: this.model.get('id'), projectId: this.model.get('projectId')});
-    this.commentsView = new CommentsView({ collection: this.commentsCollectionFirebase});
+    this.comments = new Comments.List({shotId: this.model.get('id'), projectId: this.model.get('projectId')});
   },
 
   events: {
@@ -35,7 +33,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     this.$el.html(this.template(this.model.toJSON()));
 
     // Render comments
-    this.$el.find('.comments').html(this.commentsView.render().el);
+    this.$el.find('.comments').html(this.comments.view.render().el);
     
     // this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
     

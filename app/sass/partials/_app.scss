@@ -1,1 +1,30 @@
 /* Core App styles */
+
+// Header Styles //
+
+header {
+	background-color: #333;
+	background-color: rgba(47,47,47, .98);
+}
+
+#primary {
+	padding: 20px 40px;
+	min-width: 600px;
+	a {
+		color: #f5f7f8;
+		text-decoration: none;
+		padding-right: 30px;
+		&:hover {
+			color: #7DDCD4;
+			cursor: pointer;
+			text-decoration: none;
+		}
+		&:last-child {
+			padding-right:0;
+			float:right;
+		}
+	}
+}
+#login {
+	float: right;
+}

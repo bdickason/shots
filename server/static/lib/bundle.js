@@ -516,7 +516,7 @@ function program3(depth0,data) {
   return "\n    <a href=\"/login\" id=\"login\">Login</a>\n  ";
   }
 
-  buffer += "  <a href=\"/\" id=\"home\">Home</a> |  \n  <a href=\"http://discuss.braddickason.com\" id=\"discuss\">Discuss</a> | \n  <a href=\"/contribute\" id=\"contribute\">Contribute</a> | \n  <a href=\"/help\" id=\"help\">Help Me!</a>\n\n  ";
+  buffer += "  <a href=\"/\" id=\"home\">Home</a>\n  <a href=\"http://discuss.braddickason.com\" id=\"discuss\">Discuss</a>\n  <a href=\"/contribute\" id=\"contribute\">Contribute</a>\n  <a href=\"/help\" id=\"help\">Help Me!</a>\n\n  ";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.username), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n";

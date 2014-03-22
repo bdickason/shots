@@ -1,60 +1,262 @@
-/*
-Syntax error: Invalid CSS after "/* Shots Styles *\/": expected selector or at-rule, was "<<<<<<< Updated..."
-        on line 3 of /Users/treymckay/projects/shots/app/sass/partials/_shots.scss
-        from line 13 of /Users/treymckay/projects/shots/app/sass/screen.scss
+/* Base CSS file  - compiles all imports below into screen.css */
+/* line 17, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
 
-1: /Users/treymckay/projects/shots/app/sass/screen.scss
+/* line 22, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
 
-Backtrace:
-/Users/treymckay/projects/shots/app/sass/partials/_shots.scss:3
-/Users/treymckay/projects/shots/app/sass/screen.scss:13
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/scss/parser.rb:1149:in `expected'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/scss/parser.rb:1085:in `expected'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/scss/parser.rb:28:in `parse'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/engine.rb:342:in `_to_tree'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/engine.rb:274:in `to_tree'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:225:in `visit_import'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:37:in `visit'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:100:in `visit'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:53:in `block in visit_children'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:53:in `map'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:53:in `visit_children'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:109:in `block in visit_children'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:121:in `with_environment'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:108:in `visit_children'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:37:in `block in visit'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:128:in `visit_root'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/base.rb:37:in `visit'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:100:in `visit'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/visitors/perform.rb:7:in `visit'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/tree/root_node.rb:20:in `render'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/engine.rb:315:in `_render'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/sass-3.2.14/lib/sass/engine.rb:262:in `render'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:140:in `block (2 levels) in compile'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:126:in `timed'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:139:in `block in compile'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/logger.rb:45:in `red'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:138:in `compile'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:118:in `compile_if_required'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:103:in `block (2 levels) in run'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:101:in `each'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:101:in `block in run'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:126:in `timed'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/compiler.rb:100:in `run'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/commands/update_project.rb:45:in `perform'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/commands/base.rb:18:in `execute'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/commands/project_base.rb:19:in `execute'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/exec/sub_command_ui.rb:43:in `perform!'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/lib/compass/exec/sub_command_ui.rb:15:in `run!'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/bin/compass:30:in `block in <top (required)>'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/bin/compass:44:in `call'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/gems/compass-0.12.3/bin/compass:44:in `<top (required)>'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/bin/compass:19:in `load'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/bin/compass:19:in `<main>'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/bin/ruby_noexec_wrapper:14:in `eval'
-/Users/treymckay/.rvm/gems/ruby-1.9.3-p327/bin/ruby_noexec_wrapper:14:in `<main>'
-*/
-body:before {
-  white-space: pre;
-  font-family: monospace;
-  content: "Syntax error: Invalid CSS after \"/* Shots Styles */\": expected selector or at-rule, was \"<<<<<<< Updated...\"\A         on line 3 of /Users/treymckay/projects/shots/app/sass/partials/_shots.scss\A         from line 13 of /Users/treymckay/projects/shots/app/sass/screen.scss\A \A 1: /Users/treymckay/projects/shots/app/sass/screen.scss"; }
+/* line 24, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, ../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* Custom Partials */
+/* Variables Partial  - contains colors, fonts, etc. */
+/* Text Colors */
+/* Link Colors */
+/* Background Colors */
+/* Core App styles */
+/* line 5, ../../../app/sass/partials/_app.scss */
+header {
+  background-color: #333;
+  background-color: rgba(47, 47, 47, 0.98);
+}
+
+/* line 10, ../../../app/sass/partials/_app.scss */
+#primary {
+  padding: 20px 40px;
+  min-width: 600px;
+}
+/* line 13, ../../../app/sass/partials/_app.scss */
+#primary a {
+  color: #f5f7f8;
+  text-decoration: none;
+  padding-right: 30px;
+}
+/* line 17, ../../../app/sass/partials/_app.scss */
+#primary a:hover {
+  color: #7DDCD4;
+  cursor: pointer;
+  text-decoration: none;
+}
+/* line 22, ../../../app/sass/partials/_app.scss */
+#primary a:last-child {
+  padding-right: 0;
+  float: right;
+}
+
+/* line 28, ../../../app/sass/partials/_app.scss */
+#login {
+  float: right;
+}
+
+/* All Image-related styles */
+/* line 4, ../../../app/sass/partials/_images.scss */
+img.shot {
+  width: 50%;
+  cursor: -webkit-zoom-in;
+}
+/* line 8, ../../../app/sass/partials/_images.scss */
+img.shot.big {
+  width: 100%;
+  cursor: -webkit-zoom-out;
+}
+
+/* Comment Styles */
+/* line 3, ../../../app/sass/partials/_comments.scss */
+.comments {
+  width: 50%;
+}
+
+/* line 9, ../../../app/sass/partials/_comments.scss */
+.comment p #saveComment {
+  /* Save button is hidden until editing is enabled */
+  display: none;
+}
+/* line 14, ../../../app/sass/partials/_comments.scss */
+.comment p #cancelCommentEdit {
+  /* Cancel button is hidden until editing is enabled */
+  display: none;
+}
+
+/* line 20, ../../../app/sass/partials/_comments.scss */
+[contenteditable="true"] {
+  background: yellow;
+}
+
+/* Shots Styles */
+/* line 2, ../../../app/sass/partials/_shots.scss */
+.comments {
+  width: 100%;
+}
+
+/* Shots List */
+/* line 9, ../../../app/sass/partials/_shots.scss */
+.shotsNav {
+  width: 100%;
+  padding-bottom: 10px;
+}
+/* line 13, ../../../app/sass/partials/_shots.scss */
+.shotsNav label {
+  float: left;
+}
+/* line 16, ../../../app/sass/partials/_shots.scss */
+.shotsNav #newShot {
+  margin: 0 20px 0 20px;
+}
+
+/* line 21, ../../../app/sass/partials/_shots.scss */
+.newShotView {
+  display: none;
+  padding-bottom: 10px;
+}
+
+/* Single Shot */
+/* line 28, ../../../app/sass/partials/_shots.scss */
+.shot {
+  width: 50%;
+  padding-top: 40px;
+}
+/* line 32, ../../../app/sass/partials/_shots.scss */
+.shot p #saveShot {
+  display: none;
+}
+/* line 37, ../../../app/sass/partials/_shots.scss */
+.shot p #cancelShotEdit {
+  display: none;
+}
+/* line 42, ../../../app/sass/partials/_shots.scss */
+.shot p .shotCreator {
+  float: left;
+}
+/* line 46, ../../../app/sass/partials/_shots.scss */
+.shot .shotComments {
+  float: right;
+}
+
+/* Projects Styles */
+/* Single Project View */
+/* line 7, ../../../app/sass/partials/_projects.scss */
+p.projectSettings #saveProject {
+  /* Save button is hidden until editing is enabled */
+  display: none;
+}
+
+/* Base UI styling */
+/* line 2, ../../../app/sass/partials/_base.scss */
+body {
+  font-family: 'Open Sans', Helvetica Neue,  sans-serif;
+  font-size: 14px;
+}
+
+/* line 6, ../../../app/sass/partials/_base.scss */
+#content {
+  float: left;
+}
+/* line 8, ../../../app/sass/partials/_base.scss */
+#content > div {
+  float: left;
+}
+
+/* line 12, ../../../app/sass/partials/_base.scss */
+#nav {
+  display: block;
+  padding: 0;
+  margin: 0;
+  min-width: 964px;
+  overflow: visible;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* line 20, ../../../app/sass/partials/_base.scss */
+#main {
+  padding: 25px;
+}
+
+/* line 23, ../../../app/sass/partials/_base.scss */
+#username {
+  float: right;
+  padding-right: 15px;
+}
+
+/* line 27, ../../../app/sass/partials/_base.scss */
+#logout {
+  float: right;
+}
+
+/* line 31, ../../../app/sass/partials/_base.scss */
+.error {
+  display: none;
+}
+
+/* line 36, ../../../app/sass/partials/_base.scss */
+[contenteditable="true"] {
+  background: yellow;
+}
+
+/* Page Layouts - Two Column, Full-Width, etc */
+/* line 3, ../../../app/sass/partials/_layouts.scss */
+section#left {
+  float: left;
+  width: 30%;
+}
+
+/* line 8, ../../../app/sass/partials/_layouts.scss */
+section#right {
+  float: right;
+  width: 70%;
+}

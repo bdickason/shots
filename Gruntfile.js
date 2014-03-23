@@ -53,4 +53,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['browserify', 'compass']); // By default run tests
   grunt.registerTask('tests', 'mochaTest');   // Only run tests 
+  grunt.registerTask('build', ['browserify', 'compass', 'mochaTest']);
+  grunt.registerTask('heroku:production', 'browserify, compass');
 };

@@ -33,9 +33,9 @@ module.exports = function(grunt) {
       'server/static/lib/bundle.js': ['app/app.js'],
       options: {
         transform: ['hbsfy'],
-        detectGlobals: false,
-        cache: true,
-        debug: false
+        // detectGlobals: false,
+        // cache: true,
+        // debug: false
       }
     },
     watch: {

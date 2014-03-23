@@ -5,7 +5,7 @@ profileImage: User's avatar
 username: user's handle
 */
 
-// var UserModelFirebase = require('../models/UserModelFirebase.js');
+var Users = require('../users.js');
 
 module.exports = Backbone.Model.extend({
     initialize: function() {
@@ -27,6 +27,9 @@ module.exports = Backbone.Model.extend({
           };
           model.set(userData);
 
+          // Save user data in firebase
+          model.saveUser(userData);
+
           mixpanel.identify(userData.username);
           mixpanel.people.set({
             "$last_login": userData.lastLogin,
@@ -40,6 +43,9 @@ module.exports = Backbone.Model.extend({
           model.clear();
         }
       });
+    },
+    saveUser: function(userData) {
+      var userModel = new Users.Save(userData);
     },
     login: function(service) {
       // Logs a user into the app

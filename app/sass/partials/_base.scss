@@ -61,10 +61,50 @@ body {
 // VERTICAL ALIGNMENT OF ANY ELEMENT 
 /////////////////////////////////////////////////////////
 
-@mixin vertical-align {
+@mixin align-vert {
   position: relative;
   top: 50%;
   -webkit-transform: translateY(-50%);
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+
+///////////////////////////////////////////////////////////
+// CSS Arrows
+/////////////////////////////////////////////////////////
+.arrow-up {
+  width: 0; 
+  height: 0; 
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  
+  border-bottom: 4px solid $text-light;
+}
+
+.arrow-down {
+  width: 0; 
+  height: 0; 
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  
+  border-top: 4px solid $text-light;
+}
+
+.arrow-right {
+  width: 0; 
+  height: 0; 
+  border-top: 4px solid transparent;
+  border-bottom: 64px solid transparent;
+  
+  border-left: 4px solid $text-light;
+}
+
+.arrow-left {
+  width: 0; 
+  height: 0; 
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent; 
+  
+  border-right :4px solid $text-light; 
 }

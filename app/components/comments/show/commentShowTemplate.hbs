@@ -1,6 +1,6 @@
 <li id="{{ id }}" class="comment">
-    Posted {{ time }} by {{ user }}<br />
-    <p id="commentText">{{ text }}</p>
+    Posted {{ time }}<br />
+    <p id="commentText"><strong><span class="commentCreator"></span></strong>{{ text }}</p>
     {{#if owner}}
       <p class="commentSettings">
         <a href="#edit" id="editComment" data-id="{{ id }}">edit</a> 

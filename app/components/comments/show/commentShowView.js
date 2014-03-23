@@ -2,6 +2,8 @@
 
 var commentShowTemplate = require('./commentShowTemplate.hbs');
 
+var Users = require('../../users/users.js');
+
 module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
     template: commentShowTemplate,
@@ -12,6 +14,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
       this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
 
+      // Setup user card to show avatar
+      this.users = new Users.ShowCard({id: this.model.get('user')});
+
       this.setElement(this.$el);
     },
     
@@ -21,6 +26,12 @@ module.exports = Backbone.Marionette.ItemView.extend({
       'click #editComment': 'editComment',
       'click #cancelCommentEdit': 'cancelEdit',
       'click #saveComment': 'saveComment'
+    },
+
+    onRender: function() {
+      // Render user card
+      this.$el.find('.commentCreator').html(this.users.view.render().el);
+
     },
 
     pressEnter: function(e) {

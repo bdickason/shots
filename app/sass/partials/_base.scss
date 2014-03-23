@@ -36,3 +36,35 @@ body {
 [contenteditable="true"] {
   background: yellow;
 }
+
+///////////////////////////////////////////////////////////
+// CLEARING OF ANY ELEMENT 
+/////////////////////////////////////////////////////////
+
+.clearfix:after, .container:after {
+  content: "\0020";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+  overflow: hidden;
+}
+.clearfix, .container { display: block; }
+
+/* Regular clearing
+   apply to column that should drop below previous ones. */
+
+.clear { clear: both; height: 1px; }
+
+
+///////////////////////////////////////////////////////////
+// VERTICAL ALIGNMENT OF ANY ELEMENT 
+/////////////////////////////////////////////////////////
+
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}

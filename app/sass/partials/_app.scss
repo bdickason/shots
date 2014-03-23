@@ -28,3 +28,33 @@ header {
 #login {
 	float: right;
 }
+
+// Tyopography //
+
+h1 {
+	font-weight: bold;
+	font-size: 2em;
+}
+h2 {
+	font-size: 1.8em;
+	font-weight: bold;
+}
+h3 {
+	font-size: 1.5em;
+}
+h4 {
+	font-size: 1.3em;
+}
+h5 {
+	font-size: 1.1em;
+}
+
+
+// User Card Styles //
+
+.user div > img {
+	height: 28px;
+	width: 28px;
+	
+
+}

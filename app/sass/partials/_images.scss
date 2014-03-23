@@ -12,3 +12,23 @@ img {
   }
 }
 
+/* Circle Avatar Styles */ 
+.avatar {
+	line-height: 0;		/* remove line-height */ 
+	float:right;
+	width: 30px;
+	height: 30px;
+	display: inline-block;	/* circle wraps image */
+	border-radius: 50%;	/* relative value */
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.4);	
+	transition: linear 0.25s;
+	background: url(/img/trey_avatar.jpg);
+	background-repeat: no-repeat;
+	-webkit-background-size: cover;
+	background-size: cover;
+}
+.avatar:hover {
+	transition: ease-out 0.3s;
+	transform: scale(0.8) rotate(20deg) translateZ(0);
+}
+a.avatar { color: transparent; } /* IE fix: removes blue border */

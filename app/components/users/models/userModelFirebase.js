@@ -6,5 +6,8 @@ module.exports = Backbone.Firebase.Model.extend({
     },
     initialize: function() {
         this.fbUrl = app.fbUrl + '/users/' + this.id;
+    },
+    defaults: {
+        profileImage: 'http://blah.com/blah.jpg'
     }
 });

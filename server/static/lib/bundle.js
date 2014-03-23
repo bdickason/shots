@@ -1670,6 +1670,9 @@ module.exports = Backbone.Firebase.Model.extend({
     },
     initialize: function() {
         this.fbUrl = app.fbUrl + '/users/' + this.id;
+    },
+    defaults: {
+        profileImage: 'http://blah.com/blah.jpg'
     }
 });
 
@@ -1686,9 +1689,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.profileImage) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.profileImage); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" />";
-  if (helper = helpers.displayName) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.displayName); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+    + "\" /> ";
+  if (helper = helpers.id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1);
   return buffer;
   });

@@ -47,6 +47,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "grunt tests"
+    "test": "grunt"
   }
 }

@@ -61,13 +61,24 @@ section#right {
 		&:hover, &:focus, &:active {
 			border: none;
 			box-shadow: none;
-			background-color: scale-lightness($cta-green, -40%);
+			background-color: scale-lightness($cta-green, -30%);
 			outline: 0;
 			cursor: pointer;
 		}
 	}
 }
 
+.project {
+	padding: 8px 0;
+	a {
+		text-decoration: none;
+		color: scale-lightness($cta-green, -30%);
+		&:hover {
+			color: $cta-green;
+			cursor: pointer;
+		}
+	}
+}
 
 
 

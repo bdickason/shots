@@ -21,6 +21,15 @@ h5 {
   font-size: 1.1em;
 }
 
+h5.subtle-headline {
+  font-size: .8em;
+  font-weight: 600;
+  color: $text-subtle;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
 
 // Global style for any time a piece of content becomes editable
 [contenteditable="true"] {

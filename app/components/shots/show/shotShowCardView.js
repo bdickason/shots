@@ -3,6 +3,7 @@
 var shotShowCardTemplate = require('./shotShowCardTemplate.hbs');
 
 var Comments = require('../../comments/comments.js');
+var Users = require('../../users/users.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
@@ -20,6 +21,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
+    // Setup user card to show avatar
+    this.users = new Users.ShowCard({id: this.model.get('user')});
     // Setup comment card to show # of comments
     this.comments = new Comments.ListCard({shotId: this.model.get('id'), projectId: this.model.get('projectId')});
   },
@@ -31,6 +34,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
 
+    // Render user card
+    this.$el.find('.shotCreator').html(this.users.view.render().el);
+    
     // Render comments
     this.$el.find('.shotComments').html(this.comments.view.render().el);
     

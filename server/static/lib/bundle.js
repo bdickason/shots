@@ -1304,11 +1304,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.text) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.text); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</p>\n<p class=\"shotCreator\">";
-  if (helper = helpers.user) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.user); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "</p>\n<a href=\"/";
+    + "</p>\n<div class=\"shotCreator\"></div>\n<a href=\"/";
   if (helper = helpers.projectId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.projectId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -1326,6 +1322,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 var shotShowCardTemplate = require('./shotShowCardTemplate.hbs');
 
 var Comments = require('../../comments/comments.js');
+var Users = require('../../users/users.js');
 
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
@@ -1343,6 +1340,8 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
     this.listenTo(app.user, 'change', this.render); // If a user logs in, we need to re-render
     
+    // Setup user card to show avatar
+    this.users = new Users.ShowCard({id: this.model.get('user')});
     // Setup comment card to show # of comments
     this.comments = new Comments.ListCard({shotId: this.model.get('id'), projectId: this.model.get('projectId')});
   },
@@ -1354,6 +1353,9 @@ module.exports = Backbone.Marionette.ItemView.extend({
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
 
+    // Render user card
+    this.$el.find('.shotCreator').html(this.users.view.render().el);
+    
     // Render comments
     this.$el.find('.shotComments').html(this.comments.view.render().el);
     
@@ -1373,7 +1375,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
   }
 });
 
-},{"../../comments/comments.js":2,"./shotShowCardTemplate.hbs":35}],37:[function(require,module,exports){
+},{"../../comments/comments.js":2,"../../users/users.js":43,"./shotShowCardTemplate.hbs":35}],37:[function(require,module,exports){
 // hbsfy compiled Handlebars template
 var Handlebars = require('hbsfy/runtime');
 module.exports = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

@@ -4,5 +4,8 @@ var userShowCardTemplate = require('./userShowCardTemplate.hbs');
 
 module.exports = Backbone.Marionette.ItemView.extend({
     tagName: 'div',
-    template: userShowCardTemplate
-  });
+    template: userShowCardTemplate,
+    initialize: function() {
+        this.listenTo(this.model, 'sync', this.render);
+    }
+});

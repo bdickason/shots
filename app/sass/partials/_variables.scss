@@ -6,12 +6,17 @@ $text-light:  	#C7D2D6;    // Slightly darker light text for dark backgrounds
 $text-dark:      #404040;    // Dark text for use on light backgrounds
 $text-cta:       #808080;     // Text for call to action/buttons
 $text-hover:     black;
+$cta-green: 	#7DDCD4; 	// Main seafoam/green color for call-to-actions
 
 /* Link Colors */
 $primary:        #AAA;
 $secondary:      #BBB;
 $button:         white;
 $button-hover:   #f8edd1;
+
+/* UI Element Colors */
+$rule-color: 	#e0e3e5;  		// Horizontal or vertical rule color on white bg
+$rule-color-dark:   #C0CBD3;   	// Darker rule color for things like inputs which need more visual weight
 
 /* Background Colors */
 $bg:             #5F4F5A;	// Main site BG

@@ -9,3 +9,65 @@ section#right {
   float: right;
   width: 70%;
 }
+
+
+
+//////////////////////////////////////////////
+// Homepage View
+//////////////////////////////////////////////
+#content {
+	width: 100%;
+	position: relative;
+}
+
+.view {
+	max-width: 1100px;
+	min-width: 600px;
+	margin: 0 auto;
+	padding: 30px 0;
+}
+
+.createSection {
+	max-width: 1100px;
+	min-width: 600px;
+	display: block;
+	margin: 0 0 30px 0;
+	padding: 0 0 30px 0;
+	border-bottom: 1px solid $rule-color;
+	input {
+		width: 40%;
+		margin: 20px 10px 0 0;
+		padding: 8px;
+		position: relative;
+		border: 1px solid $rule-color-dark;
+		@include border-radius(3px);
+		@include transition(border 150ms ease, box-shadow 150ms ease, background 150ms ease);
+		&:hover, &:focus, &:active {
+			border: 1px solid $cta-green;
+			box-shadow: none;
+			background-color: white;
+			outline: 0;
+			cursor: text;
+		}
+	}
+	button {
+		float: none;
+		padding: 9px 20px;
+		border: none;
+		background-color: scale-lightness($cta-green, -20%);
+		@include border-radius(3px);
+		@include transition(border 150ms ease, box-shadow 150ms ease, background 150ms ease);
+		color: white;
+		&:hover, &:focus, &:active {
+			border: none;
+			box-shadow: none;
+			background-color: scale-lightness($cta-green, -40%);
+			outline: 0;
+			cursor: pointer;
+		}
+	}
+}
+
+
+
+

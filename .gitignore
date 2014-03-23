@@ -2,3 +2,5 @@ node_modules
 .DS_Store
 rethinkdb_data
 .sass-cache
+server/static/lib/bundle.js
+server/static/css/screen.css

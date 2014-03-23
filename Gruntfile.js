@@ -45,7 +45,8 @@ module.exports = function(grunt) {
         spawn: false,
         debounceDelay: 100,
         livereload: true,
-        hostname: 'localhost'
+        hostname: 'localhost',
+        atBegin: true
       }
     }
   });

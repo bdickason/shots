@@ -48,6 +48,6 @@
   },
   "scripts": {
     "start": "grunt;node index.js",
-    "test": "grunt"
+    "test": "grunt" 
   }
 }

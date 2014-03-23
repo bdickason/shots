@@ -2,6 +2,8 @@
 
 var navTemplate = require('./navTemplate.hbs');
 
+var Users = require('../users/users.js');
+
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'div',
 
@@ -9,6 +11,13 @@ module.exports = Backbone.Marionette.ItemView.extend({
 
   initialize: function() {
     this.listenTo(this.model, 'change', this.render); // Without this, the collection doesn't render after it completes loading
+    this.listenTo(app.user, 'change', this.render);
+  },
+
+  onRender: function() {
+    // Render user card
+    this.user = new Users.ShowCard({id: app.user.get('username') });
+    this.$el.find('.user').html(this.user.view.render().el);
   },
 
   events: {

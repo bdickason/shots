@@ -31,7 +31,6 @@ module.exports = Backbone.Marionette.ItemView.extend({
     onRender: function() {
       // Render user card
       this.$el.find('.commentCreator').html(this.users.view.render().el);
-
     },
 
     pressEnter: function(e) {

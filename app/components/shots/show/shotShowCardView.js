@@ -23,6 +23,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     
     // Setup user card to show avatar
     this.users = new Users.ShowCard({id: this.model.get('user')});
+
     // Setup comment card to show # of comments
     this.comments = new Comments.ListCard({shotId: this.model.get('id'), projectId: this.model.get('projectId')});
   },
@@ -31,19 +32,22 @@ module.exports = Backbone.Marionette.ItemView.extend({
     'click .shotlink': 'gotoShot',
   },
 
-  render: function() {
-    this.$el.html(this.template(this.model.toJSON()));
-
+  onRender: function() {
     // Render user card
     this.$el.find('.shotCreator').html(this.users.view.render().el);
-    
+
     // Render comments
     this.$el.find('.shotComments').html(this.comments.view.render().el);
-    
-    this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
-    
-    return this;
+
   },
+  // render: function() {
+  //   this.$el.html(this.template(this.model.toJSON()));
+
+    
+  //   this.delegateEvents();  // Fix for events not firing in sub-views: http://stackoverflow.com/questions/9271507/how-to-render-and-append-sub-views-in-backbone-js
+    
+  //   return this;
+  // },
 
   gotoShot: function(e) {
     // Navigate to a shot

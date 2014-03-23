@@ -102,7 +102,7 @@ describe('loginModel', function() {
 
       userStub.getCall(0).args[0].displayName.should.eql(input.displayName);
       userStub.getCall(0).args[0].profileImage.should.eql(input.profile_image_url_https);
-      userStub.getCall(0).args[0].lastLogin.should.eql(input.lastLogin);
+      should.exist(userStub.getCall(0).args[0].lastLogin);
       userStub.getCall(0).args[0].username.should.eql(input.username);
 
       // console.log(userStub.Calls);

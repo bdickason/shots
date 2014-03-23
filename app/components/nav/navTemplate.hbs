@@ -8,8 +8,10 @@
   </ul>
 
   {{#if username}}
-  {{! Check if user is logged in }}
-    <div class="user"></div>
+    {{! Check if user is logged in }}
+    <div class="user">
+      {{! UserShowCard loads here }}
+    </div>
     <ul id="user-dropdown" >
       <li><a href="/logout" id="logout">Sign Out</a></li>
     </ul>

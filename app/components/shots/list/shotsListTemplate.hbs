@@ -1,12 +1,17 @@
     <div class="shotsNav">
-        <label><h3>Screens</h3></label>
+        <label>
+            <h3>Screens</h3>
+        </label>
         <button id="newShot">+</button>
     </div>
     <div class="newShotView">
-        <input id="image" type="url" class="input" size="58" placeholder="Enter a URL to an image"><br />
-        <textarea id="text" type="text" maxlength="300" class="input" placeholder="Enter any additional info" /><br />
+        <input id="image" type="url" class="input" size="58" placeholder="Enter a URL to an image">
+        <br />
+        <textarea id="text" type="text" maxlength="300" class="input" placeholder="Enter any additional info" />
+        <br />
         <button id="createShot">save</button>
         <label id="shotsError" class="error"></label>
     </div>
     <ul class="shots">
+        {{! ShotShow(s) load here }}
     </ul>

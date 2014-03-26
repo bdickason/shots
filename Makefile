@@ -17,3 +17,5 @@ mocha: test/helpers/*.spec.js test/server/*.spec.js test/app/*.spec.js
 browserify: app/app.js
 	./node_modules/.bin/browserify $^ -o server/static/lib/bundle.js -t hbsfy
 
+compass: app/sass/screen.scss app/sass/partials/*.scss
+	compass compile --config app/sass/config.rb

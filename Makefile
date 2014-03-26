@@ -11,3 +11,5 @@ tests: mocha
 mocha: test/helpers/*.spec.js test/server/*.spec.js test/app/*.spec.js
 	@NODE_ENV=test ./node_modules/.bin/mocha $^ --reporter nyan
 
+browserify: app/app.js
+	./node_modules/.bin/browserify $^ -o server/static/lib/bundle.js -t hbsfy

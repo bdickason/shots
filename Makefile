@@ -1,9 +1,9 @@
 ### Make builds the app and executes utility scripts ###
 
-all: browserify mocha
+all: browserify compass
 
 # Builds js, css, and runs tests to verify a branch
-build: browserify mocha
+build: browserify compass mocha
 
 
 # Alias to maintain the convention of function task -> program name

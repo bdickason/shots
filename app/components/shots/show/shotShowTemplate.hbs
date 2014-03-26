@@ -1,13 +1,17 @@
-<a href="/{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Posted {{ time }} by {{ user }}</a><br />
+<a href="/{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">
+    Posted {{ time }} by {{ user }}
+</a>
+<br />
 <img src="{{ image }}" id="shotImage" class="shot">
 <p id="shotText">{{ text }}</p>
-{{#if owner}}
-  <p class="shotSettings">
-    <a href="#edit" id="editShot" data-id="{{ id }}">edit</a> 
-    <a href="#cancel" id="cancelShotEdit" style="display: none" data-id="{{ id }}">cancel</a> 
-    <button id="saveShot" data-id="{{ id }}">Save</button> 
-    <a href="#delete" id="deleteShot" data-id="{{ id }}">delete</a>
-  </p>
-{{/if}}
+    {{#if owner}}
+      <p class="shotSettings">
+        <a href="#edit" id="editShot" data-id="{{ id }}">edit</a> 
+        <a href="#cancel" id="cancelShotEdit" style="display: none" data-id="{{ id }}">cancel</a> 
+        <button id="saveShot" data-id="{{ id }}">Save</button> 
+        <a href="#delete" id="deleteShot" data-id="{{ id }}">delete</a>
+      </p>
+    {{/if}}
 <ul id="{{ id }}" class="comments">
+    {{! CommentListCard loads here }}
 </ul>

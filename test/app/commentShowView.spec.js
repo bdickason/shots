@@ -22,8 +22,18 @@ describe('commentView', function() {
       CommentView = require(componentsDir + 'comments/show/commentShowView.js');
       CommentModel = Backbone.Model;  // Dummy model to pass into view
 
+      app.fbUrl = 'http://blah.firebaseio.com';
+      fbStub = sinon.stub(global, 'Firebase');
+      loginStub = sinon.stub(global, 'FirebaseSimpleLogin');
+
       done();
     });
+  });
+
+  afterEach(function(done) {
+    fbStub.restore();
+    loginStub.restore();
+    done();
   });
 
   describe('initialize', function() {

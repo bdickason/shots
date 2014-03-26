@@ -6,6 +6,7 @@
 @import "compass/typography/vertical_rhythm";
 @import "compass/utilities/general";
 @import "compass/css3/border-radius"; // CSS3 Border Radius for all browsers
+@import "compass/css3/shared";
 
 /* Custom Partials */
 @import "partials/_variables.scss";	// Variables: Color, size, etc. 
@@ -15,4 +16,4 @@
 @import "partials/_shots.scss";      	// Shots
 @import "partials/_projects.scss";   	// Projects
 @import "partials/_base.scss";		// Base Styling
-@import "partials/_layouts.scss";    	// Layouts (two-column, full-width, etc)
+@import "partials/_layouts.scss";    	// Layouts (two-column, full-width, etc) 

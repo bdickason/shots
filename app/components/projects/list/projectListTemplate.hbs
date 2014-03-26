@@ -1,8 +1,12 @@
   <div class="view">
-    <label><h3>Create a Project</h3></label>
-    <input id="name" type="textarea" class"input" placeholder="" autofocus>
-    <button id="createProject" class="save">save</button>
-    <label id="projectsError" class="error"></label>
+  	<div class="createSection clearfix">
+    		<label><h3>Create a Project</h3></label>
+    		<input id="name" type="textarea" class"input" placeholder="Name your project" autofocus>
+    		<button id="createProject" class="save">Save</button>
+    		<label id="projectsError" class="error"></label>
+    </div>
+    <h5 class="subtle-headline">projects</h5>
     <ul class="projects">
+      {{! ProjectCard(s) load here }}
     </ul>
   </div> 

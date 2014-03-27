@@ -22,7 +22,7 @@ app.on('initialize:after', function() {
     app.utils = require('./utils.js');
 
     // Firebase URL for accessing data
-    app.fbUrl = 'https://shots.firebaseio.com';
+    app.fbUrl = window.firebaseUrl;
 
     // User authentication (via Firebase)
     app.user = new userModel(); // Attempts to authenticate the current user

@@ -8,7 +8,7 @@ module.exports = Backbone.Firebase.Model.extend({
         this.fbUrl = app.fbUrl + '/users/' + this.id;
     },
     defaults: {
-        profileImage: 'http://blah.com/blah.jpg',
+        profileImage: '/images/profile.png',
         username: function() {
             // Hack - for users that weren't saved before we implemented it
             return(this.id);

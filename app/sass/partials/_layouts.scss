@@ -24,6 +24,10 @@ section#right {
 	padding: 30px 0;
 }
 
+#createSection {
+	display: none;	// Hidden by default until user clicks 'new'
+}
+
 .createSection {
 	max-width: 1100px;
 	min-width: 600px;

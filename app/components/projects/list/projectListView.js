@@ -20,6 +20,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
   events: {
     'click .project a': 'gotoProject',
+    'click #newProject': 'toggleNewProject',
     'keyup input': 'pressEnter',
     'click #createProject': 'createProject'
   },
@@ -28,11 +29,17 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     // Navigate to a specific project
     e.preventDefault(); // Have to disable the default behavior of the anchor
 
-    console.log('got here');
     projectId = e.target.id;
-    console.log(e.target);
     route = projectId;
     app.router.navigate(route, {trigger: true});
+  },
+
+  toggleNewProject: function() {
+    // Displays/hides the 'New Shot' interface
+    if(app.user.get('loggedIn')) {
+      var newProjectView = this.$el.find('.createSection');
+      newProjectView.toggle();
+    }
   },
 
   pressEnter: function(e) {
@@ -60,6 +67,8 @@ module.exports = Backbone.Marionette.CompositeView.extend({
         mixpanel.track('Create Project', input);
 
         name.val('');
+
+        this.trigger('click #newProject');
       }
     } else {
       this.showError('Sorry, you must be logged in');

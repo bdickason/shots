@@ -20,6 +20,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
   events: {
     'click .project a': 'gotoProject',
+    'keyup input': 'pressEnter',
     'click #createProject': 'createProject'
   },
 
@@ -32,6 +33,14 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     console.log(e.target);
     route = projectId;
     app.router.navigate(route, {trigger: true});
+  },
+
+  pressEnter: function(e) {
+    // Submit form when user presses enter
+    if(e.which == 13 && $('#name').val()) {
+      this.createProject(e);
+    }
+    return(false);
   },
 
   createProject: function(project) {

@@ -70,6 +70,7 @@ section#right {
 
 .project {
 	padding: 8px 0;
+	
 	a {
 		text-decoration: none;
 		color: scale-lightness($cta-green, -30%);
@@ -80,5 +81,11 @@ section#right {
 	}
 }
 
+.selected {
+	background-color: $cta-green;
+	a {
+		color: white;
+	}
+}
 
 

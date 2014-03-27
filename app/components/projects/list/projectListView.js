@@ -10,10 +10,12 @@ module.exports = Backbone.Marionette.CompositeView.extend({
   itemView: ProjectCardView,
   itemViewContainer: 'ul.projects',
 
-  initialize: function() {
+  initialize: function(options) {
+    this.id = options.id;
+
     // Collection must be passed in by Controller
     this.listenTo(this.collection, 'sync', this.render);  // Without this, the collection doesn't render after it completes loading
-    this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.
+    this.listenTo(this.collection, 'remove', this.render);   // Collection doesn't call sync when we add a new model.  
   },
 
   events: {
@@ -25,7 +27,9 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     // Navigate to a specific project
     e.preventDefault(); // Have to disable the default behavior of the anchor
 
+    console.log('got here');
     projectId = e.target.id;
+    console.log(e.target);
     route = projectId;
     app.router.navigate(route, {trigger: true});
   },
@@ -58,4 +62,14 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     error.text(message);
     error.show();
   },
+
+  itemViewOptions: function(model, index) {
+    // Determine selected item
+    if(this.id) {
+      if(model.get('id') == this.id) {
+        return({ selected: true });
+      }
+    }
+    return(null);
+  }
 });

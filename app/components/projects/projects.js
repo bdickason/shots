@@ -11,10 +11,17 @@ var ProjectsCollectionFirebase = require('./models/projectsCollectionFirebase.js
 module.exports.List = Backbone.Marionette.Controller.extend({
     /* List - Displays a list of Projects
      Inputs:
+        id: Selected project ID (optional)
     */
     initialize: function(options) {
         this.projects = new ProjectsCollectionFirebase();
-        this.view = new ProjectListView({collection: this.projects});
+        if(options.id) {
+            this.view = new ProjectListView({collection: this.projects, id: options.id});
+        }
+        else {
+            this.view = new ProjectListView({collection: this.projects});
+        }
+        
    }
 });
 

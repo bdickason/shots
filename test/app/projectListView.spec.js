@@ -84,6 +84,50 @@ describe('projectListView', function() {
 
       should.exist(projectListView.$el);
     });
+
+    it('adds a class to a Project when selected', function() {
+      // Input
+      var input = {
+        id: 'testProject',
+        projectId: 'testProject'
+      };
+
+      projectsCollection = new ProjectsCollection();
+
+      // Passing in an ID explicitly selects a project
+      projectListView = new ProjectListView({ collection: projectsCollection, id: 'testProject' });
+
+      projectModel = new ProjectModel(input);
+      projectsCollection.push(projectModel);
+
+      projectsCollection.trigger('sync');  // Sync event from collection causes view to render
+
+      var selectedProject = projectListView.$el.find('li#testProject');
+
+      selectedProject.attr('class').should.containEql('selected');
+    });
+
+    it('does not add a class to unselected Projects', function() {
+      // Input
+      var input = {
+        id: 'testProject',
+        projectId: 'testProject'
+      };
+
+      projectsCollection = new ProjectsCollection();
+
+      // No ID passed in
+      projectListView = new ProjectListView({ collection: projectsCollection });
+
+      projectModel = new ProjectModel(input);
+      projectsCollection.push(projectModel);
+
+      projectsCollection.trigger('sync');  // Sync event from collection causes view to render
+
+      var selectedProject = projectListView.$el.find('li#testProject');
+      
+      selectedProject.attr('class').should.not.containEql('selected');
+    });
   });
 
  describe('create', function() {

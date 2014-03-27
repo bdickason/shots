@@ -59,7 +59,9 @@ module.exports = Backbone.Router.extend({
         // Details for a single project
         var projects = new Projects.List({id: projectId});
 
-        var project = new Projects.Show({id: projectId});
+        // var project = new Projects.Show({id: projectId});
+
+        var shots = new Shots.List({project: projectId});
 
         // Use a two column layout to display the project
         var twoColumn = new TwoColumnLayout();
@@ -68,7 +70,7 @@ module.exports = Backbone.Router.extend({
 
         // Render two-column layout in main content area
         twoColumn.left.show(projects.view);
-        twoColumn.right.show(project.view);
+        twoColumn.right.show(shots.view);
     },
 
     shot: function(projectId, shotId) {

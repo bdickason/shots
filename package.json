@@ -47,7 +47,7 @@
     "node": ">= 0.10.1"
   },
   "scripts": {
-    "start": "grunt;node index.js",
-    "test": "grunt" 
+    "start": "grunt; node index.js",
+    "test": "grunt build"
   }
 }

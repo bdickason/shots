@@ -1,45 +1,44 @@
 /* Base UI styling */
-body {
-  font-family: 'Open Sans', Helvetica Neue,  sans-serif;
-  font-size: 14px;
+
+//////////////////////////////////////////////
+// Tyopography //
+//////////////////////////////////////////////
+h1 {
+  font-weight: bold;
+  font-size: 2em;
 }
-#content {
-  float: left;
-  > div {
-    float:left;
-  }
+h2 {
+  font-size: 1.8em;
+  font-weight: bold;
 }
-#nav {
-  display: block;
-  padding: 0;
-  margin: 0;
-  min-width: 964px;
-  overflow: visible;
-  -webkit-font-smoothing: antialiased;
+h3 {
+  font-size: 1.5em;
 }
-#main {
-	padding: 25px;
+h4 {
+  font-size: 1.3em;
 }
-#username {
-	float:right;
-	padding-right: 15px;
+h5 {
+  font-size: 1.1em;
 }
-#logout {
-	float:right;
+
+h5.subtle-headline {
+  font-size: .8em;
+  font-weight: 600;
+  color: $text-subtle;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
 }
-// Error messages should not be shown by default
-.error {
-  display: none;
-}
+
 
 // Global style for any time a piece of content becomes editable
 [contenteditable="true"] {
   background: yellow;
 }
 
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 // CLEARING OF ANY ELEMENT 
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 .clearfix:after, .container:after {
   content: "\0020";
@@ -57,9 +56,9 @@ body {
 .clear { clear: both; height: 1px; }
 
 
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 // VERTICAL ALIGNMENT OF ANY ELEMENT 
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 
 @mixin align-vert {
   position: relative;
@@ -70,9 +69,9 @@ body {
 }
 
 
-///////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 // CSS Arrows
-/////////////////////////////////////////////////////////
+//////////////////////////////////////////////
 .arrow-up {
   width: 0; 
   height: 0; 

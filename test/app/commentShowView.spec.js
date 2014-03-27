@@ -6,7 +6,7 @@ var clientenv = require('../helpers/helper.spec.js'),
     path = require('path'),
     sinon = require('sinon');
     
-describe('commentView', function() {
+describe('commentShowView', function() {
 
   var CommentModel, CommentView;
 
@@ -22,8 +22,18 @@ describe('commentView', function() {
       CommentView = require(componentsDir + 'comments/show/commentShowView.js');
       CommentModel = Backbone.Model;  // Dummy model to pass into view
 
+      app.fbUrl = 'http://blah.firebaseio.com';
+      fbSpy = sinon.spy(global, 'Firebase'); // Firebase will error out
+      loginStub = sinon.stub(global, 'FirebaseSimpleLogin');
+
       done();
     });
+  });
+
+  afterEach(function(done) {
+    fbSpy.restore();
+    loginStub.restore();
+    done();
   });
 
   describe('initialize', function() {

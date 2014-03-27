@@ -1,6 +1,12 @@
-    <label><h3>{{ this.length }} {{pluralize this.length 'Comment' 'Comments'}}</h3></label>
-    <textarea id="text" type="text" class="comment" placeholder="Enter your comment" /><br />
+    <label>
+        <h3>{{ this.length }} {{pluralize this.length 'Comment' 'Comments'}}</h3>
+    </label>
+    <textarea id="text" type="text" class="comment" placeholder="Enter your comment" />
+    <br />
     <button id="createComment">save</button>
-    <label id="commentsError" class="error"></label>
+    <label id="commentsError" class="error">
+        {{! Error message loads here }}
+    </label>
     <ul class="comments">
+        {{! CommentShow(s) load here }}
     </ul>

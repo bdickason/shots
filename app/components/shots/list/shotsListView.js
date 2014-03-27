@@ -28,6 +28,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
     },
 
     pressEnter: function(e) {
+      e.preventDefault();
       // Submit form when user presses enter
       if(e.which == 13 && $('#text').val()) {
         this.createShot();
@@ -37,7 +38,6 @@ module.exports = Backbone.Marionette.CompositeView.extend({
 
     toggleNewShot: function() {
       // Displays/hides the 'New Shot' interface
-
       if(app.user.get('loggedIn')) {
         var newShotView = this.$el.find('.newShotView');
         newShotView.toggle();
@@ -64,7 +64,7 @@ module.exports = Backbone.Marionette.CompositeView.extend({
           textField.val('');
           imageField.val('');
 
-          this.toggleNewShot(); // Hide 'new' dialog
+          this.trigger('click #newShot'); // HACK - For some reason this.toggleNewShot() won't hide the object properly
         }
       }
       else {

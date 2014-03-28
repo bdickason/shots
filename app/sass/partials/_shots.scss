@@ -41,6 +41,13 @@
     }
   }
 
+  &.single {
+    // Single shot on standalone shot page
+    & img.shotImage {
+      width: 100%;  
+    }
+  }
+
   & p #saveShot {
     // Save button is hidden until editing is enabled 
     display: none;

@@ -34,18 +34,15 @@
   &.card {
     // Shot displayed in a list
     width: 30%;
-
-    & img.shotImage {
-      // Image of shot used within a shot card
-      width: 100%;
-    }
   }
 
   &.single {
     // Single shot on standalone shot page
-    & img.shotImage {
-      width: 100%;  
-    }
+  }
+
+  & img.shotImage {
+    // Image of shot used within a shot card
+    width: 100%;
   }
 
   & p #saveShot {

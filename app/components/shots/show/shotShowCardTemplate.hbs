@@ -1,9 +1,10 @@
-<a href="/{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">Posted {{ time }} by {{ user }}</a><br />
-<img src="{{ image }}" class="shotImage">
-<p id="shotText">{{ text }}</p>
+<a href="/{{ projectId }}/{{ id }}" class="shotlink" id="{{ projectId }}/{{ id }}">
+    <img src="{{ image }}" class="shotImage">
+</a>
 <div class="shotCreator">
     {{! UserCard loads here }}
 </div>
+<div class="time">{{ time }}</div>
 <a href="/{{ projectId }}/{{ id }}">
     <div class="shotComments">
         {{! CommentsListCard loads here }}

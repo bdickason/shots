@@ -30,10 +30,12 @@
   // Can be displayed in list or standalone
   width: 100%;
   padding-top: 40px;
+  padding-right: 40px;
 
   &.card {
     // Shot displayed in a list
     width: 30%;
+    float: left;
   }
 
   &.single {

@@ -8,11 +8,11 @@ var Users = require('../../users/users.js');
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotShowCardTemplate,
+  className: 'shot card',
   id: function() {
     // Sets the id= attribute of our <li>
     return(this.model.get('id'));
   },
-  className: 'shot',
 
   initialize: function(options) {
     // Model is passed in via controller   

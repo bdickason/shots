@@ -12,7 +12,7 @@ module.exports = Backbone.Marionette.ItemView.extend({
     // Sets the id= attribute of our <li>
     return(this.model.get('id'));
   },
-  className: 'shot',
+  className: 'shot card',
 
   initialize: function(options) {
     // Model is passed in via controller   

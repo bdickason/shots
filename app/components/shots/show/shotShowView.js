@@ -7,7 +7,7 @@ var Comments = require('../../comments/comments.js');
 module.exports = Backbone.Marionette.ItemView.extend({
   tagName: 'li',
   template: shotShowTemplate,
-  className: 'shot',
+  className: 'shot single',
   id: function() {
     // Sets the id= of our <li>
     return(this.model.get('id'));

@@ -26,8 +26,26 @@
 
 /* Single Shot */
 .shot {
-  width: 50%;
+
+  // Can be displayed in list or standalone
+  width: 100%;
   padding-top: 40px;
+  padding-right: 40px;
+
+  &.card {
+    // Shot displayed in a list
+    width: 30%;
+    float: left;
+  }
+
+  &.single {
+    // Single shot on standalone shot page
+  }
+
+  & img.shotImage {
+    // Image of shot used within a shot card
+    width: 100%;
+  }
 
   & p #saveShot {
     // Save button is hidden until editing is enabled 
